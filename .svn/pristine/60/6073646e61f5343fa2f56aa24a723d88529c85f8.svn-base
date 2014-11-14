@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="layout" content="main"/>
+    <title>金士代发</title>
+</head>
+
+<body>
+<div class="container body" id="page">
+
+  
+  <div class="page-header">
+        <h3>
+          如果您需要为您的买家提供退货、换货服务，只需2元，我们为您代劳。
+        </h3>
+       </div>
+    <div class="row">
+        <div class="span12">
+            <div class="hero-unit">
+                <h2>金士代发平台订单<span style="font-size: 0.4em;"></span></h2>
+                <p>商品是在本平台代发，请输入订单号，快速提交退换货信息。</p>
+                    <g:form class="form-inline" controller="memberDaiFaOrder" action="list" method="post">
+                    <input style="height: 30px;" value="${params.orderSN}" name="orderSN" type="text" class="input-medium " placeholder="请输入订单号">
+
+                    <button type="submit" class="btn btn-primary btn-large">去退换货</button>
+                    <g:link controller="memberDaiFaOrder" action="list" class="btn btn-success btn-large">我的订单</g:link>
+                    </g:form>
+            </div>
+        </div>
+
+        %{--<div class="span6">--}%
+            %{--<div class="hero-unit">--}%
+                %{--<h2>非本平台订单</h2>--}%
+                %{--<p>商品不是我们代发的，请在这里下单。</p>--}%
+                %{--<g:link controller="memberDaiFaOrder" action="toSaleReturnAdd"  class="btn btn-primary btn-large">我要退换货</g:link>--}%
+            %{--</div>--}%
+        %{--</div>--}%
+
+    </div>
+
+
+
+
+
+    <g:render template="/layouts/footer"/>
+
+</div> <!-- /container -->
+
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- 最新 Bootstrap 核心 CSS 文件 -->
+        <style type="text/css">
+
+
+.head table{
+  width:100%;
+}
+
+.content{
+  width:100%;
+}
+
+ table
+        {
+            border-collapse: collapse;
+            border: none;
+            width: 100%;
+        }
+     table    td
+        {
+            border: solid #000 1px;
+        }
+</style>
+
+    </head>
+    <body>
+        <div class="page-header">
+        <h3>今日支出明细</h3>
+      </div>
+        
+        <table class="table table-bordered">
+        <thead>
+          <tr>
+            <td colspan="1">订单号/下单时间</td>
+            
+            <td>商品编号</td>
+            <td>商品数量</td>
+            <td>采购单价</td>
+            <td>采购小计</td>
+            
+            <td>取消商品退款</td>
+            
+            <td>退货退款</td>
+            <td>空包退代发费</td>
+            <td>物流运费</td>
+            <td>取消订单退运费</td>
+            <td>总计</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="1">882832323<br/>2014-2-2 2:3:2</td>
+            
+            <td>${goods_sn}</td>
+            <td>${num}</td>
+            <td>${actual_price}</td>
+            <td>${actual_price*num}</td>
+            
+            <td>${tuigoodsprice}</td>
+            
+            <td>${tuihuoprice}</td>
+            <td>${tuidaifafee}</td>
+            <td>${actual_shipfee}</td>
+            <td>${tuishipfee}</td>
+            <td></td>
+          </tr>
+          
+          <tr>
+            <td rowspan="2">882832323<br/>2014-2-2 2:3:2</td>
+            
+            <td>${goods_sn}</td>
+            <td>${num}</td>
+            <td>${actual_price}</td>
+            <td>${actual_price*num}</td>
+            
+            <td>${tuigoodsprice}</td>
+            <td>${tuihuoprice}</td>
+            <td rowspan="2">${tuidaifafee}</td>
+            <td rowspan="2">${actual_shipfee}</td>
+            <td rowspan="2">${tuishipfee}</td>
+            <td rowspan="2"></td>
+          </tr>
+          
+          <tr>
+            <td>${goods_sn}</td>
+            <td>${num}</td>
+            <td>${actual_price}</td>
+            <td>${actual_price*num}</td>
+            <td>${tuigoodsprice}</td>
+            <td>${tuihuoprice}</td>
+            
+          </tr>
+          
+          <tr>
+            <td colspan="1">总计</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          
+          
+        </tbody>
+      </table>
+        <br/>
+        已验收未发货商品金额总计:${noshipgoodsamount}
+    </body>
+</html>

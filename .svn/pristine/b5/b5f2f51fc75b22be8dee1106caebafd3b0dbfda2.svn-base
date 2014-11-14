@@ -1,0 +1,45 @@
+package member
+
+
+class MemberNewProductController {
+
+    def memberXmlGoodsService;
+
+    def index() {}
+
+    def list(){
+        memberXmlGoodsService.init();
+
+        def p = params.p
+        if(!p){
+            p=1
+        }else {
+
+        }
+
+        def xmlGoodsList = memberXmlGoodsService.getXmlGoodsList(p as int);
+        def map = [xmlGoodsList:xmlGoodsList,p:p]
+
+        render(view: "/member/newProduct/list",model:map)
+    }
+
+    def goods(){
+        def xmlGoods = memberXmlGoodsService.getXmlGoods(params.id as String)
+        def map = [xmlGoods:xmlGoods]
+
+        render(view: "/member/newProduct/detail",model:map)
+    }
+
+
+    def taobaoapiback(){
+        println params
+        render "ok"
+    }
+
+    def taobaoapiredirect_uri(){
+        println params
+        def tokenurl = "https://oauth.taobao.com/token?code="+params.code+"&client_id=23024144&client_secret=576761b138959a9ec941f6ed044dc41b&grant_type=authorization_code&redirect_uri=http://223.240.109.221:7070/ship/memberNewProduct/taobaoapiredirect_uri"
+
+
+    }
+}

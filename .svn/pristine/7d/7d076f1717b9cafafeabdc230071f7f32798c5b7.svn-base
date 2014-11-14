@@ -1,0 +1,91 @@
+package member
+
+import ship.User
+import ship.Account
+import ship.ResetPassword
+class MemberUserController {
+
+    def index() { }
+    
+    
+    def reqUserInfo(){
+        def user = User.get(session.loginPOJO.user.id)
+        def map = [user:user]
+        render(view: "/member/user/update",model:map)
+    }
+    
+    def doUpdateUserInfo(){
+        def user = User.get(session.loginPOJO.user.id)
+        user.properties = params
+        flash.message = "修改个人资料成功"
+        redirect(action:"reqUserInfo") 
+    }
+    def toSetSafepass(){
+        def user = User.get(session.loginPOJO.user.id)
+        if(user.safepass){
+            render(view: "/member/user/toSetSafepassAgain")
+        }else{
+            render(view: "/member/user/toSetSafepass")
+        }
+    }
+    
+    def doSetSafepass(){
+        def user = User.get(session.loginPOJO.user.id)
+        if(params.password.encodeAsPassword()!=user.password){
+            flash.message = "登录密码不正确"
+        }else{
+            user.safepass = params.safepass.encodeAsPassword()
+            session.loginPOJO.user = user
+            flash.message = "设置支付密码成功"
+        }
+        redirect(action:"toSetSafepass")
+    }
+    def doSetSafepassAgain(){
+        def user = User.get(session.loginPOJO.user.id)
+        if(params.safepass.encodeAsPassword()!=user.safepass){
+            flash.message = "支付密码不正确"
+        }else{
+            user.safepass = params.new_safepass.encodeAsPassword()
+            session.loginPOJO.user = user
+            flash.message = "修改支付密码成功"
+        }
+        redirect(action:"toSetSafepass")
+    }
+    
+    def selAccount(){
+        render User.get(session.loginPOJO.user.id).account.amount
+    }
+    
+    def toSafepassEmail(){
+        render(view: "/member/user/toSafepassEmail")
+    }
+    
+    def doSafepassEmail(){
+        ResetPassword.executeUpdate("delete ResetPassword d where d.user_id = :user_id and d.type = '0'", [user_id:session.loginPOJO.user.id])
+        
+        def resetPassword = new ResetPassword()
+        resetPassword.id = UUID.randomUUID().toString()
+        resetPassword.user_id = session.loginPOJO.user.id
+        resetPassword.type = '0'
+        resetPassword.save()
+        
+        String baseUrl = "http://" + request.getServerName() + ":" + request.getServerPort()
+        String bodyStr = "请在60分钟内复制以下链接至浏览器的地址栏直接打开。\n"+baseUrl+"${createLink(controller :'index', action: 'resetPassword')}"+"?id="+resetPassword.id+"\n"+
+        "如果您不知道为什么收到了这封邮件，可能是他人不小心输错邮箱意外发给了您，请忽略此邮件。"
+        Thread.start {
+            print "start============================="
+                
+                    
+                
+            sendMail {  
+                async true 
+                from "service@findyi.com"
+                to session.loginPOJO.user.email
+                subject "【金士代发】找回支付密码"     
+                body bodyStr
+            }
+            print "success============================="
+        }
+        render(view:"/member/user/emailSuccess")
+    }
+}

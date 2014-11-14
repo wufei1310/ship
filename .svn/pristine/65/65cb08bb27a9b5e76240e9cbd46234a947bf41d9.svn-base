@@ -1,0 +1,24 @@
+{
+  "name": "金士代发智能同步淘宝插件",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "安装此插件后，将在您的淘宝订单列表页面自动生成‘去金士代发’按钮，一键同步订单数据到金士代发下单页面，节省您的宝贵时间",
+  "icons": {
+        "48": "kings.png"
+    },
+  "browser_action": {
+    "default_icon": "kings.png",
+    "default_popup": "popup.html"
+  },
+  "background": {  
+    "scripts": ["background.js"]  
+  },
+  "content_scripts": [{  
+         "matches": ["http://*.taobao.com/trade/*","http://kingsdf.com/memberDaiFaOrder/add*"],   
+         "js": ["jquery-1.8.0.min.js", "content.js"],   
+         "all_frames": true   
+    }],	
+  "permissions": [
+    "tabs"
+  ]
+}

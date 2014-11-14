@@ -1,0 +1,82 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package admin
+import ship.Express
+import ship.DaiFaOrder
+import ship.MobileMessage
+import grails.converters.JSON
+/**
+ *
+ * @author DELL
+ */
+class AdminOrderShipController  extends BaseController{
+    def list(){
+        def express = Express.list();
+        express.each{
+            String name = it.name
+            def n_explore = DaiFaOrder.countByWuliuAndIsCanExportInListAndIs_explore(name,['1','3'],"0")
+            def y_explore = DaiFaOrder.countByWuliuAndIsCanExportInListAndIs_explore(name,['1','3'],"1")
+            it.n_explore = n_explore
+            it.y_explore = y_explore
+        }
+        def map = [list:express]
+        render(view: "/admin/daifaShip/list",model:map)
+    }
+        
+    
+    def expressMobile(){
+
+
+
+        def dabao = new Express();
+        dabao.name = "大包"
+
+        def express = Express.list();
+        express.add(dabao)
+        express.each{
+            String name = it.name
+            def n_explore = DaiFaOrder.countByWuliuAndIsCanExport(name,'1')
+            it.n_explore = n_explore
+        }
+        def map = [list: express]
+        
+        if(params.mobile=="mobile"){
+
+            def mm = new MobileMessage()
+            mm.message = "获取快递公司及其下订单数量成功"
+            mm.result = "success"
+            mm.model = map
+
+            render mm as JSON
+        }
+        
+    }
+    
+    
+        
+    def explore(){
+        def date = new Date()
+        def explore = DaiFaOrder.findAllByWuliuAndIsCanExportInListAndIs_explore(params.name,['1','3'],params.is_explore,[sort: "canExport_date", order: "asc"])
+        def num_map = [:]    
+        
+        explore.each{
+            int goodsNum = 0
+            def goods = it.daiFaGoods
+            goods.each{i ->
+                goodsNum = goodsNum + i.num
+            }
+            num_map.put(it.id,goodsNum)
+            if(params.is_explore == '0'){
+                DaiFaOrder.executeUpdate("update DaiFaOrder set is_explore = '1' where id = '"+it.id+"'")
+            }            
+        }
+        def map = [list:explore,num_map:num_map]
+        String file = date.format('MM-dd-yyyy')+params.name+date.format('HH：mm')+".xls"
+        map.file = file
+        render(view: "/admin/daifaShip/explore",model:map)
+    }
+}
+

@@ -1,0 +1,20 @@
+<g:if test="${!params.area_id}">
+  <g:link   class="arealink areafancybox fancybox.ajax " controller="area" action="reqAreaPannel" params="[area_id:'0100102100']">
+    <span id="areaText">请点击这里，选择省、市、地区</span>
+    <input name="area_id" id="area_id" type="hidden"/>
+  </g:link>
+</g:if>
+<g:else>
+    <g:link   class="arealink areafancybox fancybox.ajax " controller="area" action="reqAreaPannel" params="[area_id:params.area_id]">
+    <span id="areaText"><g:areaName area_id="${params.area_id}" /></span>
+    <input name="area_id" id="area_id" type="hidden" value="${params.area_id}"/>
+  </g:link>
+</g:else>
+<script>
+$(document).ready(function() {
+        $(".areafancybox").fancybox();
+});
+
+</script>
+
+

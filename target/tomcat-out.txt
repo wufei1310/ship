@@ -1,0 +1,13 @@
+================:jdbc:mysql://127.0.0.1:3306/ship?useUnicode=true&characterEncoding=UTF-8
+================:jdbc:mysql://127.0.0.1:3306/ship?useUnicode=true&characterEncoding=UTF-8
+2014-11-14 17:58:04,504 [localhost-startStop-1] ERROR hbm2ddl.SchemaUpdate  - Unsuccessful: alter table qianshouview add column id bigint not null
+2014-11-14 17:58:04,506 [localhost-startStop-1] ERROR hbm2ddl.SchemaUpdate  - 'ship.qianshouview' is not BASE TABLE
+2014-11-14 17:58:04,507 [localhost-startStop-1] ERROR hbm2ddl.SchemaUpdate  - Unsuccessful: alter table qianshouview add column version bigint not null
+2014-11-14 17:58:04,507 [localhost-startStop-1] ERROR hbm2ddl.SchemaUpdate  - 'ship.qianshouview' is not BASE TABLE
+2014-11-14 17:58:04,675 [localhost-startStop-1] ERROR hbm2ddl.SchemaUpdate  - Unsuccessful: alter table user add index FK36EBCBAEBC16BE (role_id_id), add constraint FK36EBCBAEBC16BE foreign key (role_id_id) references role (id)
+2014-11-14 17:58:04,675 [localhost-startStop-1] ERROR hbm2ddl.SchemaUpdate  - Can't create table 'ship.#sql-576_9f' (errno: 150)
+2014-11-14 17:58:04,827 [localhost-startStop-1] ERROR hbm2ddl.SchemaUpdate  - Unsuccessful: alter table user add index FK36EBCB99662CC8 (account_id), add constraint FK36EBCB99662CC8 foreign key (account_id) references account (id)
+2014-11-14 17:58:04,827 [localhost-startStop-1] ERROR hbm2ddl.SchemaUpdate  - Can't create table 'ship.#sql-576_9f' (errno: 150)
+Hibernate: select this_.id as id9_0_, this_.version as version9_0_, this_.date_created as date3_9_0_, this_.last_updated as last4_9_0_, this_.menu_desc as menu5_9_0_, this_.menu_name as menu6_9_0_, this_.menu_path as menu7_9_0_, this_.p_id as p8_9_0_, this_.sort_no as sort9_9_0_, this_.status as status9_0_ from menu this_ order by this_.sort_no desc
+Hibernate: select this_.id as id22_0_, this_.version as version22_0_, this_.add_user as add3_22_0_, this_.date_created as date4_22_0_, this_.last_updated as last5_22_0_, this_.level as level22_0_, this_.name as name22_0_, this_.p_id as p8_22_0_, this_.sort_no as sort9_22_0_ from area this_ order by this_.sort_no desc
+Server running. Browse to http://localhost:8080/ship

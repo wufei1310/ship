@@ -1,0 +1,61 @@
+package member
+
+import ship.XmlGoods
+
+class MemberXmlGoodsService {
+
+    private static List<XmlGoods> xmlGoodsList = new ArrayList<XmlGoods>();
+    private static Map<String,XmlGoods> xmlGoodsMap = new HashMap<String,XmlGoods>()
+    private static int size =0 ;
+
+    def getXmlGoodsList(){
+        return xmlGoodsList;
+    }
+
+    def getXmlGoodsList(p){
+        int d = 8
+        int s = (p-1)*d;
+        int m = d;
+        if(s>size-1){
+            return []
+        }else if(s+d>size-1){
+            m = size-1;
+        }else{
+            m = s + d -1
+        }
+        println "s:"+s
+        println "m:"+m
+        println xmlGoodsList[s..m]
+        return xmlGoodsList[s..m];
+    }
+
+    def getXmlGoods(id){
+        return  xmlGoodsMap.get(id)
+    }
+
+    def init() {
+        xmlGoodsList.clear();
+        xmlGoodsMap.clear();
+        def storePOJO = new XmlSlurper().parse(new File("/home/wufei/jucheworkspace/readGoods/src/readGoods.xml"))
+        for (goods in storePOJO.goodslist) {
+            XmlGoods xmlGoods = new XmlGoods();
+            xmlGoods.setGoods_name(goods.goods_name.text())
+            xmlGoods.setFloor(goods.floor.text())
+            xmlGoods.setMarket(goods.market.text())
+            xmlGoods.setPic(goods.pic.text())
+            xmlGoods.setPrice(goods.price.text())
+            xmlGoods.setQq(goods.qq.text())
+            xmlGoods.setStall(goods.stall.text())
+            xmlGoods.setStore_name(goods.store_name.text())
+            xmlGoods.setTel(goods.tel.text())
+            xmlGoods.setUrl(goods.url.text())
+            xmlGoods.setGoods_id(goods.goods_id.text())
+            xmlGoods.setSkusize(goods.skusize.text())
+            xmlGoods.setSkucolor(goods.skucolor.text())
+            xmlGoods.setContent(goods.content.text())
+            xmlGoodsList.add(xmlGoods);
+            xmlGoodsMap.put(goods.goods_id.toString(),xmlGoods)
+        }
+        size = xmlGoodsList.size();
+    }
+}

@@ -1,0 +1,280 @@
+package admin
+
+import grails.converters.JSON
+import ship.Market
+import ship.MobileMessage
+import ship.Pager
+import ship.ReturnGoods
+import ship.ReturnOrder
+import ship.ShipSN
+
+class AdminMobileController {
+
+    def index() {}
+
+
+    def fenJian(){
+        def shipSN =  ShipSN.findAllByStatus("1")
+        def returnOrder = ReturnOrder.findAllByWuliu_snInList(shipSN.wuliu_sn)
+
+        println  returnOrder
+
+        println   params.market
+
+        returnOrder.returnGoods.flatten().each{returnGoods->
+            if(returnGoods.status=="1") {  //1:新入库退换货商品统计2:分拣完毕退换货商品统计
+                if(params.market==returnGoods.daiFaGoods.market){
+
+
+                    ReturnGoods.executeUpdate("update ReturnGoods r set r.status='2'" +
+                            "where r.id="+returnGoods.id)
+                }
+            }
+        }
+
+        def mm = new MobileMessage()
+        mm.message = params.market+"退换货商品分拣完毕，等待代发人员领货退换"
+        mm.result = "success"
+
+        render mm as JSON
+    }
+
+
+
+    //获取退换货市场统计
+    def shipForMarket(){
+
+        def shipSN =  ShipSN.findAllByStatus("1")
+        def returnOrder = ReturnOrder.findAllByWuliu_snInList(shipSN.wuliu_sn)
+
+        def searchMarket = {
+        }
+        def marketList = Market.createCriteria().list(searchMarket)
+
+        def  resultList = []
+
+        marketList.each{market->
+            Long return_num = 0
+            def m_map = [:]
+            returnOrder.returnGoods.flatten().each{returnGoods->
+
+                if(returnGoods.status==params.returnGoodsStatus){  //1:新入库退换货商品统计2:分拣完毕退换货商品统计
+                    if(market.market_name==returnGoods.daiFaGoods.market){
+                        return_num = return_num + returnGoods.return_num
+                    }
+                }
+
+
+            }
+            m_map.market = market.market_name
+            m_map.num = return_num
+            resultList.add(m_map)
+
+        }
+
+
+        def mm = new MobileMessage()
+        mm.message = "获取市场退换货商品数量成功"
+        mm.result = "success"
+        mm.model = [list:resultList]
+
+        render mm as JSON
+
+    }
+
+    //根据市场查询下面的退换货商品
+    def returnGoodsList(){
+        def shipSN =  ShipSN.findAllByStatus("1")
+        def returnOrder = ReturnOrder.findAllByWuliu_snInList(shipSN.wuliu_sn)
+        def m_list = []
+        returnOrder.returnGoods.flatten().each{returnGoods->
+            if(returnGoods.status==params.returnGoodsStatus) {  //1:新入库退换货商品统计2:分拣完毕退换货商品统计
+                if(params.market==returnGoods.daiFaGoods.market){
+                    m_list.add(returnGoods.daiFaGoods)
+                }
+            }
+
+        }
+
+        def mm = new MobileMessage()
+        mm.message = "获取"+params.market+"退换货商品列表成功"
+        mm.result = "success"
+        mm.model = [list:m_list]
+
+        render mm as JSON
+
+
+    }
+
+
+    //物流单号列表查询
+    def shipList(){
+
+
+
+
+
+
+
+        if (!params.max) {
+            params.max = 10
+        }else{
+            params.max = new Long(params.max)
+        }
+        if (!params.offset) params.offset = 0
+        if (!params.sort) params.sort = "dateCreated"
+        if (!params.order) params.order = "desc"
+
+
+        def searchClosure =  {
+
+
+            if(params.status=="wait"){
+                eq("status","1")
+            }
+            if(params.status=="noowner"){
+                inList("status",["0","2"])
+            }
+
+        }
+
+        def o = ShipSN.createCriteria();
+        def results = o.list(params,searchClosure)
+
+        def map = [list: results, total: results.totalCount]
+
+
+        if(params.mobile=="mobile"){
+
+
+
+            //封装分页传给手机端
+            def pager = new Pager(max:params.max,"offset":params.offset,"totalPage":((results.totalCount-1)/params.max + 1) as int ,total:results.totalCount)
+            map.put("pager",pager)
+
+            def mm = new MobileMessage()
+            mm.message = "获取物流登记统计列表成功"
+            mm.result = "success"
+            mm.model = map
+
+            render mm as JSON
+        }
+
+
+    }
+
+    def regShipSNNum(){
+        //查询入库商品数量
+        def shipSN =  ShipSN.findAllByStatus("1")
+        def confirmOrder = ReturnOrder.findAllByWuliu_snInList(shipSN.wuliu_sn)
+
+
+        Long new_num = 0 ;//新入库商品数量
+        Long wait_num = 0;//分拣完毕商品数量
+        confirmOrder.returnGoods.flatten().each{returnGoods->
+            if(returnGoods.status=="1"){
+                new_num = new_num + returnGoods.return_num
+            }
+            if(returnGoods.status=="2"){
+                wait_num = wait_num + returnGoods.return_num
+            }
+
+        }
+
+
+        def noowner = ShipSN.countByStatusInList(["0","2"])
+
+        def map = [new_num:new_num,wait:wait_num,noowner:noowner]
+        def mm = new MobileMessage()
+        mm.message = "获取物流登记统计数据成功"
+        mm.result = "success"
+        mm.model = map
+
+        render mm as JSON
+    }
+
+    //扫描退回包裹的物流单号
+    def checkReturnOrderSN(){
+        def mm = new MobileMessage()
+        ReturnOrder returnOrder = ReturnOrder.findByWuliu_snAndStatus(params.wuliu_sn,"1")//已经支付的退换货申请
+        if(!returnOrder){
+
+            ShipSN shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
+            if(!shipSN){
+                shipSN = new ShipSN();
+            }
+            shipSN.num = params.num as int
+            shipSN.wuliu_sn = params.wuliu_sn
+            shipSN.status = "0"
+            shipSN.save();
+
+            mm.message = "系统中没有该物流单号的退换货申请,录入无主包裹"
+        }else{
+            int num = 0;
+            returnOrder.returnGoods.each{it->
+                it.status = "1" //记录该退换货商品办事处入库
+                num = num + (it.num as int);
+            }
+
+            if(num == (params.num as int)){
+                ShipSN shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
+                if(!shipSN){
+                    shipSN = new ShipSN();
+                }
+                shipSN.num = params.num as int
+                shipSN.wuliu_sn = params.wuliu_sn
+                shipSN.status = "1"
+                shipSN.save();
+
+
+
+
+                mm.message = "物流单号与商品数量匹配，录入新入库"
+
+
+            }else{
+                ShipSN shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
+                if(!shipSN){
+                    shipSN = new ShipSN();
+                }
+                shipSN.num = params.num as int
+                shipSN.wuliu_sn = params.wuliu_sn
+                shipSN.status = "2"
+                shipSN.save();
+
+
+                mm.message = "物流单号准确，商品数量不匹配，录入无主包裹"
+            }
+        }
+
+
+
+
+        //查询入库商品数量
+        def shipSN =  ShipSN.findAllByStatus("1")
+        def confirmOrder = ReturnOrder.findAllByWuliu_snInList(shipSN.wuliu_sn)
+
+
+        Long new_num = 0 ;//新入库商品数量
+        Long wait_num = 0;//分拣完毕商品数量
+        confirmOrder.returnGoods.flatten().each{returnGoods->
+            if(returnGoods.status=="1"){
+                new_num = new_num + returnGoods.return_num
+            }
+            if(returnGoods.status=="2"){
+                wait_num = wait_num + returnGoods.return_num
+            }
+
+        }
+
+
+        def noowner = ShipSN.countByStatusInList(["0","2"])
+
+        def map = [new_num:new_num,wait:wait_num,noowner:noowner]
+        mm.result = "success"
+        mm.model = map
+
+        render mm as JSON
+        return;
+    }
+}

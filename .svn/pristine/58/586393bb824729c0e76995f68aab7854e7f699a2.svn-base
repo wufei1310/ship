@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="layout" content="main"/>
+    <title>金士代发</title>
+</head>
+
+<body>
+<div class="container body" id="page">
+
+    <div class="page-header">
+        <h3>
+            如果您需要为您的买家提供退货、换货服务，只需2元，我们为您代劳。
+        </h3>
+    </div>
+
+    <div class="row">
+        <div class="span12">
+            <div class="hero-unit">
+                <div class="row">
+                    <div class="span5 pull-left">
+                        <h2>金士代发平台订单<span style="font-size: 0.4em;"></span></h2>
+
+                        <p>商品是在本平台代发，请输入订单号，快速提交退换货信息。</p>
+                        <g:form class="form-inline" controller="memberDaiFaOrder" action="list" method="post">
+                            <input style="height: 30px;" value="${params.orderSN}" name="orderSN" type="text"
+                                   class="input-medium " placeholder="请输入订单号">
+
+                            <button type="submit" class="btn btn-primary btn-large">去退换货</button>
+                            <g:link controller="memberDaiFaOrder" action="list"
+                                    class="btn btn-success btn-large">我的订单</g:link>
+                        </g:form>
+
+                    </div>
+                    <div class="span5 pull-right">
+                        <h4>退换货下单前准备</h4>
+                        <ol>
+                            <li>在委托我们帮您退、换货前，请先跟档口联系是否可以退、换</li>
+                            <li>通知您的买家将要退、换的货物寄到如下地址：广州市白云区沙太南路318号橡树园小区A2栋310号</li>
+                            <li>当您的买家按上述地址发货后，请向您的买家取得退回的快递单照片</li>
+                            <li>下单并正确填写信息（填写错误的退换货信息会拖延您的最佳退、换货时机，也有可能造成您的货物损失）</li>
+                        </ol>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        %{--<div class="span6">--}%
+        %{--<div class="hero-unit">--}%
+        %{--<h2>非本平台订单</h2>--}%
+        %{--<p>商品不是我们代发的，请在这里下单。</p>--}%
+        %{--<g:link controller="memberDaiFaOrder" action="toSaleReturnAdd"  class="btn btn-primary btn-large">我要退换货</g:link>--}%
+        %{--</div>--}%
+        %{--</div>--}%
+
+    </div>
+
+
+
+
+
+    <g:render template="/layouts/footer"/>
+
+</div> <!-- /container -->
+
+</body>
+</html>

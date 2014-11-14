@@ -1,0 +1,35 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package ship
+
+/**
+ *
+ * @author DELL
+ */
+class TranLog {
+    static constraints = {
+        goods_id(blank:true,nullable:true)
+        shouru_type(blank:true,nullable:true)
+        order_user(blank:true,nullable:true)
+        num(blank:true,nullable:true)
+    }
+    
+    BigDecimal amount
+    Long num//商品数量
+    String direction //0收入 1支出
+    String type // 1 [支出]验收商品 2 [支出]发货运费 3 [收入]会员对商品补款 4 [收入]会员对运费补款 5 [支出]会员取消商品退款 6[支出]会员取消商品退运费 7[收入]会员支付商品 8 [收入]会员支付运费 9[收入]会员支付服务费 10 [支出]退货退款 11 [支出]空包退还代发费用 12 [收入]会员支付退换货服务费 13 [收入]会员换货支付差价 14[收入]会员支付换货运费  15[支出]发货运费(换货) 16[收入]退货档口回款 17[支出]换货差价支出 18[收入]会员充值 19[支出]会员充值 20[收入]会员支付礼品费 21[支出]会员取消商品退礼品费 22[支出]会员更换档口退货款 23[收入]会员更换档口超过2次支付费用
+    String orderSN;
+    String goods_id;
+    String shouru_type //0 会员账户余额支付 1支付宝支付 2线下支付
+    
+    
+    String flat="0" //0 平台订单 1 非平台订单 2会员充值
+    Long order_user //订单创建人
+    
+    Date dateCreated
+    Date lastUpdated
+}
+

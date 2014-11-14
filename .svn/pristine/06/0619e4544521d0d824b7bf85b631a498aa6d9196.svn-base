@@ -1,0 +1,24 @@
+package ship
+
+class ShipSNGoods {
+
+    static constraints = {
+        shouliUserId(blank:true,nullable:true)
+        shouliUser(blank:true,nullable:true)
+        shouliTime(blank:true,nullable:true)
+    }
+
+    String wuliu_sn;
+    String orderSN //关联退换货申请单号
+    String status;// 0：物流单不存在 1:已核实，广州办收货确认2：单号匹配，商品数量不符 3:无主包裹，手工关联入库  4:已分配代发人员 5:已由代发人员退货完成 6与代发人员已结账
+    String goods_sn
+    int num;  //输入数量
+
+    Long shouliUserId //受理人id
+    String shouliUser
+    Date shouliTime
+
+
+    Date dateCreated
+    Date lastUpdated
+}

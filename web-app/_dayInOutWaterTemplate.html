@@ -1,0 +1,105 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- 最新 Bootstrap 核心 CSS 文件 -->
+        <style type="text/css">
+
+
+.head table{
+  width:100%;
+}
+
+.content{
+  width:100%;
+}
+
+ table
+        {
+            border-collapse: collapse;
+            border: none;
+            width: 100%;
+        }
+     table    td
+        {
+            border: solid #000 1px;
+        }
+</style>
+
+    </head>
+    <body>
+        <div class="page-header">
+        <h3>已发货订单收入支出对照明细</h3>
+      </div>
+        
+        <table class="table table-bordered">
+        <thead>
+          <tr>
+            <td colspan="1" width="10%"></td>
+            <td colspan="1" width="10%"></td>
+            <td colspan="2">收入</td>
+            <td colspan="2">支出</td>
+            
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td>订单号</td>
+            <td>发货时间</td>
+            <td>货款</td>
+            <td>运费</td>
+            <td>货款</td>
+            <td>运费</td>
+         
+          </tr>
+          <tr>
+            <td>882832323</td>
+            <td>2014-2-2 2:3:2</td>
+            <td>${ingoodsfee}</td>
+            <td>${inshipfee}</td>
+            <td>${outgoodsfee}</td>
+            <td>${outshipfee}</td>
+         
+          </tr>
+          <tr>
+            <td>882832323</td>
+            <td>2014-2-2 2:3:2</td>
+            <td>${ingoodsfee}</td>
+            <td>${inshipfee}</td>
+            <td>${outgoodsfee}</td>
+            <td>${outshipfee}</td>
+         
+          </tr>
+          <tr>
+              <td colspan="2">总计</td>
+            <td>${totalingoodsfee}</td>
+            <td>${totalinshipfee}</td>
+            <td>${totaloutgoodsfee}</td>
+            <td>${totaloutshipfee}</td>
+         
+          </tr>
+          <tr>
+            <td colspan="2">总计</td>
+            <td colspan="2">${totalinfee}</td>
+            <td colspan="2">${totaloutfee}</td>
+         
+          </tr>
+          <tr>
+            <td colspan="2">净利</td>
+            <td colspan="4">${totalinfee-totaloutfee}</td>
+         
+          </tr>
+          
+         
+          
+          
+        </tbody>
+      </table>
+    </body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="layout" content="main"/>
+    <title>金士代发</title>
+</head>
+
+<body>
+<r:require modules="chart"/>
+<div class="container body" id="page" style="margin-top:100px;  ">
+
+    <div class="row-fluid">
+        <div class="span2">
+          
+          
+          <div class="row-fluid">
+                <div class="span12 well">
+                        点击下面红色文字，可快速引导您需要管理的订单
+                </div>
+            </div>
+          
+          
+            <div class="row-fluid">
+                <div class="span12 alert alert-success">
+                        未付款：<g:link style="text-decoration:underline;color: red;" controller="memberDaiFaOrder" action="list"
+                                    params="[status: 'waitpay']">${waitpay}</g:link>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span12 alert alert-success">
+
+                            需要补款/缺货： <g:link style="text-decoration:underline;color: red;" controller="memberDaiFaOrder" action="list" params="[status: 'error']">${error}
+                        </g:link>
+
+                </div>
+
+                <div class="row-fluid">
+                    <div class="span12 alert alert-success">
+
+
+                                需要补运费：<g:link style="text-decoration:underline;color: red;" controller="memberDaiFaOrder" action="list" params="[status: 'diffship']">${diffship}
+                            </g:link>
+                    </div>
+                </div>
+              
+              
+                <div class="row-fluid">
+                    <div class="span12 alert alert-success">
+
+
+                                已出物流单：<g:link style="text-decoration:underline;color: red;" controller="memberDaiFaOrder" action="list" params="[status: 'diffship']">${diffship}
+                            </g:link>
+                    </div>
+                </div>
+              
+
+                <div class="row-fluid">
+                    <div class="span12 alert alert-success">
+
+
+
+                                已发货：<g:link style="text-decoration:underline;color: red;" controller="memberDaiFaOrder" action="list" params="[status: 'shipped']">${shipped}
+
+                            </g:link>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="span10">
+
+            <div class="page-header">
+                <h3>最新订单
+                    <g:link controller="memberDaiFaOrder" action="add" class="btn btn-primary btn-large pull-right">创建新订单</g:link>
+                </h3>
+
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>订单号</th>
+                    <th>总费用</th>
+                    <th>创建时间</th>
+                    <th>取货详情</th>
+                </tr>
+                </thead>
+                <tbody>
+                <g:each in="${orderResults}">
+                    <tr>
+                        <td>${it.orderSN}</td>
+                        <td>${it.totalFee}</td>
+                        <td>${it.dateCreated.toString()[0..18]}</td>
+                        <td>
+                        <g:link controller="memberDaiFaOrder" action="show" id="${it.id}" params="${params}" >点击查看取货进展</g:link>
+                        </td>
+                    </tr>
+
+                </g:each>
+
+                </tbody>
+            </table>
+
+
+
+            %{--<canvas id="canvas" height="90"></canvas>--}%
+        </div>
+
+    </div> <!-- /container -->
+<g:render template="/layouts/footer"/>
+
+    <script>
+        var lineChartData = {
+            labels: [${keyStr}],
+            datasets: [
+                {
+                    label: "My Second dataset",
+                    fillColor: "rgba(151,187,205,0.2)",
+//                    strokeColor : "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: ${mdata}
+                }
+            ]
+
+        }
+
+        window.onload = function () {
+            var ctx = document.getElementById("canvas").getContext("2d");
+            window.myLine = new Chart(ctx).Line(lineChartData, {
+                responsive: true
+            });
+        }
+
+
+    </script>
+
+</body>
+
+</html>

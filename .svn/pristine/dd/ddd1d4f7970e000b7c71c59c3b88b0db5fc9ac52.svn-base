@@ -1,0 +1,68 @@
+package ship
+
+class ReturnOrder {
+
+    static constraints = {
+        check_user(blank:true,nullable:true)
+        check_time(blank:true,nullable:true)
+        reason(blank:true,nullable:true)
+        shipFee(blank:true,nullable:true)
+        payTime(blank:true,nullable:true)
+        daiFaOrder(blank:true,nullable:true)
+        orderSN(blank:true,nullable:true)
+        chajia(blank:true,nullable:true)
+        h_wuliu_sn(blank:true,nullable:true)
+        shipTime(blank:true,nullable:true)
+        actual_shipFee(blank:true,nullable:true)
+        tui_user(blank:true,nullable:true)
+        tui_time(blank:true,nullable:true)
+        chajia(min:new BigDecimal(0))
+        actual_shipFee(min:new BigDecimal(0))
+        goodsFee(min:new BigDecimal(0))
+        shipFee(min:new BigDecimal(0))
+        serviceFee(min:new BigDecimal(0))
+        totalFee(min:new BigDecimal(0))
+        wuliupic(blank:true,nullable:true)
+    }
+    static mapping = {
+            sort lastUpdated: "desc" // or "asc"
+            returnGoods sort: 'id', order: 'desc'
+     }
+     
+    static hasMany = [ returnGoods : ReturnGoods]
+
+     DaiFaOrder daiFaOrder
+     String wuliu  //退回物流公司
+     String wuliu_sn //退回物流单号
+     String orderSN //订单号
+     String status //0 未支付 1 已支付,等待处理  2 退货完成,已退款 3 审核不通过 4 已退货,档口已回款 5 换货完成,已发货
+     String type //0 退货 1换货
+     Long add_user //下单人
+     User tui_user //退换货操作人
+     Date tui_time //退换货操作时间
+     User check_user //审核人
+     Date check_time
+     String reason
+     Date payTime //支付时间
+
+    BigDecimal chajia; //差价
+    String h_wuliu_sn //换货发货物流单号
+    Date shipTime //发货时间
+    BigDecimal actual_shipFee //实际发货运费
+    
+    BigDecimal goodsFee; //商品退回的费用/换货商品支付费用
+    BigDecimal shipFee //运费
+    BigDecimal serviceFee //服务费
+    BigDecimal totalFee //支付总费用
+    
+    String flat //0 平台订单  1非平台订单 
+    
+    String sendperson//发件人
+    String sendaddress //发件人地址
+    String sendcontphone //发件人手机
+
+    String wuliupic//快递单　图片
+    
+    Date dateCreated
+    Date lastUpdated
+}

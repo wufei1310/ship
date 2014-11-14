@@ -1,0 +1,67 @@
+package ship
+
+import grails.converters.JSON
+import javax.servlet.http.HttpServletRequest
+import org.springframework.web.multipart.MultipartHttpServletRequest
+import org.springframework.web.multipart.MultipartFile
+import org.apache.commons.fileupload.FileUploadException
+import org.codehaus.groovy.grails.web.json.JSONObject
+import java.text.SimpleDateFormat
+
+import util.FileUtil
+
+import com.qiniu.api.io.PutRet;
+import util.SysPropertUtil
+import java.awt.image.BufferedImage
+import sysinit.SysInitParams
+import admin.BaseController
+
+
+class ImageController extends BaseController{
+    
+    public static final String IMG_BUCKET = SysPropertUtil.getString("QN.IMG_BUCKET")
+ 
+    def index() { }
+
+   
+    
+    private String getError(String message) {
+	JSONObject obj = new JSONObject();
+	obj.put("error", 1);
+	obj.put("message", message);
+	return obj.toString();
+    }
+    
+    
+    
+    
+    def doImgUpload(){
+        print request.getFileMap()
+        def file = request.getFile("imgFile")
+        long maxSize = 2100000
+        if (file.getSize() > maxSize){
+            render(getError(file.getOriginalFilename()+"尺寸过大超过2M"));
+            return 
+        }
+                
+        
+        HashMap<String, String> extMap = new HashMap<String, String>();
+        extMap.put("image", "*");
+        String newFileName = FileUtil.getNewFileName(session.loginPOJO.user.id)
+        
+        boolean flat = FileUtil.doUpload(extMap,IMG_BUCKET,newFileName,file.inputStream)
+        if(flat){
+                JSONObject obj = new JSONObject();
+		obj.put("error", 0);
+		obj.put("url", "http://"+IMG_BUCKET+".qiniudn.com/"+newFileName);
+		render(obj.toString());
+        }else{
+            render(getError(file.getOriginalFilename()+"上传失败"));
+        }
+    }
+    
+   
+
+}
+
+

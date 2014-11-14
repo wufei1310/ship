@@ -1,0 +1,180 @@
+package admin
+
+import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.support.PropertiesLoaderUtils
+import ship.DaiFaGoods
+import ship.DaiFaOrder
+import ship.Market
+import ship.Pager
+import ship.ReturnOrder
+import ship.ShipSN
+import ship.User
+import ship.MobileMessage
+import ship.LoginPOJO
+import grails.converters.JSON
+import ship.PushMsg
+import ship.Menu
+import ship.Role
+import ship.UserCheck
+
+class MobileController {
+    def properties = PropertiesLoaderUtils.loadProperties(new ClassPathResource("sysSetting.properties"))
+
+    def index() { }
+    
+    
+    def login(){
+        
+
+
+        if(!params.isNew){
+            def mm = new MobileMessage()
+            mm.message = "该软件有新版本，请更新"
+            mm.result = "fail"
+            render mm as JSON
+            return;
+        }
+
+
+        def isPro = properties.getProperty("isPro");
+
+        if(isPro=="true"){
+            UserCheck userCheck =  UserCheck.findByEmailAndApk_type(params.email,params.apk_type)
+
+
+            if(userCheck){
+                if(userCheck.deviceId !=  params.deviceId){
+                    def mm = new MobileMessage()
+                    mm.message = "只能在您自己的手机上登录"
+                    mm.result = "fail"
+                    render mm as JSON
+                    return;
+                }
+            }else{
+                UserCheck userCheck1 = new UserCheck();
+                userCheck1.email = params.email;
+                userCheck1.apk_type = params.apk_type
+                userCheck1.deviceId =  params.deviceId
+                userCheck1.save();
+            }
+        }
+
+
+
+
+
+
+        
+        def user = User.findByEmailAndPasswordAndUser_type(params.email, params.password,"admin")
+        if(!user){
+            
+            def mm = new MobileMessage()
+            
+            mm.message = "帐号或者密码不正确"
+            mm.result = "fail"
+            
+            render mm as JSON
+        }else if(user.status == '1'){
+            def mm = new MobileMessage()
+            
+            mm.message = "用户被冻结"
+            mm.result = "fail"
+            
+            render mm as JSON
+        }else{
+            def searchClosure =  {
+            
+           role{eq("id",user.role_id.id)}
+        }
+        
+        def o = Menu.createCriteria();
+        def menu = o.list(params,searchClosure)
+
+            def menuList = new ArrayList();
+            def roleMenuList = new ArrayList();
+            menu.each { it ->
+                if(it.pId == 0){
+                   menuList.add(it) 
+                }
+                if(it.menuPath){
+                    roleMenuList.add(it.menuPath)
+                }     
+            }
+            menuList.each{it ->
+                menu.each{ i ->
+                    if(i.pId == it.id)
+                        it.childrenMenu.add(i)
+                }
+            }
+            
+            def loginPOJO = new LoginPOJO();
+            loginPOJO.user = user;
+            loginPOJO.menuList = menuList;
+            loginPOJO.roleMenuList = roleMenuList//验证菜单权限
+            session.loginPOJO = loginPOJO;
+            
+            def mm = new MobileMessage()
+            mm.message = "登录成功"
+            mm.result = "success"
+            mm.model.put("loginPOJO",loginPOJO)
+            
+            if(params.channel_id){
+                def pushMsg = PushMsg.get(user.id)
+                if(!pushMsg){
+                    pushMsg = new PushMsg();
+                    pushMsg.id = user.id
+                }
+                 pushMsg.appid = params.appid
+                 pushMsg.channel_id = params.channel_id
+                 pushMsg.push_user_id = params.push_user_id
+                 pushMsg.apk_type = params.apk_type
+                 pushMsg.user_type = user.user_type
+                 pushMsg.role = user.role
+                 pushMsg.save();
+            }
+            
+            
+            render mm as JSON
+        }
+    }
+    
+    def reqFinalServerVersion(){
+        
+        params.max = 1  
+       
+        params.offset = 0  
+        params.sort = "dateCreated"  
+        params.order = "desc" 
+        
+        def searchClosure =  {
+            
+           
+            if(params.app_type){
+                eq('app_type',params.app_type)
+            }
+            if(params.platform){
+                eq('platform',params.platform)
+            }
+        }
+        
+        def o = AdminApk.createCriteria();
+        def results = o.list(params,searchClosure)
+        
+        def mm = new MobileMessage()
+            mm.result = "success"
+            mm.model.put("adminApk",results[0])
+            
+//        render results[0] as JSON
+
+        def m = [:]
+        m.put("versioncode",results[0].versioncode)
+        m.put("versionname",results[0].versionname)
+        m.put("newapkfeature",results[0].newapkfeature)
+        
+        render m as JSON
+    }
+
+
+
+
+}

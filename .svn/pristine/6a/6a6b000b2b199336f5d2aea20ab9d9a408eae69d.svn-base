@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="layout" content="main"/>
+    <title>金士代发</title>
+</head>
+<body>
+<div class="container body" id="page">
+
+
+
+    <div class="page-header">
+        <h3>
+            最热货源
+        </h3>
+    </div>
+
+
+
+    <div class="row-fluid">
+        <ul class="thumbnails">
+
+            <g:set var="j" value="${0}" />
+            <g:each in="${xmlGoodsList}" status="i" var="goods">
+
+
+
+                    <li class="span3">
+                        <div class="thumbnail">
+
+                <g:link controller="memberNewProduct" action="goods" id="${goods.goods_id}" class="areafancybox fancybox.ajax">
+
+                            <img title="${goods.goods_name}" style="width: 300px; height: 200px;" src="${goods.pic}">
+                    </g:link>
+                            <div class="caption">
+                                <h4>${goods.goods_name.size()>18?goods.goods_name[0..18]:goods.goods_name[0..10]}</h4>
+                                <p>价格：${goods.price}</p>
+                                <p>尺码：${goods.skusize}</p>
+                                <p>颜色：${goods.skucolor}</p>
+                                <p>${goods.store_name}&nbsp;${goods.market}&nbsp;${goods.floor}&nbsp;${goods.stall}</p>
+                                <p>手机：${goods.tel}&nbsp;&nbsp;&nbsp;</p>
+                                <p>QQ：${goods.qq}</p>
+                                <p>
+
+                                    <g:link controller="memberNewProduct" action="goods" id="${goods.goods_id}" class="btn btn-info areafancybox fancybox.ajax">瞅瞅</g:link>
+
+                                    <a href="#" class="btn btn-primary">上传淘宝</a>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+
+                <g:if test="${j%4==3}">
+                        </ul>
+                    </div>
+                    <div class="row-fluid">
+                     <ul class="thumbnails">
+                </g:if>
+                <g:set var="j" value="${j + 1}" />
+            </g:each>
+
+        </ul>
+    </div>
+    <ul class="pager">
+        <li><g:link controller="memberNewProduct" action="list" params="[p:(p as int) - 1]">上一页</g:link></li>
+        <li><g:link controller="memberNewProduct" action="list" params="[p:(p as int) + 1]">下一页</g:link></li>
+    </ul>
+
+    <g:render template="/layouts/footer"/>
+</div> <!-- /container -->
+<script>
+    $(document).ready(function() {
+        $(".areafancybox").fancybox({
+            'width':'300px'
+        });
+    });
+
+</script>
+</body>
+</html>

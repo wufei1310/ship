@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="layout" content="adminMain"/>
+    <r:require modules="bootstrapDatetimepicker"/>
+    <title>金士代发</title>
+  </head>
+  <body>
+    <g:if test="${flash.message}">
+         <script>
+         alert('${flash.message}')
+        </script>
+      </g:if>
+  
+  <script>
+      function fahuo(){
+         var wuliu_no =  $("#wuliu_text").val()
+         if($.trim(wuliu_no)==''){
+           alert("请填写物流单号")
+           return false
+         }else{
+            toActionCom({wuliu_no:wuliu_no},'<%=request.getContextPath()%>/adminDaiFaOrder/updateForShipped')
+         }
+      }
+  </script>
+  
+    <div id="wuliuModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">填写物流单号</h3>
+    </div>
+      
+      <div class="modal-body">     
+        <form class="form-horizontal">
+          <div class="control-group">
+            <label class="control-label">物流单号</label>
+            <div class="controls">
+              <input  data-required-message="物流单号不能为空" data-required="true" type="text" id="wuliu_text" >
+            </div>
+          </div>
+
+          <div class="control-group">
+            <div class="controls">
+              <button type="button" class="btn btn-primary btn-large" onclick="fahuo()" >发货</button>
+            </div>
+          </div>
+          </form>
+      </div>
+        
+    </div>
+  
+    <div class="container body" id="page">
+      <div class="page-header">
+        <h3>所有订单
+        </h3>
+      </div>
+      <div class="well well-large">
+        <form class="form-inline">
+          物流号：
+          <input name="wuliu_no" type="text" class="" placeholder="" value="${params.wuliu_no}">
+            订单号：
+            <input name="orderSN" type="text" class="" placeholder="" value="${params.orderSN}">
+            会员ID：
+        <input name="add_user" type="text" class="span1" placeholder="" value="${params.add_user}">
+          状态：
+           <g:select class="input-small" value="${params.status}" name="status" optionKey="status" optionValue="queryShow" from="${[[status:"",queryShow:"全部"],[status:"waitpay",queryShow:"未付款"],[status:"waitaccept",queryShow:"已付款等待拿货"],[status:"partaccept",queryShow:"已部分验收"],[status:"problem",queryShow:"问题订单"],[status:"allaccept",queryShow:"验收完成，等待发货"],[status:"shipped",queryShow:"已发货"],[status:"error",queryShow:"补款或缺货"],[status:"close",queryShow:"已取消"],[status:"diffship",queryShow:"需要补运费"],[status:"kill",queryShow:"终止订单"]]}" />
+           发货时间:
+           <input class="datetime input-small" value="${params.start_date}"  type="text" name="start_date">  ~  <input class="datetime input-small" value="${params.end_date}"  type="text" name="end_date">
+          
+          <button type="submit" class="btn btn-primary">查询</button>
+        </form>
+        
+         <script>
+    $(document).ready(function(){
+		 $(".datetime").datetimepicker({
+			format: "yyyy-mm-dd",
+			autoclose: true,
+			todayBtn: true,
+			pickerPosition: "bottom-left",
+			minView:4,
+			language:'zh-CN'
+		    });
+	  })
+
+</script>
+      </div>
+      
+      <div class="bs-docs-example">
+        
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>订单号</th>
+              <th>收货人</th>
+              <th>总费用</th>
+              <th>补款费</th>
+              <th>快递公司</th>
+              <th>物流单号</th>
+              <th>状态</th>
+              <th>发货时间</th>
+                <th>会员ID</th>
+              <th>创建时间</th>
+                %{--<th>数量</th>--}%
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+          <g:each in="${list}" status="i" var="daiFaOrder">
+            <tr>
+              <td>${daiFaOrder.orderSN}</td>
+              <td>${daiFaOrder.reperson}</td>
+              <td>${daiFaOrder.totalFee}</td>
+              <td>${daiFaOrder.diffFee}</td>
+              <td><order:wuliu wuliu="${daiFaOrder.wuliu}" /></td>
+              <td>${daiFaOrder.wuliu_no}</td>
+              <td><orderAdmin:orderStatusDic status="${daiFaOrder.status}"/></td>
+              <td>${daiFaOrder.ship_time}</td>
+                <td>${daiFaOrder.add_user}</td>
+              <td>${daiFaOrder.dateCreated.toString()[0..18]}</td>
+                %{--<td>${daiFaOrder.daiFaGoods.num}</td>--}%
+              <td>
+                 <g:link controller="adminDaiFaOrder" action="show"  params="${params}" id="${daiFaOrder.id}" class="btn">查看</g:link>
+<!--                 <g:if test="${daiFaOrder.status == 'waitaccept'}">
+                   <a class="btn btn-primary" href="javascript:void(0)" onclick="toActionCom({id:'${daiFaOrder.id}'},'<%=request.getContextPath()%>/adminDaiFaOrder/updateForProcessing','确认处理此订单吗？')">我来处理</a>
+                 </g:if>-->
+<!--                <g:if test="${daiFaOrder.status == 'processing' && daiFaOrder.processing_user_id == session.loginPOJO.user.id}">
+                   <a class="btn btn-primary" href="#wuliuModal" data-toggle="modal" onclick="$('#commonActionForm').find('#id').val('${daiFaOrder.id}')">发货</a>
+                 </g:if>-->
+                  <g:if test="${daiFaOrder.status == 'waitpay' && session.loginPOJO.user.email == 'superquan' }">
+                   <a class="btn btn-primary" href="javascript:void(0)"  onclick=" toActionCom({id:'${daiFaOrder.id}'},'<%=request.getContextPath()%>/adminDaiFaOrder/delete','确定删除该订单吗？')">删除</a>
+                 </g:if> 
+              </td>
+            </tr>
+          </g:each>
+            
+            
+            
+          </tbody>
+        </table>
+      </div>
+<div class="row-fluid">
+      <div class="span12">
+      <div  class="pagination pagination-right new-pagination" >
+          
+
+
+            <g:if test="${total != 0}">
+                <g:paginate total="${total}"  params="${params}" action="list"  update="page" />
+           </g:if>
+            
+            <span class="currentStep">共${total}条数据</span>
+          </div>
+      </div>
+    </div>
+         <form     method="post" id="commonActionForm" target="innerFrame">
+                  <input type='hidden' name='id' id='id' class='key'>
+                  <input type='hidden' name='wuliu_no' id='wuliu_no' class='key'>
+        </form>
+        <iframe id="innerFrame" name="innerFrame" height="0" frameborder="0"></iframe>
+         <g:form  action="${actionName}" params="${params}"  method="post" class="commonListForm">
+        </g:form >       
+      <g:render template="/layouts/footer"/>
+    </div> <!-- /container -->
+  </body>
+</html>
+

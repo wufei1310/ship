@@ -1,0 +1,139 @@
+package member
+
+import ship.DaiFaGoods
+import ship.DaiFaOrder
+import ship.User
+import ship.Account
+import ship.ResetPassword
+class MemberUserController {
+
+    def index() {
+
+        def waitpay = DaiFaOrder.countByStatusAndAdd_user("waitpay",session.loginPOJO.user.id)
+        def error = DaiFaOrder.countByStatusAndAdd_user("error",session.loginPOJO.user.id)
+        def diffship = DaiFaOrder.countByStatusAndAdd_user("diffship",session.loginPOJO.user.id)
+        def shipped = DaiFaOrder.countByStatusAndAdd_user("shipped",session.loginPOJO.user.id)
+        def guanlian = DaiFaOrder.countByIsCanExportAndAdd_user("3",session.loginPOJO.user.id)
+
+
+        def keyStr = ""
+        def mdata = []
+        def date = new Date()
+        for(int i=10;i>0;i--){
+            def c = DaiFaGoods.createCriteria()
+            def goodsCount = c.get {
+                eq("add_user",session.loginPOJO.user.id)
+                between("dateCreated",date-i-1,date-i)
+                projections {
+                    sum "num"
+                }
+            }
+            keyStr = keyStr + ",'" + (date-i).format ('yyyy-MM-dd') + "'";
+            mdata.add(goodsCount!=null?goodsCount:0)
+        }
+
+
+        if (!params.max) params.max = 10
+        if (!params.offset) params.offset = 0
+        if (!params.sort) params.sort = "dateCreated"
+        if (!params.order) params.order = "desc"
+
+        def searchClosure = {
+            ne("status", "delete")
+            eq('add_user', session.loginPOJO.user.id)
+        }
+
+        def o = DaiFaOrder.createCriteria();
+        def orderResults = o.list(params, searchClosure)
+
+
+
+        def map = [orderResults:orderResults,shipped:shipped,diffship:diffship,error:error,waitpay:waitpay,keyStr:keyStr.substring(1),mdata:mdata,guanlian:guanlian]
+        render(view: "/member/index",model:map)
+    }
+    
+    
+    def reqUserInfo(){
+        def user = User.get(session.loginPOJO.user.id)
+        def map = [user:user]
+        render(view: "/member/user/update",model:map)
+    }
+    
+    def doUpdateUserInfo(){
+        def user = User.get(session.loginPOJO.user.id)
+        user.properties = params
+        flash.message = "修改个人资料成功"
+        redirect(action:"reqUserInfo") 
+    }
+    def toSetSafepass(){
+        def user = User.get(session.loginPOJO.user.id)
+        if(user.safepass){
+            render(view: "/member/user/toSetSafepassAgain")
+        }else{
+            render(view: "/member/user/toSetSafepass")
+        }
+    }
+    
+    def doSetSafepass(){
+        def user = User.get(session.loginPOJO.user.id)
+        if(params.password.encodeAsPassword()!=user.password){
+            flash.message = "登录密码不正确"
+        }else{
+            user.safepass = params.safepass.encodeAsPassword()
+            session.loginPOJO.user = user
+            flash.message = "设置支付密码成功"
+        }
+        redirect(action:"toSetSafepass")
+    }
+    def doSetSafepassAgain(){
+        def user = User.get(session.loginPOJO.user.id)
+        if(params.safepass.encodeAsPassword()!=user.safepass){
+            flash.message = "支付密码不正确"
+        }else{
+            user.safepass = params.new_safepass.encodeAsPassword()
+            session.loginPOJO.user = user
+            flash.message = "修改支付密码成功"
+        }
+        redirect(action:"toSetSafepass")
+    }
+    
+    def selAccount(){
+        render User.get(session.loginPOJO.user.id).account.amount
+    }
+    
+    def toSafepassEmail(){
+        render(view: "/member/user/toSafepassEmail")
+    }
+    
+    def doSafepassEmail(){
+        ResetPassword.executeUpdate("delete ResetPassword d where d.user_id = :user_id and d.type = '0'", [user_id:session.loginPOJO.user.id])
+        
+        def resetPassword = new ResetPassword()
+        resetPassword.id = UUID.randomUUID().toString()
+        resetPassword.user_id = session.loginPOJO.user.id
+        resetPassword.type = '0'
+        resetPassword.save()
+        
+        String baseUrl = "http://" + request.getServerName() + ":" + request.getServerPort()
+        String bodyStr = "请在60分钟内复制以下链接至浏览器的地址栏直接打开。\n"+baseUrl+"${createLink(controller :'index', action: 'resetPassword')}"+"?id="+resetPassword.id+"\n"+
+        "如果您不知道为什么收到了这封邮件，可能是他人不小心输错邮箱意外发给了您，请忽略此邮件。"
+
+        String email =  session.loginPOJO.user.email;
+
+        Thread.start {
+            print "start============================="
+            println "email:" + email
+
+                
+            sendMail {  
+                async true 
+                from "service@findyi.com"
+                to   email
+                subject "【金士代发】找回支付密码"     
+                body bodyStr
+            }
+            print "success============================="
+        }
+        render(view:"/member/user/emailSuccess")
+    }
+}

@@ -1,0 +1,733 @@
+package admin
+
+import grails.converters.JSON
+import ship.Market
+import ship.MobileMessage
+import ship.Pager
+import ship.ReturnGoods
+import ship.ReturnGoodsPOJO
+import ship.ReturnOrder
+import ship.ShipSN
+
+class AdminMobileController {
+
+    def index() {}
+
+
+
+
+
+    //分拣
+    def fenJian() {
+        def shipSN = ShipSN.findAllByStatus("1")
+        def returnOrder = ReturnOrder.findAllByWuliu_snInList(shipSN.wuliu_sn)
+
+
+        returnOrder.returnGoods.flatten().each { returnGoods ->
+            if (returnGoods.status == "1") {  //1:新入库退换货商品统计2:分拣完毕退换货商品统计
+                if (params.market == returnGoods.daiFaGoods.market) {
+                    returnGoods.status = "2"
+                    returnGoods.fenjianTime = new Date();
+                    returnGoods.fenjianUser = session.loginPOJO.user.email;
+
+                }
+            }
+        }
+
+        def mm = new MobileMessage()
+        mm.message = params.market + "退换货商品分拣完毕，等待代发人员领货退换"
+        mm.result = "success"
+
+        render mm as JSON
+    }
+
+
+
+
+
+
+    //获取退换货市场统计
+    def shipForMarket() {
+
+        def shipSN = ShipSN.findAllByStatus("1")
+        def returnOrder = ReturnOrder.findAllByWuliu_snInList(shipSN.wuliu_sn)
+        def searchMarket = {
+        }
+        def marketList = Market.createCriteria().list(searchMarket)
+
+        def resultList = []
+
+        marketList.each { market ->
+            Long return_num = 0
+            def m_map = [:]
+            returnOrder.returnGoods.flatten().each { returnGoods ->
+
+                if (returnGoods.status == params.returnGoodsStatus) {  //1:新入库退换货商品统计2:分拣完毕退换货商品统计
+
+                    if (market.market_name == returnGoods.daiFaGoods.market) {
+                        return_num = return_num + returnGoods.return_num
+                    }
+                }
+
+
+            }
+            m_map.market = market.market_name
+            m_map.num = return_num
+            resultList.add(m_map)
+
+        }
+
+
+        def mm = new MobileMessage()
+        mm.message = "获取市场退换货商品数量成功"
+        mm.result = "success"
+        mm.model = [list: resultList]
+        render mm as JSON
+
+    }
+
+
+    //会员提交退换货请求处理
+    def returnToStall(){
+        def returnGoods = ReturnGoods.get(params.returnGoodsId as Long)
+
+        def mm = new MobileMessage()
+
+        if(params.status == "4"){
+            returnGoods.status = params.status
+            returnGoods.actual_returnTime = new Date()
+            returnGoods.actual_return_fee = new BigDecimal(params.actual_return_fee)
+
+            mm.message = "退货成功"
+
+
+        }
+
+
+        if(params.status == "7"){
+            returnGoods.status = params.status
+            returnGoods.actual_returnTime = new Date()
+
+            mm.message = "换货成功"
+
+
+        }
+
+        if(params.status == "6"){
+            returnGoods.status = params.status
+            returnGoods.reason = params.reason
+
+            returnGoods.actual_returnTime = new Date()
+            returnGoods.actual_return_fee = 0
+            returnGoods.reason =  params.reason
+
+            mm.message = params.reason+"，退货不成功"
+        }
+
+        if(params.status == "8"){
+            returnGoods.status = params.status
+            returnGoods.actual_returnTime = new Date()
+            returnGoods.reason =  params.reason
+            mm.message = params.reason+"，换货不成功"
+
+
+        }
+
+
+        //更改退货申请的状态
+        def returnOrder = returnGoods.returnOrder;
+        def isTuiOver = "1"  //退换货申请下的退货商品是否都处理了？
+        //退货
+
+        int returnGoodsCount = 0;
+        int tuiGoodsCount = 0;
+        int huanGoodsCount = 0;
+
+        int tuiSucc = 0;//退货成功商品
+        int tuiFail = 0;//退货失败商品
+
+        int huanSucc = 0;//换货成功商品
+        int huanFail = 0;//换货失败商品
+
+        returnOrder.returnGoods.each{
+            returnGoodsCount ++
+            if(it.type=="0"){
+                tuiGoodsCount ++;
+                if(it.status=="4"){
+                    tuiSucc ++;
+                }else if(it.status=="6"){
+                    tuiFail ++;
+                }
+            }
+
+            if(it.type=="1"){
+                huanGoodsCount ++;
+                if(it.status=="7"){
+                    huanSucc ++;
+                }else if(it.status=="8"){
+                    huanFail ++;
+                }
+            }
+
+        }
+
+
+        println  "tuiGoodsCount:"+tuiGoodsCount
+        println  "tuiSucc:"+tuiSucc
+        println  "tuiFail:"+tuiFail
+
+        if( (tuiSucc!=0) && tuiGoodsCount==(tuiSucc+tuiFail)){
+            returnOrder.needTui = "1"
+        }else if(tuiGoodsCount==tuiFail){
+            returnOrder.needTui = "3"
+            returnOrder.status = "2"  //处理结束
+        }else{
+            returnOrder.needTui = "0"
+        }
+
+
+        if( (huanSucc!=0)&& huanGoodsCount== (huanSucc+huanFail)){
+            returnOrder.needShip = "1"
+        }else if(huanGoodsCount==huanFail){
+
+            returnOrder.needShip = "3"
+
+            returnOrder.status = "2"  //处理结束
+
+        }else{
+            returnOrder.needShip = "0"
+        }
+
+
+
+        mm.result = "success"
+        render mm as JSON
+
+
+    }
+
+
+
+
+
+    //代发人员受理退换货
+    def daifaShouLiReturn(){
+        def returnGoods = ReturnGoods.findAllByStatus("2")
+        returnGoods.each { it ->
+
+            if (params.market == it.daiFaGoods.market) {
+
+
+                it.status = "5"//已受理
+                it.shouliUser = session.loginPOJO.user.email
+                it.shouliUserId = session.loginPOJO.user.id
+                it.shouliTime = new Date();
+            }
+
+        }
+
+        def mm = new MobileMessage()
+        mm.message = params.market  + "退换货商品已领出"
+        mm.result = "success"
+
+        render mm as JSON
+
+    }
+
+    //代发人员已经处理的退换货，成功或者不成功的,管理员查看
+   def hasDoneReturnOfWuliu(){
+
+
+       if (!params.max) {
+           params.max = 10
+       } else {
+           params.max = new Long(params.max)
+       }
+       if (!params.offset) params.offset = 0
+
+
+       if (!params.sort) params.sort = "actual_returnTime"
+       if (!params.order) params.order = "desc"
+
+
+       def searchClosure = {
+
+          if(params.returnFail == "1"){
+              inList("status",['6','8'])
+          }else{
+              eq("status", params.status)
+          }
+
+
+
+
+       }
+
+       def o = ReturnGoods.createCriteria();
+       def results = o.list(params, searchClosure)
+       def m_list = []
+       results.each { it ->
+
+           ReturnGoodsPOJO returnGoodsPOJO = new ReturnGoodsPOJO();
+           returnGoodsPOJO.returnOrderId = it.returnOrder.id
+           returnGoodsPOJO.returnGoodsId = it.id
+           returnGoodsPOJO.goodsId = it.daiFaGoods.id
+           returnGoodsPOJO.market = it.daiFaGoods.market
+           returnGoodsPOJO.floor = it.daiFaGoods.floor
+           returnGoodsPOJO.stalls = it.daiFaGoods.stalls
+           returnGoodsPOJO.goods_sn = it.daiFaGoods.goods_sn
+           returnGoodsPOJO.spec = it.daiFaGoods.spec
+           returnGoodsPOJO.wuliu = it.returnOrder.wuliu
+           returnGoodsPOJO.wuliu_sn = it.returnOrder.wuliu_sn
+           returnGoodsPOJO.orderSN = it.returnOrder.orderSN
+
+           returnGoodsPOJO.actual_price = it.actual_price
+           returnGoodsPOJO.return_fee = it.return_fee
+           returnGoodsPOJO.num = it.return_num   //退回的商品数量
+
+           returnGoodsPOJO.actual_return_fee = it.actual_return_fee
+           returnGoodsPOJO.actual_returnTime = it.actual_returnTime
+
+           returnGoodsPOJO.reason = it.reason;
+           returnGoodsPOJO.type = it.type;
+
+
+           m_list.add(returnGoodsPOJO)
+
+       }
+
+
+
+
+
+       def map = [list: m_list]
+
+
+       if (params.mobile == "mobile") {
+           //封装分页传给手机端
+           def pager = new Pager(max: params.max, "offset": params.offset, "totalPage": ((results.totalCount - 1) / params.max + 1) as int, total: results.totalCount)
+           map.put("pager", pager)
+
+           def mm = new MobileMessage()
+
+           if(params.status=="4"){
+               mm.message = "代发人员已成功的退换货商品列表"
+           }
+           if(params.status=="6"){
+               mm.message = "代发人员不成功的退换货商品列表"
+           }
+
+
+           mm.result = "success"
+           mm.model = map
+           render mm as JSON
+       }
+   }
+
+
+    //提供管理员根据代发员和时间查询他的退货数据
+    def hasDoneReturn(){
+       def daifa_user_id = params.daifa_user_id
+       def actual_returnTime = params.actual_returnTime
+
+       forward(action:'hasDoneReturnOfDaiFa',params:[daifa_user_id:daifa_user_id,actual_returnTime:actual_returnTime])
+
+    }
+
+
+    //代发人员已经处理的退换货，成功或者不成功的
+    def hasDoneReturnOfDaiFa(){
+        if (!params.sort) params.sort = "actual_returnTime"
+        if (!params.order) params.order = "desc"
+
+
+        def searchClosure = {
+
+
+            between('actual_returnTime', Date.parse("yyyy-MM-dd HH:mm:ss", params.actual_returnTime + ' 00:00:00'), Date.parse("yyyy-MM-dd HH:mm:ss", params.actual_returnTime + ' 23:59:59'))
+
+            if(params.daifa_user_id){
+                eq("shouliUserId",params.daifa_user_id as Long)
+            }else{
+                eq("shouliUserId",session.loginPOJO.user.id)
+            }
+
+            eq("status", params.status)
+
+        }
+
+        def o = ReturnGoods.createCriteria();
+        def results = o.list(params, searchClosure)
+        def m_list = []
+        results.each { it ->
+
+            ReturnGoodsPOJO returnGoodsPOJO = new ReturnGoodsPOJO();
+            returnGoodsPOJO.returnOrderId = it.returnOrder.id
+            returnGoodsPOJO.returnGoodsId = it.id
+            returnGoodsPOJO.goodsId = it.daiFaGoods.id
+            returnGoodsPOJO.market = it.daiFaGoods.market
+            returnGoodsPOJO.floor = it.daiFaGoods.floor
+            returnGoodsPOJO.stalls = it.daiFaGoods.stalls
+            returnGoodsPOJO.goods_sn = it.daiFaGoods.goods_sn
+            returnGoodsPOJO.spec = it.daiFaGoods.spec
+            returnGoodsPOJO.wuliu = it.returnOrder.wuliu
+            returnGoodsPOJO.wuliu_sn = it.returnOrder.wuliu_sn
+            returnGoodsPOJO.orderSN = it.returnOrder.orderSN
+
+            returnGoodsPOJO.actual_price = it.actual_price
+            returnGoodsPOJO.return_fee = it.return_fee
+            returnGoodsPOJO.num = it.return_num   //退回的商品数量
+
+            returnGoodsPOJO.actual_return_fee = it.actual_return_fee
+            returnGoodsPOJO.actual_returnTime = it.actual_returnTime
+
+            returnGoodsPOJO.reason = it.reason;
+
+
+
+            m_list.add(returnGoodsPOJO)
+
+        }
+
+
+
+
+
+        def map = [list: m_list]
+
+
+        if (params.mobile == "mobile") {
+
+
+            def mm = new MobileMessage()
+
+            if(params.status=="4"){
+                mm.message = "代发人员已成功的退换货商品列表"
+            }
+            if(params.status=="6"){
+                mm.message = "代发人员不成功的退换货商品列表"
+            }
+
+
+            mm.result = "success"
+            mm.model = map
+
+            render mm as JSON
+        }
+    }
+
+     //已被代发人员领出办理处，需要退换处理的
+    def  returnGoodsListOfDaiFa(){
+        def returnGoods = ReturnGoods.findAllByShouliUserIdAndStatus(session.loginPOJO.user.id,"5")
+        def m_list = []
+        returnGoods.each { it ->
+
+                ReturnGoodsPOJO returnGoodsPOJO = new ReturnGoodsPOJO();
+                returnGoodsPOJO.returnOrderId = it.returnOrder.id
+                returnGoodsPOJO.returnGoodsId = it.id
+
+                returnGoodsPOJO.goodsId = it.daiFaGoods.id
+                returnGoodsPOJO.market = it.daiFaGoods.market
+                returnGoodsPOJO.floor = it.daiFaGoods.floor
+                returnGoodsPOJO.stalls = it.daiFaGoods.stalls
+                returnGoodsPOJO.goods_sn = it.daiFaGoods.goods_sn
+                returnGoodsPOJO.spec = it.daiFaGoods.spec
+
+
+            //记录给换货的商品信息
+                returnGoodsPOJO.changeMarket = it.market
+                returnGoodsPOJO.changeFloor = it.floor
+                returnGoodsPOJO.changeStalls = it.stalls
+                returnGoodsPOJO.changeGoods_sn = it.goods_sn
+                returnGoodsPOJO.changeSpec = it.spec
+
+
+
+                returnGoodsPOJO.wuliu = it.returnOrder.wuliu
+                returnGoodsPOJO.wuliu_sn = it.returnOrder.wuliu_sn
+                returnGoodsPOJO.orderSN = it.returnOrder.orderSN
+
+                returnGoodsPOJO.actual_price = it.actual_price
+                returnGoodsPOJO.return_fee = it.return_fee
+                returnGoodsPOJO.num = it.return_num   //退回的商品数量
+                returnGoodsPOJO.type = it.type   //退回的商品数量
+
+                m_list.add(returnGoodsPOJO)
+
+        }
+
+        def mm = new MobileMessage()
+        mm.message = "获取我的退换货商品列表成功"
+        mm.result = "success"
+        mm.model = [list: m_list]
+
+        render mm as JSON
+    }
+
+    //代发人员的退换货商品列表接口
+    def returnGoodsListForDaiFa() {
+
+        def returnGoods = ReturnGoods.findAllByStatus("2")
+
+
+        def m_list = []
+        returnGoods.each { it ->
+            if (params.market == it.daiFaGoods.market) {
+
+                ReturnGoodsPOJO returnGoodsPOJO = new ReturnGoodsPOJO();
+                returnGoodsPOJO.returnOrderId = it.returnOrder.id
+                returnGoodsPOJO.returnGoodsId = it.id
+                returnGoodsPOJO.goodsId = it.daiFaGoods.id
+                returnGoodsPOJO.market = it.daiFaGoods.market
+                returnGoodsPOJO.floor = it.daiFaGoods.floor
+                returnGoodsPOJO.stalls = it.daiFaGoods.stalls
+                returnGoodsPOJO.goods_sn = it.daiFaGoods.goods_sn
+                returnGoodsPOJO.spec = it.daiFaGoods.spec
+
+                returnGoodsPOJO.num = it.daiFaGoods.num
+                returnGoodsPOJO.wuliu = it.returnOrder.wuliu
+                returnGoodsPOJO.wuliu_sn = it.returnOrder.wuliu_sn
+                returnGoodsPOJO.orderSN = it.returnOrder.orderSN
+
+
+                returnGoodsPOJO.actual_price = it.actual_price
+                returnGoodsPOJO.return_fee = it.return_fee
+                returnGoodsPOJO.num = it.return_num
+                returnGoodsPOJO.type = it.type   //退回的商品数量
+
+                m_list.add(returnGoodsPOJO)
+            }
+
+        }
+
+        def mm = new MobileMessage()
+        mm.message = "获取" + params.market + "退换货商品列表成功,等待代发人员受理"
+        mm.result = "success"
+        mm.model = [list: m_list]
+
+        render mm as JSON
+    }
+
+    //根据市场查询下面的退换货商品
+    def returnGoodsList() {
+
+
+
+
+
+
+        def shipSN = ShipSN.findAllByStatus("1")
+        def returnOrder = ReturnOrder.findAllByWuliu_snInList(shipSN.wuliu_sn)
+        def m_list = []
+        returnOrder.returnGoods.flatten().each { returnGoods ->
+            if (returnGoods.status == params.returnGoodsStatus) {  //1:新入库2:分拣完毕
+                if (params.market == returnGoods.daiFaGoods.market) {
+
+                    ReturnGoodsPOJO returnGoodsPOJO = new ReturnGoodsPOJO();
+                    returnGoodsPOJO.returnOrderId = returnGoods.returnOrder.id
+                    returnGoodsPOJO.returnGoodsId = returnGoods.id
+                    returnGoodsPOJO.goodsId = returnGoods.daiFaGoods.id
+                    returnGoodsPOJO.market = returnGoods.daiFaGoods.market
+                    returnGoodsPOJO.floor = returnGoods.daiFaGoods.floor
+                    returnGoodsPOJO.stalls = returnGoods.daiFaGoods.stalls
+                    returnGoodsPOJO.goods_sn = returnGoods.daiFaGoods.goods_sn
+                    returnGoodsPOJO.spec = returnGoods.daiFaGoods.spec
+                    returnGoodsPOJO.wuliu = returnGoods.returnOrder.wuliu
+                    returnGoodsPOJO.wuliu_sn = returnGoods.returnOrder.wuliu_sn
+                    returnGoodsPOJO.orderSN = returnGoods.returnOrder.orderSN
+
+                    returnGoodsPOJO.actual_price = returnGoods.actual_price
+                    returnGoodsPOJO.return_fee = returnGoods.return_fee
+                    returnGoodsPOJO.num = returnGoods.return_num
+                    returnGoodsPOJO.type = returnGoods.type   //退回的商品数量
+
+                    m_list.add(returnGoodsPOJO)
+                }
+            }
+
+        }
+
+        def mm = new MobileMessage()
+        mm.message = "获取" + params.market + "退换货商品列表成功"
+        mm.result = "success"
+        mm.model = [list: m_list]
+
+        render mm as JSON
+
+
+    }
+
+    //物流单号列表查询
+    def shipList() {
+
+
+        if (!params.max) {
+            params.max = 10
+        } else {
+            params.max = new Long(params.max)
+        }
+        if (!params.offset) params.offset = 0
+        if (!params.sort) params.sort = "dateCreated"
+        if (!params.order) params.order = "desc"
+
+
+        def searchClosure = {
+
+
+            if (params.status == "wait") {
+                eq("status", "1")
+            }
+
+
+            if (params.status == "noowner") {
+
+                inList("status", ["0", "2"])
+            }
+
+        }
+
+        def o = ShipSN.createCriteria();
+        def results = o.list(params, searchClosure)
+
+        def map = [list: results, total: results.totalCount]
+
+
+        if (params.mobile == "mobile") {
+
+            //封装分页传给手机端
+            def pager = new Pager(max: params.max, "offset": params.offset, "totalPage": ((results.totalCount - 1) / params.max + 1) as int, total: results.totalCount)
+            map.put("pager", pager)
+
+            def mm = new MobileMessage()
+            mm.message = "获取物流登记统计列表成功"
+            mm.result = "success"
+            mm.model = map
+
+            render mm as JSON
+        }
+
+
+    }
+
+    def regShipSNNum() {
+        //查询入库商品数量
+        def shipSN = ShipSN.findAllByStatus("1")
+        def confirmOrder = ReturnOrder.findAllByWuliu_snInList(shipSN.wuliu_sn)
+
+
+        Long new_num = 0;//新入库商品数量
+        Long wait_num = 0;//分拣完毕商品数量
+        confirmOrder.returnGoods.flatten().each { returnGoods ->
+            if (returnGoods.status == "1") {
+                new_num = new_num + returnGoods.return_num
+            }
+            if (returnGoods.status == "2") {
+                wait_num = wait_num + returnGoods.return_num
+            }
+
+        }
+
+
+        def noowner = ShipSN.countByStatusInList(["0", "2"])
+
+        def map = [new_num: new_num, wait: wait_num, noowner: noowner]
+        def mm = new MobileMessage()
+        mm.message = "获取物流登记统计数据成功"
+        mm.result = "success"
+        mm.model = map
+
+        render mm as JSON
+    }
+
+    //扫描退回包裹的物流单号
+    def checkReturnOrderSN() {
+        def mm = new MobileMessage()
+        ReturnOrder returnOrder = ReturnOrder.findByWuliu_snAndStatus(params.wuliu_sn, "1")//已经支付的退换货申请
+
+
+        if (!returnOrder) {
+
+            ShipSN shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
+            if (!shipSN) {
+                shipSN = new ShipSN();
+            }
+            shipSN.num = params.num as int
+            shipSN.wuliu_sn = params.wuliu_sn
+            shipSN.status = "0"
+            shipSN.save();
+
+            mm.message = "系统中没有该物流单号的退换货申请,录入无主包裹"
+        } else {
+            int return_num = 0;
+            returnOrder.returnGoods.each { it ->
+
+                return_num = return_num + (it.return_num as int);
+            }
+
+            if (return_num == (params.num as int)) {
+                ShipSN shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
+                if (!shipSN) {
+                    shipSN = new ShipSN();
+                }
+                shipSN.num = params.num as int
+                shipSN.wuliu_sn = params.wuliu_sn
+                shipSN.status = "1"
+                shipSN.save();
+
+
+
+                returnOrder.returnGoods.each { it ->
+
+                    it.rukuUser = session.loginPOJO.user.email
+                    it.rukuTime = new Date();
+                    it.status = "1" //记录该退换货商品办事处入库
+                }
+
+
+
+                mm.message = "物流单号与商品数量匹配，录入新入库"
+
+
+            } else {
+                ShipSN shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
+                if (!shipSN) {
+                    shipSN = new ShipSN();
+                }
+                shipSN.num = params.num as int
+                shipSN.wuliu_sn = params.wuliu_sn
+                shipSN.status = "2"
+                shipSN.save();
+
+
+                mm.message = "物流单号准确，商品数量不匹配，录入无主包裹"
+            }
+        }
+
+        //查询入库商品数量
+        def shipSN = ShipSN.findAllByStatus("1")
+        def confirmOrder = ReturnOrder.findAllByWuliu_snInList(shipSN.wuliu_sn)
+
+
+        Long new_num = 0;//新入库商品数量
+        Long wait_num = 0;//分拣完毕商品数量
+        confirmOrder.returnGoods.flatten().each { returnGoods ->
+            if (returnGoods.status == "1") {
+                new_num = new_num + returnGoods.return_num
+            }
+            if (returnGoods.status == "2") {
+                wait_num = wait_num + returnGoods.return_num
+            }
+
+        }
+
+
+        def noowner = ShipSN.countByStatusInList(["0", "2"])
+
+        def map = [new_num: new_num, wait: wait_num, noowner: noowner]
+        mm.result = "success"
+        mm.model = map
+
+        render mm as JSON
+        return;
+    }
+}

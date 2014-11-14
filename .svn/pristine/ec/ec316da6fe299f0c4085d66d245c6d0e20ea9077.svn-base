@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="layout" content="adminMain"/>
+    <title>金士代发</title>
+  </head>
+  <body>
+    <div class="container body" id="page">
+
+      <g:if test="${flash.message}">
+         <script>
+         alert('${flash.message}')
+        </script>
+      </g:if>
+      
+      
+
+      <div class="page-header">
+        <h3>
+          退货审核列表
+          
+        </h3>
+       </div>
+
+      <div class="well well-large">
+        <form class="form-inline">
+           订单号：
+          <input name="orderSN" type="text" class="" placeholder="" value="${params.orderSN}">
+
+          <button type="submit" class="btn btn-primary">查询</button>
+        </form>
+      </div>
+
+
+      <div class="bs-docs-example">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>订单号</th>
+<!--              <th>物流单号</th>
+              <th>物流公司</th>-->
+              <th>类型</th>
+              <th>状态</th>
+              <th>退货人</th>
+              <th>退货时间</th>
+              <th>创建时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+          <g:each in="${list}" status="i" var="returnOrder">
+            <tr>
+              <td>${returnOrder.orderSN}<g:if test="${returnOrder.flat == '1'}">(非平台订单)</g:if>
+              </td>
+
+              <td>退货
+               </td>
+              <td>已退货
+              </td>
+              <td>${returnOrder.tui_user.email}</td>
+              <td>${returnOrder.tui_time.toString()[0..18]}</td>
+              <td>${returnOrder.dateCreated.toString()[0..18]}</td>
+              <td>
+                <g:link controller="adminDaiFaOrder" action="saleReturnAmountShow" id="${returnOrder.id}" params="${params}" class="btn">查看</g:link>
+              </td>
+            </tr>
+          </g:each>
+            
+            
+            
+          </tbody>
+        </table>
+      </div>
+      <div class="row-fluid">
+        <div class="span12">
+          <div  class="pagination pagination-right new-pagination">
+          
+
+
+            <g:if test="${total != 0}">
+                <g:paginate total="${total}"  params="${params}" action="saleReturnAmountList"  update="page" />
+           </g:if>
+            
+            <span class="currentStep">共${total}条数据</span>
+          </div>
+        
+        </div>
+      </div>
+        
+<g:render template="/layouts/footer"/>
+
+
+    </div> <!-- /container -->
+    
+  </body>
+</html>

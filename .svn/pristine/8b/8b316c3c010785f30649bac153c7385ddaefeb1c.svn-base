@@ -1,0 +1,49 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package admin
+import ship.Express
+import ship.DaiFaOrder
+/**
+ *
+ * @author DELL
+ */
+class AdminOrderShipController  extends BaseController{
+	def list(){
+            def express = Express.list();
+            express.each{
+                String name = it.name
+                def n_explore = DaiFaOrder.countByWuliuAndStatusAndIs_explore(name,'allaccept',"0")
+                def y_explore = DaiFaOrder.countByWuliuAndStatusAndIs_explore(name,'allaccept',"1")
+                it.n_explore = n_explore
+                it.y_explore = y_explore
+            }
+            def map = [list:express]
+            render(view: "/admin/daifaShip/list",model:map)
+        }
+        
+        def explore(){
+            def date = new Date()
+            def explore = DaiFaOrder.findAllByWuliuAndStatusAndIs_explore(params.name,'allaccept',params.is_explore)
+            def num_map = [:]    
+        
+            explore.each{
+                int goodsNum = 0
+                def goods = it.daiFaGoods
+                goods.each{i ->
+                    goodsNum = goodsNum + i.num
+                }
+                num_map.put(it.id,goodsNum)
+                if(params.is_explore == '0'){
+                    DaiFaOrder.executeUpdate("update DaiFaOrder set is_explore = '1' where id = '"+it.id+"'")
+                }            
+            }
+            def map = [list:explore,num_map:num_map]
+            String file = date.format('MM-dd-yyyy')+params.name+date.format('HH：mm')+".xls"
+            map.file = file
+            render(view: "/admin/daifaShip/explore",model:map)
+        }
+}
+

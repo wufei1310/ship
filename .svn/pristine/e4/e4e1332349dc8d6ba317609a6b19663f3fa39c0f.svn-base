@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="layout" content="adminMain"/>
+    <title>金士代发</title>
+  </head>
+  <body>
+    <script>
+      function beforeTuikuan(){
+            if(window.confirm("确认发货吗？")){
+                toActionFormCom('checkSaleReturnForm')  
+            }
+        }
+    </script>
+
+    
+    
+    <div class="container body">
+      <g:if test="${flash.message}">
+         <script>
+         alert('${flash.message}')
+        </script>
+      </g:if>
+
+      <div class="page-header">
+        <h3>换货审核(<small>订单号：</small>${returnOrder.orderSN})</h3>
+      </div>
+      <g:form  name="checkSaleReturnForm"  data-validate="parsley" class="form-signin checkSaleReturnForm" action="checkSaleReturn" method="post" target="innerFrame">
+        <input type="hidden" name="id" value="${returnOrder.id}">
+        <h4>商品信息</h4>
+        <div class="bs-docs-example">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th ></th>
+                <th ></th>
+                <th style="width: 200px;">市场位置</th>
+                <th style="width: 200px;">档口号</th>
+                <th >商品货号</th>
+                <th>规格（颜色/尺码）</th>
+                <th>拿货件数</th>
+                <th>单件付款价格</th>
+                <th>单件拿货价格</th>
+                <th>换货件数</th>
+              </tr>
+            </thead>
+            <tbody>
+              <g:each in="${returnOrder.returnGoods}" status="i" var="returnGoods">
+                  <tr class="daiFaGoods" >
+                    <td rowspan="2"></td>
+                    <td><font color="red">原商品</font></td>
+                    <td >
+                      ${returnGoods.daiFaGoods.market} - ${returnGoods.daiFaGoods.floor}
+                    </td>
+                    <td>${returnGoods.daiFaGoods.stalls}</td>
+                    <td>${returnGoods.daiFaGoods.goods_sn}</td>
+                    <td>${returnGoods.daiFaGoods.spec}</td>
+                    <td>${returnGoods.daiFaGoods.num}</td>
+                    <td>${returnGoods.daiFaGoods.price}</td>
+                    <td>${returnGoods.daiFaGoods.actual_price}</td>
+                    <td>
+                        
+                    </td>
+                  </tr>
+                  <tr class="daiFaGoods" style="background-color: lavender">
+                    
+                    <td><font color="red">换货商品</font></td>
+                    <td >
+                      ${returnGoods.market} - ${returnGoods.floor}
+                    </td>
+                    <td>${returnGoods.stalls}</td>
+                    <td>${returnGoods.goods_sn}</td>
+                    <td>${returnGoods.spec}</td>
+                    <td></td>
+                    <td></td>
+                    <td><input onkeyup="if(isNaN(value) || value<0)execCommand('undo')" onafterpaste="if(isNaN(value) || value<0)execCommand('undo')" data-error-message="单件拿货价格不能为空" data-required="true"   name="actual_price" class="input-small" type="text" placeholder="" value="${returnGoods.actual_price}"  onblur="if(isNaN(value) || value<0)execCommand('undo');fee();"></td>
+                    <input type="hidden" name="returnGoods_id" value="${returnGoods.id}"/>
+                    <td>${returnGoods.return_num}                      
+                    </td>
+                  </tr>
+              </g:each>
+            </tbody>
+          </table>
+          
+         
+        </div>
+        
+        <h4>发件人信息</h4>
+        <div class="bs-docs-example">
+          <table class="table table-bordered">
+
+            <tbody>
+
+              <tr>
+                <td >
+                  发&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人：
+                  ${returnOrder.sendperson}
+                  <br/>
+                  发&nbsp;&nbsp;&nbsp;件&nbsp;&nbsp;地&nbsp;&nbsp;&nbsp;址：
+                  ${returnOrder.sendaddress}
+                  <br/>
+                  联系手机/电话：
+                  ${returnOrder.sendcontphone}
+                  <br/>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        
+        <h4>退回商品物流信息</h4>
+        <div class="bs-docs-example">
+          <table class="table table-bordered">
+
+            <tbody>
+
+              <tr>
+                <td >
+
+                  物流单号：${returnOrder.wuliu_sn}
+                  <br>
+                  物流公司：${returnOrder.wuliu}
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        
+        <h4>收货地址</h4>
+        <div class="bs-docs-example">
+          <table class="table table-bordered">
+
+            <tbody>
+
+              <tr>
+                <td >
+
+                  收&nbsp;&nbsp;件&nbsp;&nbsp;人：
+                  ${returnOrder.daiFaOrder.reperson}
+                  &nbsp;&nbsp;
+                  联系手机/电话：
+                  ${returnOrder.daiFaOrder.contphone}
+                  <br/>
+                  收件地区：
+                  <g:areaName area_id="${returnOrder.daiFaOrder.area_id}" />
+                  <br/>
+                  收件地址：               
+                  ${returnOrder.daiFaOrder.address}
+                  <br/>
+                  快&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;递：
+                  ${returnOrder.daiFaOrder.wuliu} 
+                  <g:if test="${returnOrder.shipTime}">
+                    <br/>
+                      发货时间：
+                      ${returnOrder.shipTime.toString()[0..18]}
+                   <br/>
+                    发货单号：
+                    ${returnOrder.h_wuliu_sn}
+                    <br/>
+                    实际发货运费：${returnOrder.actual_shipFee}
+                  </g:if>
+                  <g:if test='${returnOrder.status == '1'}'>
+                    <br/>
+                    <br/>
+                      发&nbsp;&nbsp;&nbsp;货&nbsp;&nbsp;单&nbsp;&nbsp;&nbsp;号：<input  data-error-message="发货单号不能为空" data-required="true"   name="h_wuliu_sn"  type="text" placeholder=""  >
+                      <br/>
+                      实际发货运费：<input onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" data-error-message="实际发货运费不能为空" data-required="true"    name="actual_shipFee" class="input-small" type="text" placeholder="">
+                  </g:if>
+                  <br/>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        
+        <h4>状态</h4>
+        <div class="bs-docs-example">
+          <table class="table table-bordered">
+ 
+            <tbody>
+
+              <tr>
+                <td >
+                  申请状态：
+                  <strong ><g:returnOrder status="${returnOrder.status}" /></strong>
+                  
+                  <br/>
+                  <g:if test="${returnOrder.tui_time}">
+                    操作人：<strong >${returnOrder.tui_user.email}</strong>
+                    <br/>
+                    处理时间：
+                    <strong >${returnOrder.tui_time.toString()[0..18]}</strong>
+                   <br/>                  
+                  </g:if>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+            
+        </div>
+        
+        <h4>支付款项</h4>
+        <div class="bs-docs-example">
+          <table class="table table-bordered">
+
+            <tbody>
+
+              <tr>
+                <td >
+                  补&nbsp;&nbsp;差&nbsp;&nbsp;价：${returnOrder.chajia}
+                  <br/>
+                  手&nbsp;&nbsp;续&nbsp;&nbsp;费：${returnOrder.serviceFee} （手续费每件2元）
+                 <br/>
+                 运&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费：${returnOrder.shipFee} 
+                  <br/>
+                  支付总计：${returnOrder.totalFee} 
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        
+      
+
+
+      
+      
+      
+
+ 
+        <g:if test="${returnOrder.status == '1'}"><a  href="javascript:void(0)" onclick="beforeTuikuan()"  class=" btn btn-large btn-primary">确认发货</a></g:if>    
+        <g:link controller="adminDaiFaOrder" action="saleReturnList"  params="${params}" class=" btn btn-large ">返回</g:link>
+
+    </g:form>
+      
+      <form     method="post" id="commonActionForm" target="innerFrame">
+                  <input type='hidden' name='id' id='id' class='key'>
+                  <input type='hidden' name='safepass' id='safepass' class='key'>
+        </form>
+        <iframe id="innerFrame" name="innerFrame" height="0" frameborder="0"></iframe>
+         <g:form  action="saleReturnShow" params="${params}"   method="post" class="commonListForm">
+        </g:form >
+      <g:render template="/layouts/footer"/>
+  </body>
+</html>

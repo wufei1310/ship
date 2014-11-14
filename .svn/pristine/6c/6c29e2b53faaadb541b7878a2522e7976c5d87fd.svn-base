@@ -1,0 +1,197 @@
+<style>
+  .addr-box{
+    width:600px;
+    height: 400px;
+    border-top: 1px #dfdfdf solid;
+  }
+
+  .addr-box ul{
+    padding-bottom: 10px;
+    border-bottom: 1px #dfdfdf solid;
+  }
+
+  .addr-box ul li{
+    text-align: center;
+    display: inline-block;
+    width: 80px;
+    margin-top: 10px;
+    cursor: pointer;
+    word-break:normal;
+  }
+  .addr-box .on{
+    background: gray;
+  }
+  .addr-box .hover{
+    background: #E5F0EA;
+  }
+</style>
+
+<input value="${area_id}" type="hidden" name="selareaid" id="selareaid">
+<script>
+  
+    String.prototype.startWith=function(str){ 
+    var reg=new RegExp("^"+str); 
+    return reg.test(this); 
+} 
+  
+  $(document).ready(function() {
+    initArea('${area_id}');
+    
+   });
+  
+  
+  function initArea(area_id){
+    
+    var len = area_id.length
+    
+    if(len==4){
+      $("#pId").val(area_id);
+      $("#initChildArea").submit();
+    }
+    if(len==7){
+      $("#pId").val(area_id.substring(0,4));
+      $("#initChildArea").submit();
+      $("#pId").val(area_id);
+      //$("#initChildArea").submit();
+      
+    }
+    
+    
+    if(len==10){
+      $("#pId").val(area_id.substring(0,4));
+      $("#initChildArea").submit();
+      $("#pId").val(area_id.substring(0,7));
+      $("#initChildArea").submit();
+      $("#pId").val(area_id);
+      $("#initChildArea").submit();
+      
+    }
+    
+    if(len==13){
+      $("#pId").val(area_id.substring(0,4));
+      $("#initChildArea").submit();
+      $("#pId").val(area_id.substring(0,7));
+      $("#initChildArea").submit();
+      $("#pId").val(area_id.substring(0,10));
+      $("#initChildArea").submit();
+      $("#pId").val(area_id);
+      $("#initChildArea").submit();
+      
+    }
+    
+    $("#area_name").empty();
+    $(".addr-box .on").each(function(){
+      $("#area_name").append($(this).html()).append("-");
+    });
+    
+  }
+    
+    
+    
+    
+    
+    
+    
+  
+  
+  function initChildArea(data){
+    
+    if(data==""){
+      return false;
+    }
+    var area_id = $("#selareaid").val();
+    var ulhtml = '<ul>'
+    for(var i=0;i<data.length;i++){
+      
+      var li = '<li v='+data[i].id+'>' + data[i].name + '</li>';
+      if(area_id.startWith(data[i].id)){
+        li = '<li class="on" v='+data[i].id+'>' + data[i].name + '</li>';
+      }
+      
+      ulhtml = ulhtml + li;
+    }
+    
+    ulhtml = ulhtml + '</ul>';
+    $('.addr-box').append(ulhtml);
+    
+    $('ul li').mouseover(function(){
+      $(this).parent().find("li").removeClass("hover");
+      $(this).addClass("hover");
+    }).mouseout(function(){
+      $(this).removeClass("hover");
+    });
+    
+    $('ul li').click(function(){
+      $(this).parent().find("li").removeClass("hover");
+      $(this).parent().find("li").removeClass("on");
+      $(this).addClass("on");
+      v = $(this).attr("v");
+      $('.addr-box').html('');
+      $('#selareaid').val(v);
+      initArea(v);
+    });
+    
+  }
+  
+  
+  function closeFancy(){
+    
+    $("#areaText").html($('#area_name').html());
+    $("#area_id").val($('#selareaid').val());
+    var href = $(".arealink").attr("href");
+    
+    href = href.substring(0,href.indexOf('=')) + "=" + $('#selareaid').val()
+    $(".arealink").attr("href",href);
+    
+    //选择地区之后的操作
+    try{
+      afterArea()
+    }catch(e){
+    }
+    
+    
+    $.fancybox.close()
+  }
+
+
+</script>
+
+<g:formRemote asynchronous="false" onSuccess="initChildArea(data)" method="post"  name="initChildArea" on404="alert('not found!')" update="updateMe" class="form-horizontal  form-inline "
+              url="[controller: 'area', action:'initChildArea']">
+  <input type="hidden" name="pId" id="pId">
+</g:formRemote>
+
+您选择的地区：<span id="area_name"></span><button type="button" onclick="closeFancy()" style="margin-left:10px;width: 50px;">确定</button>
+<div class="addr-box" style="display: block;margin-top: 5px;">
+
+</div>
+
+<style>
+  /*  .addr-box {
+      width: 600px;
+      border: 1px #dfdfdf solid;
+      padding: 10px;
+      position: absolute;
+      background: #fff;
+      box-shadow: 0 0 8px 0 #CCC;
+      display: none;
+    }
+  
+    .addr-box ul.f-city {
+      border-bottom: 1px #dfdfdf solid;
+    }
+    .addr-box ul {
+      margin: 5px 0;
+    }
+    .addr-box ul li {
+      display: inline-block;
+      zoom: 1;
+      padding: 0 10px;
+      margin-bottom: 5px;
+      margin-right: 5px;
+      cursor: pointer;
+      position: relative;
+      border: 1px #fff solid;
+      font-size: 13px;
+    }*/
+</style>

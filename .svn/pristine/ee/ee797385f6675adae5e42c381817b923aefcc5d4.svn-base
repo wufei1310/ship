@@ -1,0 +1,31 @@
+package member
+
+class MemberNewProductController {
+
+    def memberXmlGoodsService;
+
+    def index() {}
+
+    def list(){
+        memberXmlGoodsService.init();
+
+        def p = params.p
+        if(!p){
+            p=1
+        }else {
+
+        }
+
+        def xmlGoodsList = memberXmlGoodsService.getXmlGoodsList(p as int);
+        def map = [xmlGoodsList:xmlGoodsList,p:p]
+
+        render(view: "/member/newProduct/list",model:map)
+    }
+
+    def goods(){
+        def xmlGoods = memberXmlGoodsService.getXmlGoods(params.id as String)
+        def map = [xmlGoods:xmlGoods]
+
+        render(view: "/member/newProduct/detail",model:map)
+    }
+}

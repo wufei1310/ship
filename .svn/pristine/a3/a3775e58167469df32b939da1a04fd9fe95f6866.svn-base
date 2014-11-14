@@ -1,0 +1,65 @@
+package ship
+
+class OrderStatusTagLib {
+    static namespace = "order"
+	
+    def orderStatusDic = { attrs ->
+        switch (attrs.status){
+        case "waitpay": out << "未付款"
+            break;
+        case "waitaccept": out << "已付款，等待发货"
+            break;
+        case "partaccept": out << "已付款，等待发货"
+            break;
+        case "allaccept": out << "已付款，等待发货"
+            break;
+        case "problem": out << "已付款，等待发货"
+            break;
+        case "shipped": out << "已发货"
+            break;
+        case "error": out << "等待补款/缺货"
+            break;
+        case "close": out << "已取消"
+            break;
+        case "diffship": out << "需要补运费"
+            break;     
+        }
+		
+    }
+    
+    def orderRegards = { attrs ->
+        switch (attrs.status){
+        case "1": out << "好评卡+小礼物"
+            break;
+        case "2": out << "包装盒+小礼物"
+            break;
+        case "3": out << "好评卡+包装盒+小礼物"
+            break;
+        default:out << ""
+            break;
+        }
+		
+    }
+    
+    def wuliu = { attrs ->
+        def wuliu = attrs.wuliu
+
+            switch (wuliu){
+                case "中通":out << '<a href="http://www.zto.cn/" target="_blank">'+wuliu+'</a>'
+                    break;
+                case "顺丰":out << '<a href="http://www.sf-express.com/cn/sc/" target="_blank">'+wuliu+'</a>'
+                    break;
+                case "圆通":out << '<a href="http://www.yto.net.cn/cn/index/index.html" target="_blank">'+wuliu+'</a>'
+                    break;
+                case "申通":out << '<a href="http://www.sto.cn/" target="_blank">'+wuliu+'</a>'
+                    break;
+                case "韵达":out << '<a href="http://www.yundaex.com/" target="_blank">'+wuliu+'</a>'
+                    break;
+                case "EMS":out << '<a href="http://www.ems.com.cn/?COLLCC=306421325&" target="_blank">'+wuliu+'</a>'
+                    break;
+                case "天天":out << '<a href="http://www.ttkdex.com/ttkdweb/index.html" target="_blank">'+wuliu+'</a>'
+                    break;
+                default:out << wuliu
+            }
+    }
+}

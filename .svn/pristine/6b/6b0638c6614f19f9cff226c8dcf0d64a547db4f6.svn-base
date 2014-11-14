@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="layout" content="main"/>
+    <title>${grailsApplication.config.seo.title}</title>
+    <meta name="description" content="${grailsApplication.config.seo.description}" />
+    <meta name="keywords" content="${grailsApplication.config.seo.keywords}" />
+    
+ 
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Times New Roman","serif";}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-link:"页眉 Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:center;
+	layout-grid-mode:char;
+	border:none;
+	padding:0cm;
+	font-size:9.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-link:"页脚 Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	layout-grid-mode:char;
+	font-size:9.0pt;
+	font-family:"Times New Roman","serif";}
+span.Char
+	{mso-style-name:"页眉 Char";
+	mso-style-link:页眉;}
+span.Char0
+	{mso-style-name:"页脚 Char";
+	mso-style-link:页脚;}
+ /* Page Definitions */
+ @page Section1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	layout-grid:15.6pt;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+  </head>
+  <body>
+
+
+
+    <div class="container body">
+
+     <div class=Section1 style='layout-grid:15.6pt'>
+
+<p class=MsoNormal style='text-indent:26.25pt'><span
+style='font-family:宋体'>Kingsdf.cn(金士代发)是广州最专业的代发服务团队，活跃于广州各大型服装批发市场，帮淘宝店、天猫、拍拍等c2c和b2c卖家到服装批发档口直接取货，并立即以卖家的名义发货到指定的买家。</span><span
+lang=EN-US></span><span style='font-family:宋体'>我们的服务可以：</span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-18.0pt'><span
+lang=EN-US>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-family:宋体'>为你轻松的在产地拿一手货源，且不用压货！</span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-18.0pt'><span
+lang=EN-US>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-family:宋体'>提供发货前质量检验服务</span><span
+lang=EN-US>（注1）</span><span style='font-family:宋体'>，解除您的后顾之忧！</span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-18.0pt'><span
+lang=EN-US>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-family:宋体'>为您提供个性包装、促销礼品、换吊牌、服务，彰显您的网店实力！</span><span
+lang=EN-US>（注2）</span><span style='font-family:宋体'>，让您网店生意更好做！</span></p>
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-18.0pt'><span
+lang=EN-US>4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-family:宋体'>为您提供专业全职QC、物流、售后服务。</span></p>
+
+
+<p class=MsoNormal style='margin-left:45.0pt;text-indent:-18.0pt'><span
+lang=EN-US>5.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-family:宋体'>以您的名义，按您指定的快递公司，发货地址准确、快速发货。</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;&nbsp;&nbsp;&nbsp; 注1</span><span
+style='font-family:宋体'>质量标准及档口缺货情况，见<g:link controller="index" action="policy">《金士代发服务须知》</g:link></span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;&nbsp;&nbsp;&nbsp; 注2 </span><span
+style='font-family:宋体'>  见<g:link controller="index"  action="liucheng">产品&服务</g:link></span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+</div>
+
+
+
+      <g:render template="/layouts/footer"/>
+
+    </div> <!-- /container -->
+
+
+</html>

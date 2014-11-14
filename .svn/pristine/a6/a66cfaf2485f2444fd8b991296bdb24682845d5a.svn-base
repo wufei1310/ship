@@ -1,0 +1,158 @@
+package util
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import org.springframework.core.io.ClassPathResource;
+
+import ship.AreaShip
+import ship.Express
+import org.springframework.core.io.support.PropertiesLoaderUtils
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Administrator
+ */
+class StringUtil {
+    
+    
+    
+    public static String getSafeStringXSS(String s){ 
+		    if (s == null || "".equals(s)) {   
+		        return s;   
+		    }   
+		    StringBuilder sb = new StringBuilder(s.length() + 16);   
+		    for (int i = 0; i < s.length(); i++) {   
+		        char c = s.charAt(i);   
+		        switch (c) {   
+		        case '<':   
+		            sb.append("《");   
+		            break;  
+		        case '>':   
+		            sb.append("》");   
+		            break;   
+		        case '\'':   
+		            sb.append("‘");// &acute;");   
+		            break;   
+		        case '\"':   
+		            sb.append("“");   
+		            break;   
+		       /* case ',':   
+		            sb.append("，");   
+		            break;*/
+		        /*case '&':   
+		            sb.append("&#38;");   
+		            break;   
+		        case '#':   
+		            sb.append("&#35;");   
+		            break;  */ 
+		        case '\\':   
+		            sb.append("「");   
+		            break;  
+		       /* case '=':   
+		            sb.append("&#61;");   
+		            break; */
+		        default:   
+		            sb.append(c);   
+		            break;   
+		        }   
+		    }   
+		    return sb.toString().trim();  
+		}
+                
+        public static String getOrderStatus(String s){ 
+                    switch (s) {   
+		       case "waitpay": "未付款"
+                            break;
+                        case "waitaccept":  "已付款，等待受理"
+                            break;
+                        case "processing":  "处理中"
+                            break;
+                        case "waitpaydiff":  "等待补款"
+                            break;
+                        case "shipped":  "已发货"
+                            break;
+                    }
+        }
+        
+    
+        public static String getOrderStatusByGoods(List goods){
+            int yanshouCount = 0
+            int close = 0
+            if(goods.contains('3') || goods.contains('8') ){
+                    return "problem";
+            }
+            for(int i=0;i<goods.size();i++){
+                def g = goods.get(i)
+                
+                if(g=='4' || g=='5'){
+                    return "error";
+                }
+                
+                if(g=='7'){
+                    yanshouCount++;
+                }
+                if(g=='6'){
+                    close++;
+                }
+                  
+            }
+            if(yanshouCount>0 ){
+                    if(yanshouCount+close == goods.size()){
+                        return "allaccept"
+                    }else{
+                        return "partaccept"
+                    }
+                }else if(close == goods.size){
+                    return "close"
+                }else{
+                    return "waitaccept";
+                }     
+        }
+        
+        public static String readMailTemplates(String name)  {
+		ClassPathResource resource = new ClassPathResource(name);
+		
+		StringBuffer buffer = new StringBuffer();
+		String line = "";
+		try {
+			BufferedReader inn = new BufferedReader(new InputStreamReader(resource.getInputStream(),"UTF-8"));
+			while ((line = inn.readLine()) != null) {
+				buffer.append(line);
+			}
+			inn.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		return buffer.toString();
+	}
+        
+        public static BigDecimal checkShip(wuliu,area_id,num){
+        
+            if(!area_id)
+                area_id = "0100"
+        
+            if(area_id.length()>7)
+            area_id = area_id.substring(0,7)
+            def express = Express.findByName(wuliu)
+            def areaShip = AreaShip.findByExpressAndArea_id(express,area_id)
+
+            if(!areaShip){
+                areaShip = AreaShip.findByExpressAndArea_id(express,"0100")
+            }
+           // print areaShip as JSON
+            if(num<=5){
+               return areaShip.f_price 
+            }else{
+                int f_num = (num-5-1)/4+1 
+                return areaShip.f_price + areaShip.x_price*f_num
+            }
+        }
+        
+        
+}
+

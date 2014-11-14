@@ -1,0 +1,289 @@
+package admin
+
+import ship.DaiFaOrder
+import ship.Pager
+import ship.ReturnOrder
+import ship.ShipSN
+import ship.User
+import ship.MobileMessage
+import ship.LoginPOJO
+import grails.converters.JSON
+import ship.PushMsg
+import ship.Menu
+import ship.Role
+import ship.UserCheck
+
+class MobileController {
+
+    def index() { }
+    
+    
+    def login(){
+        
+        println params as JSON
+
+
+
+
+
+        if(params.debug=="debug"){
+            UserCheck userCheck =  UserCheck.findByEmailAndApk_type(params.email,params.apk_type)
+            if(userCheck){
+                if(userCheck.deviceId !=  params.deviceId){
+                    def mm = new MobileMessage()
+                    mm.message = "该账户已绑定手机设备，不能在其它手机登录"
+                    mm.result = "fail"
+                    render mm as JSON
+                    return;
+                }
+            }else{
+                UserCheck userCheck1 = new UserCheck();
+                userCheck1.email = params.email;
+                userCheck1.apk_type = params.apk_type
+                userCheck1.deviceId =  params.deviceId
+                userCheck1.save();
+            }
+        }
+
+
+
+
+
+
+        
+        def user = User.findByEmailAndPasswordAndUser_type(params.email, params.password,"admin")
+        if(!user){
+            
+            def mm = new MobileMessage()
+            
+            mm.message = "帐号或者密码不正确"
+            mm.result = "fail"
+            
+            render mm as JSON
+        }else if(user.status == '1'){
+            def mm = new MobileMessage()
+            
+            mm.message = "用户被冻结"
+            mm.result = "fail"
+            
+            render mm as JSON
+        }else{
+            def searchClosure =  {
+            
+           role{eq("id",user.role_id.id)}
+        }
+        
+        def o = Menu.createCriteria();
+        def menu = o.list(params,searchClosure)
+
+            def menuList = new ArrayList();
+            def roleMenuList = new ArrayList();
+            menu.each { it ->
+                if(it.pId == 0){
+                   menuList.add(it) 
+                }
+                if(it.menuPath){
+                    roleMenuList.add(it.menuPath)
+                }     
+            }
+            menuList.each{it ->
+                menu.each{ i ->
+                    if(i.pId == it.id)
+                        it.childrenMenu.add(i)
+                }
+            }
+            
+            def loginPOJO = new LoginPOJO();
+            loginPOJO.user = user;
+            loginPOJO.menuList = menuList;
+            loginPOJO.roleMenuList = roleMenuList//验证菜单权限
+            session.loginPOJO = loginPOJO;
+            
+            def mm = new MobileMessage()
+            mm.message = "登录成功"
+            mm.result = "success"
+            mm.model.put("loginPOJO",loginPOJO)
+            
+            if(params.channel_id){
+                def pushMsg = PushMsg.get(user.id)
+                if(!pushMsg){
+                    pushMsg = new PushMsg();
+                    pushMsg.id = user.id
+                }
+                 pushMsg.appid = params.appid
+                 pushMsg.channel_id = params.channel_id
+                 pushMsg.push_user_id = params.push_user_id
+                 pushMsg.apk_type = params.apk_type
+                 pushMsg.user_type = user.user_type
+                 pushMsg.role = user.role
+                 pushMsg.save();
+            }
+            
+            
+            render mm as JSON
+        }
+    }
+    
+    def reqFinalServerVersion(){
+        
+        params.max = 1  
+       
+        params.offset = 0  
+        params.sort = "dateCreated"  
+        params.order = "desc" 
+        
+        def searchClosure =  {
+            
+           
+            if(params.app_type){
+                eq('app_type',params.app_type)
+            }
+            if(params.platform){
+                eq('platform',params.platform)
+            }
+        }
+        
+        def o = AdminApk.createCriteria();
+        def results = o.list(params,searchClosure)
+        
+        def mm = new MobileMessage()
+            mm.result = "success"
+            mm.model.put("adminApk",results[0])
+            
+//        render results[0] as JSON
+
+        def m = [:]
+        m.put("versioncode",results[0].versioncode)
+        m.put("versionname",results[0].versionname)
+        m.put("newapkfeature",results[0].newapkfeature)
+        
+        render m as JSON
+    }
+
+
+    def shipList(){
+        if (!params.max) {
+            params.max = 10
+        }else{
+            params.max = new Long(params.max)
+        }
+        if (!params.offset) params.offset = 0
+        if (!params.sort) params.sort = "dateCreated"
+        if (!params.order) params.order = "desc"
+
+
+        def searchClosure =  {
+
+
+            if(params.status=="wait"){
+                eq("status","1")
+            }
+            if(params.status=="noowner"){
+                inList("status",["0","2"])
+            }
+
+        }
+
+        def o = ShipSN.createCriteria();
+        def results = o.list(params,searchClosure)
+
+        def map = [list: results, total: results.totalCount]
+
+
+        if(params.mobile=="mobile"){
+
+
+
+            //封装分页传给手机端
+            def pager = new Pager(max:params.max,"offset":params.offset,"totalPage":((results.totalCount-1)/params.max + 1) as int ,total:results.totalCount)
+            map.put("pager",pager)
+
+            def mm = new MobileMessage()
+            mm.message = "获取物流登记统计列表成功"
+            mm.result = "success"
+            mm.model = map
+
+            render mm as JSON
+        }
+
+
+    }
+
+    def regShipSNNum(){
+        def wait = ShipSN.countByStatus("1")
+        def noowner = ShipSN.countByStatusInList(["0","2"])
+
+        def map = [wait:wait,noowner:noowner]
+        def mm = new MobileMessage()
+        mm.message = "获取物流登记统计数据成功"
+        mm.result = "success"
+        mm.model = map
+
+        render mm as JSON
+    }
+
+
+    def checkReturnOrderSN(){
+        def mm = new MobileMessage()
+        ReturnOrder returnOrder = ReturnOrder.findByWuliu_sn(params.wuliu_sn)
+        if(!returnOrder){
+
+            ShipSN shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
+            if(!shipSN){
+                shipSN = new ShipSN();
+            }
+            shipSN.num = params.num as int
+            shipSN.wuliu_sn = params.wuliu_sn
+            shipSN.status = "0"
+            shipSN.save();
+
+            mm.message = "系统中没有该物流单号的退换货申请,录入无主包裹"
+        }else{
+            int num = 0;
+            returnOrder.returnGoods.each{it->
+                num = num + (it.num as int);
+            }
+
+            if(num == (params.num as int)){
+                ShipSN shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
+                if(!shipSN){
+                    shipSN = new ShipSN();
+                }
+                shipSN.num = params.num as int
+                shipSN.wuliu_sn = params.wuliu_sn
+                shipSN.status = "1"
+                shipSN.save();
+
+
+
+
+                mm.message = "物流单号与商品数量匹配，录入等待退换货"
+
+
+            }else{
+                ShipSN shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
+                if(!shipSN){
+                    shipSN = new ShipSN();
+                }
+                shipSN.num = params.num as int
+                shipSN.wuliu_sn = params.wuliu_sn
+                shipSN.status = "2"
+                shipSN.save();
+
+
+                mm.message = "物流单号准确，商品数量不匹配，录入无主包裹"
+            }
+        }
+
+
+
+ 
+        def wait = ShipSN.countByStatus("1")
+        def noowner = ShipSN.countByStatusInList(["0","2"])
+        def map = [wait:wait,noowner:noowner]
+        mm.result = "success"
+        mm.model = map
+        render mm as JSON
+        return;
+    }
+}

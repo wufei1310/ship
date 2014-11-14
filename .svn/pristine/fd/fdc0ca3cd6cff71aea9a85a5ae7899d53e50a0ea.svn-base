@@ -1,0 +1,144 @@
+package ship
+import ship.User
+
+class IndexController {
+def jcaptchaService
+    def index() { 
+        
+        
+        def orderList = DaiFaOrder.findAllByStatus("shipped",[sort:"dateCreated",order:"desc",offset:0,max:30,cache: true])
+        
+        def map = [orderList:orderList]
+        render(view:"/index",model:map)
+    }
+    
+    def policy(){
+        render(view:"/policy")
+    }
+    
+    def bikan(){
+        render(view:"/bikan")
+    }
+    def ship(){
+        render(view:"/ship")
+    }
+    def liucheng(){
+        render(view:"/liucheng")
+    }
+    def kuaidi(){
+        redirect(url: "http://kuaidi100.com")
+    }
+    def gywm(){
+        render(view:"/gywm")
+    }
+     def gonggao(){
+        render(view:"/gonggao")
+    }
+    
+    def contractus(){
+        render(view:"/contractus")
+    }
+    
+    def resetPassword(){
+        render(view:"/resetPassword")
+    }
+    def doResetPassword(){
+            Date validitydate = new Date();
+            validitydate.setMinutes(validitydate.getMinutes()-60);
+            def resetPassword = ResetPassword.findByIdAndDateCreatedGreaterThanEquals(params.id,validitydate)
+            if(resetPassword){
+                //修改支付密码
+                def user = User.get(resetPassword.user_id)
+                user.safepass = params.new_safepass.encodeAsPassword()
+                resetPassword.delete();
+                flash.message = "设置支付密码成功！"
+                render(view:"/resetSuccess")
+                return 
+            }else{
+                flash.message = "链接已失效！请登录金士代发重新发送找回密码邮件"
+                render(view:"/resetError")
+                return 
+            }
+    }
+    
+    def toLoginpassEmail(){
+        render(view:"/resetPass/toLoginpassEmail")
+    }
+    
+    def doLoginpassEmail(){
+        
+        try{
+             if (!jcaptchaService.validateResponse("emailImageCaptcha", session.id, params.emailValidCode)){  
+
+                flash.message="验证码不正确";
+                redirect(controller: 'index',action:"toLoginpassEmail")
+                return;
+             }
+        }catch(Exception e){
+                flash.message="验证码不正确";
+                 redirect(controller: 'index',action:"toLoginpassEmail")
+                return;
+        }
+        
+        def user = User.findByEmail(params.email)
+        if(!user){
+            flash.message = "邮箱不存在，请重新输入"
+           redirect(controller: 'index',action:"toLoginpassEmail")
+            return
+        }
+        ResetPassword.executeUpdate("delete ResetPassword d where d.user_id = :user_id and d.type = '1'", [user_id:user.id])
+        
+        def resetPassword = new ResetPassword()
+        resetPassword.id = UUID.randomUUID().toString()
+        resetPassword.user_id = user.id
+        resetPassword.type = '1'
+        resetPassword.save()
+        
+        String baseUrl = "http://" + request.getServerName() + ":" + request.getServerPort()
+        String bodyStr = "请在60分钟内复制以下链接至浏览器的地址栏直接打开。\n"+baseUrl+"${createLink(controller :'index', action: 'resetLoginPassword')}"+"?id="+resetPassword.id+"\n"+
+        "如果您不知道为什么收到了这封邮件，可能是他人不小心输错邮箱意外发给了您，请忽略此邮件。"
+        Thread.start {
+            print "start============================="
+                sendMail {  
+                    async true 
+                    from "service@findyi.com"
+                    to user.email
+                    subject "【金士代发】找回登录密码"     
+                    body bodyStr
+                }
+                print "success============================="
+        }
+                
+          def map = [email:params.email] 
+         render(view:"/resetPass/emailSuccess",model:map)
+    }
+    
+    def resetLoginPassword(){
+        render(view:"/resetPass/resetLoginPassword")
+    }
+    
+    def doResetLoginPassword(){
+            Date validitydate = new Date();
+            validitydate.setMinutes(validitydate.getMinutes()-60);
+            def resetPassword = ResetPassword.findByIdAndDateCreatedGreaterThanEquals(params.id,validitydate)
+            if(resetPassword){
+                //修改登录密码
+                def user = User.get(resetPassword.user_id)
+                user.password = params.new_safepass.encodeAsPassword()
+                resetPassword.delete();
+                flash.message = "设置登录密码成功！"
+                render(view:"/resetPass/resetSuccess")
+                return 
+            }else{
+                flash.message = "链接已失效！请登录金士代发重新发送找回密码邮件"
+                render(view:"/resetPass/resetError")
+                return 
+            }
+    }
+
+
+    def newIndex(){
+        render(view:"/newIndex")
+    }
+
+}

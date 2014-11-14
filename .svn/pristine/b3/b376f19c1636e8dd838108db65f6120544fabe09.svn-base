@@ -1,0 +1,14 @@
+package ship
+
+class ShipSN {
+
+    static constraints = {
+    }
+
+    String wuliu_sn;
+    int num;
+    String status;// 0：物流单不存在 1:已核实，广州办收货确认2：单号匹配，商品数量不符
+
+    Date dateCreated
+    Date lastUpdated
+}

@@ -1,0 +1,27 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ship
+import java.text.SimpleDateFormat
+import ship.TranLog
+import ship.DaiFaOrder
+import ship.User
+import util.StringUtil
+/**
+
+ *
+ * @author DELL
+ */
+class EmailJob {
+    def adminFinaceReportService
+    static triggers = {
+        cron name: 'myTrigger', cronExpression: "1 0 0 * * ?"
+    }
+    def execute() {
+
+        adminFinaceReportService.sendEmail(null)
+
+    }
+}
+

@@ -1,0 +1,23 @@
+<div class="footer ">
+  <p style="text-align: center;">全国统一客服热线：4006589896    QQ：2819103568
+     </p>
+  <p style="text-align: center;">CopyRight 2010-2014 金士代发kingsdf.cn &nbsp;&nbsp; 桂ICP备13006769号-1 
+     <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F904f5fc5d44209b24334a29307032358' type='text/javascript'%3E%3C/script%3E"));
+</script>
+  </p>
+<p style="text-align: center;"> <a href="http://www.17zwd.com" target="_blank" >一起做网店</a>&nbsp;&nbsp;&nbsp;<a href="http://www.shuabaopt.com/" target="_blank" >刷宝平台</a>
+  </p>
+</div>
+<style>
+  .footer{
+    margin-top: 10px;
+    border-top: 1px solid #dddddd;
+    padding-top: 10px;
+  }
+
+</style>
+
+
+

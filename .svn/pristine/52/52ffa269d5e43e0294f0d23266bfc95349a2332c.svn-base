@@ -1,0 +1,544 @@
+<r:require modules="uploadify"/>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="layout" content="main"/>
+    <title>金士代发</title>
+        <style>
+     .uploadifyQueue{  
+           text-align: center;
+    left: 50%; /*FF IE7*/
+    top: 50%; /*FF IE7*/
+    margin-left: -130px !important; /*FF IE7 该值为本身宽的一半 */
+    margin-top: -30px !important; /*FF IE7 该值为本身高的一半*/
+    margin-left: 0px;
+    margin-top: 0px;
+    z-index: 99;
+    position: fixed !important; /*FF IE7*/
+    position: absolute; /*IE6*/
+
+    } 
+
+    </style>
+  </head>
+  <body>
+    <div class="container body">
+      <g:if test="${flash.message}">
+         <script>
+         alert('${flash.message}')
+        </script>
+      </g:if>
+
+      <div class="page-header">
+        <h3>修改订单(<small>订单号：</small>${order.orderSN})</h3>
+      </div>
+      <g:form   name="updateDaiFaForm" id="${order.id}" data-validate="parsley" class="form-signin addDaiFaForm" controller="memberDaiFaOrder" action="doUpdate" method="post" target="innerFrame">
+        <h4>1.填写商品信息</h4>
+        <div class="bs-docs-example">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="width: 200px;">市场位置</th>
+                <th style="width: 200px;">档口号</th>
+                <th >商品货号</th>
+                <th>规格（颜色/尺码）</th>
+                <th>件数</th>
+                <th>单件价格</th>
+                <th>图片</th>
+                <th><button onclick="addDaiFaGoods()" type="button" class="btn btn-primary">增加</button></th>
+              </tr>
+            </thead>
+            <tbody>
+             <g:each in="${order.daiFaGoods}" status="i" var="daiFaGoods">
+              <tr class="daiFaGoods">
+                <td >
+                  <g:select  class="input-small" value="${daiFaGoods.market}"  name="market"  from="${market}" />
+<!--                  <select name="market" class="input-small">
+                    <option value="大时代" <g:if test="${daiFaGoods.market== '大时代'}">selected</g:if>>大时代</option>
+                    <option value="宝华" <g:if test="${daiFaGoods.market== '宝华'}">selected</g:if>>宝华</option>
+                    <option value="女人街" <g:if test="${daiFaGoods.market== '女人街'}">selected</g:if>>女人街</option>
+                    <option value="大西豪" <g:if test="${daiFaGoods.market== '大西豪'}">selected</g:if>>大西豪</option>
+                    <option value="西街" <g:if test="${daiFaGoods.market== '西街'}">selected</g:if>>西街</option>
+                    <option value="富丽" <g:if test="${daiFaGoods.market== '富丽'}">selected</g:if>>富丽</option>
+                    <option value="金马" <g:if test="${daiFaGoods.market== '金马'}">selected</g:if>>金马</option>
+                    <option value="机筑巷" <g:if test="${daiFaGoods.market== '机筑巷'}">selected</g:if>>机筑巷</option>
+                    <option value="国大" <g:if test="${daiFaGoods.market== '国大'}">selected</g:if>>国大</option>
+                    <option value="广州站" <g:if test="${daiFaGoods.market== '广州站'}">selected</g:if>>广州站</option>
+                    <option value="新潮都" <g:if test="${daiFaGoods.market== '新潮都'}">selected</g:if>>新潮都</option>
+                  
+                    <option value="柏美" <g:if test="${daiFaGoods.market== '柏美'}">selected</g:if>>柏美</option>
+                    <option value="非凡" <g:if test="${daiFaGoods.market== '非凡'}">selected</g:if>>非凡</option>
+                    <option value="佰润" <g:if test="${daiFaGoods.market== '佰润'}">selected</g:if>>佰润</option>
+                    <option value="益民" <g:if test="${daiFaGoods.market== '益民'}">selected</g:if>>益民</option>
+                  </select>-->
+                  <select name="floor" class="input-small">
+                    <option value="1楼"<g:if test="${daiFaGoods.floor== '1楼'}">selected</g:if> >1楼</option>
+                    <option value="2楼" <g:if test="${daiFaGoods.floor== '2楼'}">selected</g:if>>2楼</option>
+                    <option value="3楼" <g:if test="${daiFaGoods.floor== '3楼'}">selected</g:if>>3楼</option>
+                    <option value="4楼" <g:if test="${daiFaGoods.floor== '4楼'}">selected</g:if>>4楼</option>
+                    <option value="5楼" <g:if test="${daiFaGoods.floor== '5楼'}">selected</g:if>>5楼</option>
+                    <option value="6楼" <g:if test="${daiFaGoods.floor== '6楼'}">selected</g:if>>6楼</option>
+                    <option value="7楼" <g:if test="${daiFaGoods.floor== '7楼'}">selected</g:if>>7楼</option>
+                    <option value="8楼" <g:if test="${daiFaGoods.floor== '8楼'}">selected</g:if>>8楼</option>
+                    <option value="9楼" <g:if test="${daiFaGoods.floor== '9楼'}">selected</g:if>>9楼</option>
+                  </select>
+                </td>
+                <td><input  name="stalls" class="input-medium" type="text" placeholder="" value="${daiFaGoods.stalls}"></td>
+                <td><input  name="goods_sn" class="input-small" type="text" placeholder="" value="${daiFaGoods.goods_sn}"></td>
+                <td><input  name="spec" class="input-small" type="text" placeholder="" value="${daiFaGoods.spec}"></td>
+                <td><input  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" onblur="if(isNaN(value))execCommand('undo');checkShip()" name="num" class="input-small" type="text" placeholder="" value="${daiFaGoods.num}"></td>
+                <td><input  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')"  onblur="if(isNaN(value))execCommand('undo');checkShip()" name="price" class="input-small" type="text" placeholder="" value="${daiFaGoods.price}"></td>
+                <td class="imgTd"><div id="imgFileDiv${i}" ><input type="file" class="imgFile" id="imgFile${i}" style="display:none"></div><div class="imgDiv" id="imgDiv${i}" style="position: relative;width:100px">
+                    <g:if test="${daiFaGoods.attach_id}">
+                        <a href="${daiFaGoods.attach_id}" target="blank">
+                        <img src="${daiFaGoods.attach_id}?imageView/2/w/100"  style="display: inline;max-width: 100px"/></a>
+                        <span class="closeimg" style="position: absolute; top:0px; right:0px; display:inline-block;*display:inline;zoom:1; width:16px; height:18px; z-index:100;cursor: pointer; " onClick="removeImg(${i})"><img src="<%=request.getContextPath()%>/resource/uploadify/cancel.png"/>
+                    </g:if>
+                  </div><input type="hidden" id="imgInput${i}" class="imgInput"  name="attach_id" value="${daiFaGoods.attach_id}" ></td>
+                <td><button onclick="removeDaiFaGoods(this)" type="button" class="btn btn-danger">删除</button></td>
+              </tr>
+             </g:each>
+
+            </tbody>
+          </table>
+        </div>
+
+        
+        
+        <h4>2.填写收货地址</h4>
+        <div class="bs-docs-example">
+          <table class="table table-bordered">
+
+            <tbody>
+
+              <tr>
+                <td >
+                  收&nbsp;&nbsp;件&nbsp;&nbsp;人：
+                  <input data-error-message="收件人不能为空" data-required="true" id="reperson" name="reperson" type="text" class="" placeholder="" value="${order.reperson}">
+                  &nbsp;&nbsp;
+                  联系手机/电话：
+                  <input data-error-message="联系手机/电话不能为空" data-required="true"  id="contphone" name="contphone" type="text" class="" placeholder="" value="${order.contphone}">
+                  <br/>
+                  收件地区：
+                  <g:include controller="area" action="reqAreaField" params="[area_id:order.area_id]"/>
+                  <br/>
+                  收件地址：
+                  <input data-error-message="收件地址不能为空" data-required="true"  id="address" name="address" type="text" class="input-xxlarge" placeholder="" value="${order.address}">
+
+                  <br/>
+                  选择快递：
+                  <select id="wuliu" name="wuliu" class="input-small" onchange="checkShip()">
+                    <option value="天天" <g:if test="${order.wuliu == '天天'}">selected</g:if>>天天</option>
+                    <option value="中通" <g:if test="${order.wuliu == '中通'}">selected</g:if>>中通</option>
+                    <option value="顺丰" <g:if test="${order.wuliu == '顺丰'}">selected</g:if>>顺丰</option>
+                    <option value="圆通" <g:if test="${order.wuliu == '圆通'}">selected</g:if>>圆通</option>
+                    
+<!--                    <option value="汇通" <g:if test="${order.wuliu == '汇通'}">selected</g:if>>汇通</option>-->
+                    <option value="申通" <g:if test="${order.wuliu == '申通'}">selected</g:if>>申通</option>
+                    <option value="韵达" <g:if test="${order.wuliu == '韵达'}">selected</g:if>>韵达</option>
+<!--                    <option value="电邮小包" <g:if test="${order.wuliu == '电邮小包'}">selected</g:if>>电邮小包</option>-->
+                    <option value="EMS" <g:if test="${order.wuliu == 'EMS'}">selected</g:if>>EMS</option>
+                   
+                  </select>
+                  <br/>
+                  填写运费：
+                  <input onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" readonly="readonly"  data-required-message="运费不能为空" data-required="true" data-min-message="运费至少大于0" data-min="0"  id="addShipFee" type="text" class=""  value="${order.shipFee}">
+                  <span style="color: red" id="wuliuSpan">运费根据收件地区、快递、商品总数量自动计算，<g:link controller="index" action="ship" target="_blank">点击查看最新运费</g:link></span>
+
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        
+        <h4>3.填写发件人信息</h4>
+        <div class="bs-docs-example">
+          <table class="table table-bordered">
+
+            <tbody>
+
+              <tr>
+                <td >
+                  发&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人：
+                  <input data-error-message="发件人不能为空" data-required="true"  name="sendperson" type="text" class="" placeholder="" value="${order.sendperson}">
+                  <br/>
+                  发&nbsp;&nbsp;&nbsp;件&nbsp;&nbsp;地&nbsp;&nbsp;&nbsp;址：
+                  <input data-error-message="发件人地址不能为空" data-required="true"  name="sendaddress" type="text" class="input-xxlarge" placeholder="" value="${order.sendaddress}">
+                  <br/>
+                  联系手机/电话：
+                  <input data-error-message="联系手机/电话不能为空" data-required="true"   name="sendcontphone" type="text" class="" placeholder="" value="${order.sendcontphone}">
+                  <br/>
+                  备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：
+                  <input   name="senddesc" type="text" class="input-xxlarge" placeholder="" value="${order.senddesc}">
+                  <br/>
+            <g:if test="${order.h_senddesc}">
+                    历&nbsp;&nbsp;&nbsp;史&nbsp;&nbsp;备&nbsp;&nbsp;&nbsp;注：
+                    <ul>
+                      <g:each in="${order.h_senddesc.split("\\|")}" var="item">
+                        <li>${item}</li>
+                       </g:each>
+                    </ul>
+                    
+                </g:if>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <h4>4.选择礼品</h4>
+        <div class="bs-docs-example">
+          <table class="table table-bordered">
+
+            <tbody>
+
+              <tr>
+                <td >
+
+                  选择礼品：<select id="regards" name="regards" class="input-large" onchange="fee()">
+                      <option value="">请选择</option>
+                      <option value="1" <g:if test="${order.regards == '1'}">selected</g:if> >好评卡+小礼物</option>
+                      <option value="2" <g:if test="${order.regards == '2'}">selected</g:if> >包装盒+小礼物</option>
+                      <option value="3" <g:if test="${order.regards == '3'}">selected</g:if> >好评卡+包装盒+小礼物</option>
+                    </select>
+                  
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        
+        <h4>5.支付款项</h4>
+        <div class="bs-docs-example">
+          <table class="table table-bordered">
+
+            <tbody>
+
+              <tr>
+                <td >
+                  商品总价：
+                  <strong id="goodsFee">0</strong>
+                  <input type="hidden" name="goodsFee">
+                  <br/>
+                  运&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费：&nbsp;<strong id="shipFee">0</strong>
+                  <input type="hidden" name="shipFee">
+                  <br/>
+                  代&nbsp; 发&nbsp; 费：&nbsp;<strong id="serviceFee">0</strong>
+                  <input type="hidden" name="serviceFee">(代发每件1元)
+                  <br/>
+                  礼&nbsp; 品&nbsp; 费：&nbsp;<strong id="regardsFee">0</strong>
+                  <input type="hidden" name="regardsFee">(好评卡+小礼物1元/件，包装盒+小礼物2元/件，好评卡+包装盒+小礼物3元/件)
+                  <br/>
+                  订单总价：&nbsp;<strong id="totalFee">0</strong>
+                  <input type="hidden" name="totalFee">
+                  <!--                <br/>
+                                  账户余额：<strong style="color: red;">0</strong>(余额不足，去充值)-->
+                  <br/>
+                  <br/>
+                 
+
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </g:form>
+       <button type="button" class=" btn btn-large btn-primary" onclick="beforAddDaiFaForm()">修改订单</button>
+
+      
+      <g:link controller="memberDaiFaOrder" action="list"  params="${params}" class=" btn btn-large ">返回</g:link>
+
+
+      
+      <div id="daiFaPayModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="myModalLabel">支付代发订单</h3>
+        </div>
+
+
+
+
+        <div class="modal-footer">
+          <g:link class="btn btn-primary" controller="memberDaiFaOrder" params="${params}" action="show">支付完成</g:link>
+        </div>
+      </div>
+      <iframe id="innerFrame" name="innerFrame" height="0" frameborder="0"></iframe>
+         <g:form  action="list" controller="memberDaiFaOrder"   method="post" class="commonListForm">
+        </g:form >
+      <g:render template="/layouts/footer"/>
+    </div>
+    
+      <script>
+         var imgFileId =${order.daiFaGoods.size()}
+        
+        var priceMap = {}
+        priceMap["中通"]=8
+        priceMap["顺丰"]=13
+        priceMap["圆通"]=8
+        priceMap["申通"]=8
+        priceMap["韵达"]=8
+        priceMap["电邮小包"]=11
+        priceMap["天天"]=6
+
+//        checkWuliu(document.getElementById("wuliu"))
+//        function checkWuliu(obj){
+//          $("#wuliuSpan").html('‘'+obj.value+'’最低首重'+'‘'+priceMap[obj.value]+'’元    <g:link controller="index" action="ship" target="_blank">点击查看续重详情</g:link>')
+//        }
+        
+        fee()
+      
+        function beforAddDaiFaForm(){
+          
+          
+          var msg = ''
+          
+          $("input[name='stalls']").each(function(){
+            if($(this).val()==""){
+              msg = msg + "档口号不能为空" + '\n'
+//              alert("档口号不能为空")
+              return false;
+            }
+          })
+          
+          $("input[name='goods_sn']").each(function(){
+            if($(this).val()==""){
+              msg = msg + "商品货号不能为空" + '\n'
+//              alert("商品货号不能为空")
+              return false;
+            }
+          })
+          
+          $("input[name='spec']").each(function(){
+            if($(this).val()==""){
+              msg = msg + "规格（颜色/尺码）不能为空" + '\n'
+//              alert("规格（颜色/尺码）不能为空")
+              return false;
+            }
+          })
+          
+          $("input[name='num']").each(function(){
+            
+            
+          
+            if($(this).val()==""){
+              msg = msg + "件数不能为空" + '\n'
+//              alert("件数不能为空")
+              return false;
+            }
+            if($(this).val()<=0){
+              msg = msg + "件数必须大于0" + '\n'
+//              alert("件数必须大于0")
+              return false;
+            }
+          })
+          
+          
+          $("input[name='price']").each(function(){
+            
+            if($(this).val()==""){
+              msg = msg + "单件价格不能为空" + '\n'
+//              alert("单件价格不能为空")
+              return false;
+            }
+            if($(this).val()<=0){
+              msg = msg + "单件价格必须大于0" + '\n'
+//              alert("单件价格必须大于0")
+              return false;
+            }
+          
+          })
+          
+          
+          if(msg!=''){
+            alert(msg)
+            return false;//取消提交
+          }else{
+            
+          }
+            
+            if($("#area_id").val() == ''){
+             alert("请选择收件地区")
+             return false
+          }
+            
+//          var addShipFee = $("#addShipFee").val()
+//          var wuliuPrice = priceMap[$("#wuliu").val()]
+//          if(addShipFee*1 < wuliuPrice*1){
+//            alert("‘"+$("#wuliu").val()+"’最低首重"+"‘"+priceMap[$("#wuliu").val()]+"’元,请重新填写运费")
+//            $("#addShipFee").focus()
+//            return false
+//          }
+          
+          fee()
+          
+          
+        
+          
+
+          
+          toActionFormCom('addDaiFaForm')
+        }
+      
+        function fee(){
+        
+          var goodsFee = 0.00 ;
+          var serviceFee = 0.00;
+          var shipFee = 0.00;
+          var regardsFee = 0.00;
+          var totalFee = 0.00;
+          $(".daiFaGoods").each(function(){
+            var num = $(this).find("input[name='num']").val();
+            var price = $(this).find("input[name='price']").val();
+            goodsFee = parseFloat(goodsFee) + parseFloat(price*num);
+            serviceFee = parseFloat(serviceFee) + parseFloat(1*num);
+            shipFee = parseFloat($("#addShipFee").val());
+          })
+          if($("#regards").val()!='')
+              regardsFee = parseFloat($("#regards").val());
+          $("#goodsFee").html(goodsFee.toFixed(2));
+          $("#goodsFee").next().val(goodsFee.toFixed(2))
+          $("#serviceFee").html(serviceFee.toFixed(2));
+          $("#serviceFee").next().val(serviceFee.toFixed(2))
+          $("#shipFee").html(shipFee.toFixed(2));
+          $("#shipFee").next().val(shipFee.toFixed(2))
+          $("#regardsFee").html(regardsFee.toFixed(2));
+          $("#regardsFee").next().val(regardsFee.toFixed(2))
+        
+          totalFee = parseFloat(goodsFee) + parseFloat(serviceFee) + parseFloat(shipFee) + parseFloat(regardsFee);
+          $("#totalFee").html(totalFee.toFixed(2));
+          $("#totalFee").next().val(totalFee.toFixed(2))
+        }
+      
+      
+        function removeDaiFaGoods(o){
+        
+          $(o).parents("tr").remove();
+          checkShip()
+        }
+      
+        function addDaiFaGoods(){
+         
+          var lastTR = jQuery(".daiFaGoods:last")
+          var cloneTR = lastTR.clone();
+          cloneTR.show();
+          cloneTR.find("input").val('')
+          
+          imgFileId++
+          cloneTR.find(".imgTd").html('<div id="imgFileDiv'+imgFileId+'"><input type="file" class="imgFile" id="imgFile'+imgFileId+'" style="display:none"></div><div class="imgDiv" id="imgDiv'+imgFileId+'" style="position: relative;width:100px"></div><input type="hidden" id="imgInput'+imgFileId+'" class="imgInput"  name="attach_id" >')
+          
+          
+          jQuery(".daiFaGoods:last").after(cloneTR)
+          initImg(imgFileId)
+        }
+        
+        
+        var timeRefresh;
+        timer()
+	function timer() {
+		    timeRefresh = setInterval(function(){
+			refreshAjax()},
+			600000);
+	}
+        
+        function refreshAjax(){
+		$.ajax({
+				type : "POST",
+				url : '<%=request.getContextPath()%>/memberDaiFaOrder/acceptAjax',			
+				success : function(msg) {
+					
+				}
+			});	
+			
+	}
+        
+        
+        function removeImg(id){
+            $('#imgDiv'+id).html("")
+            $("#imgFileDiv"+id).css("height","auto");
+            $("#imgInput"+id).val("")
+        }
+        
+
+                  var $uploadifyImg = {
+                      'auto':true,
+                      'debug':false,
+                      'multi': false,
+                      'sizeLimit' : '2100000',
+                      'fileDataName' : 'imgFile',
+                      'fileDesc' : '上传图片',
+                      'fileExt' : '*.gif;*.jpg;*.jpeg;*.png;*.bmp;',
+                      'buttonImg' : '<%=request.getContextPath()%>/images/upload.png',
+                      'cancelImg': '<%=request.getContextPath()%>/resource/uploadify/cancel.png',
+                      'uploader': '<%=request.getContextPath()%>/resource/uploadify/uploadify.swf',
+                      'script' : '<%=request.getContextPath()%>/image/doImgUpload;jsessionid=<%=session.getId()%>'
+                };  
+                
+                function initImg(id){
+                    $uploadifyImg.onComplete = function(event,queueId,fileObj,response,data) {
+                                var msg = eval('('+response+')');
+                                if(msg.error == '0'){
+                                  
+                                  
+                                   var _html = '<a href="'+msg.url+'" target="blank"><img src="'+msg.url+'?imageView/2/w/100"  style="display: inline;max-width: 100px"/></a>'+
+                                               '<span class="closeimg" style="position: absolute; top:0px; right:0px; display:inline-block;*display:inline;zoom:1; width:16px; height:18px; z-index:100;cursor: pointer; " onClick="removeImg('+id+')"><img src="<%=request.getContextPath()%>/resource/uploadify/cancel.png"/>'
+                                   $('#imgDiv'+id).html(_html)
+                                   $("#imgFileDiv"+id).css("height","0px");
+                                   $("#imgInput"+id).val(msg.url)
+                                }else{
+                                    alert(msg.message)
+                                }
+                            }
+                  $('#imgFile'+id).uploadify($uploadifyImg)
+                }
+        $(document).ready(function() {
+          <g:if test="${order.daiFaGoods.size()<100}">
+
+              <g:each in="${order.daiFaGoods}" status="i" var="daiFaGoods">
+                          <g:if test="${daiFaGoods.attach_id}">
+                                   $("#imgFileDiv${i}").css("height","0px"); 
+                          </g:if>
+                          initImg(${i})
+              </g:each>  
+          </g:if>
+        });
+        
+      </script>
+      <script>
+        function daiFaPay(){
+          $('#daiFaPayModal').modal({
+                keyboard: false
+               })
+        }
+        function checkShip(){
+          var num = 0
+          var area_id = $("#area_id").val()
+          var wuliu = $("#wuliu").val()
+          $(".daiFaGoods").each(function(){
+            num = num + $(this).find("input[name='num']").val()*1;
+          })
+          if(area_id!="" && wuliu!="" ){
+            $.ajax({
+				type : "POST",
+				url : '<%=request.getContextPath()%>/memberDaiFaOrder/checkShipAjax',	
+                                data: {area_id:area_id,wuliu:wuliu,num:num},
+				success : function(msg) {
+                                        $("#addShipFee").val(msg)
+					fee() 
+				}
+			});	
+          }else{
+            fee()
+            // alert("请先选择收件地区和快递")
+          }
+        }
+        
+        function afterArea(){
+            checkShip()
+        }
+    </script>
+  </body>
+</html>

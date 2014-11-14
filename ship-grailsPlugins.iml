@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="web" name="GrailsWeb">
+      <configuration>
+        <webroots>
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/mail-1.0.4/grails-app/views" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/quartz-1.0-RC5/web-app" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jquery-1.8.3/web-app" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/excel-import-1.0.0/web-app" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/joda-time-1.4/grails-app/views" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/remote-pagination-0.4.2/web-app" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/database-migration-1.3.2/grails-app/views" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jcaptcha-1.2.1/web-app" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/random-0.2/web-app" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/random-0.2/grails-app/views" relative="/" />
+        </webroots>
+        <sourceRoots />
+      </configuration>
+    </facet>
+    <facet type="hibernate" name="Hibernate">
+      <configuration>
+        <datasource-map>
+          <unit-entry name="Gorm" />
+        </datasource-map>
+        <naming-strategy-map />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/cache-1.0.1">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/cache-1.0.1/src/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/cache-1.0.1/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/cache-1.0.1/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/cache-1.0.1/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/database-migration-1.3.2">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/database-migration-1.3.2/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/database-migration-1.3.2/grails-app/controllers" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/excel-import-1.0.0">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/excel-import-1.0.0/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/excel-import-1.0.0/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/excel-import-1.0.0/grails-app/services" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/hibernate-2.2.1">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/hibernate-2.2.1/grails-app/i18n" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jcaptcha-1.2.1">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jcaptcha-1.2.1/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jcaptcha-1.2.1/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jcaptcha-1.2.1/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jcaptcha-1.2.1/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/joda-time-1.4">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/joda-time-1.4/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/joda-time-1.4/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jquery-1.8.3">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jquery-1.8.3/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jquery-1.8.3/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jquery-1.8.3/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jquery-1.8.3/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/mail-1.0.4">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/mail-1.0.4/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/mail-1.0.4/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/mail-1.0.4/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/mail-1.0.4/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/quartz-1.0-RC5">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/quartz-1.0-RC5/src/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/quartz-1.0-RC5/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/quartz-1.0-RC5/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/quartz-1.0-RC5/grails-app/services" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/random-0.2">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/random-0.2/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/random-0.2/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/random-0.2/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/random-0.2/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/remote-pagination-0.4.2">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/remote-pagination-0.4.2/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/remote-pagination-0.4.2/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/resources-1.1.6">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/resources-1.1.6/src/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/resources-1.1.6/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/resources-1.1.6/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/resources-1.1.6/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/rest-0.8">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/rest-0.8/src/groovy" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/tomcat-2.2.1" />
+    <content url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/webxml-1.4.1">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/webxml-1.4.1/src/groovy" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="grails-2.2.1" level="application" />
+    <orderEntry type="module-library" exported="">
+      <library name="Grails User Library (ship-grailsPlugins)">
+        <CLASSES>
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/excel-import-1.0.0/lib" />
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/joda-time-1.4/lib" />
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jcaptcha-1.2.1/lib" />
+          <root url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/random-0.2/lib" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.geronimo.specs/geronimo-stax-api_1.0_spec/jars/geronimo-stax-api_1.0_spec-1.0.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/stax/stax-api/jars/stax-api-1.0.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.xmlbeans/xmlbeans/jars/xmlbeans-2.3.0.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.poi/poi-ooxml-schemas/jars/poi-ooxml-schemas-3.7.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.poi/poi-ooxml/jars/poi-ooxml-3.7.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.poi/poi/jars/poi-3.7.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/com.sun.mail/javax.mail/jars/javax.mail-1.5.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/javax.activation/activation/jars/activation-1.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/javax.mail/javax.mail-api/jars/javax.mail-api-1.5.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/c3p0/c3p0/jars/c3p0-0.9.1.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.quartz-scheduler/quartz/jars/quartz-2.1.5.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/xml-resolver/xml-resolver/jars/xml-resolver-1.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/xerces/xercesImpl/jars/xercesImpl-2.9.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/net.sourceforge.nekohtml/nekohtml/jars/nekohtml-1.9.16.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/net.sf.ezmorph/ezmorph/jars/ezmorph-1.0.6.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/net.sf.json-lib/json-lib/jars/json-lib-2.3-jdk15.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/commons-codec/commons-codec/jars/commons-codec-1.6.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/commons-logging/commons-logging/jars/commons-logging-1.1.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.httpcomponents/httpcore/jars/httpcore-4.2.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.httpcomponents/httpclient/jars/httpclient-4.2.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.groovy.modules.http-builder/http-builder/jars/http-builder-0.6.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/excel-import-1.0.0/lib" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/jcaptcha-1.2.1/lib" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/joda-time-1.4/lib" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/.grails/2.2.1/projects/ship/plugins/random-0.2/lib" recursive="false" />
+      </library>
+    </orderEntry>
+  </component>
+</module>
+

@@ -1,0 +1,41 @@
+package ship
+
+class ReturnGoods{
+
+    static constraints = {
+        daiFaGoods(blank:true,nullable:true)
+        num(blank:true,nullable:true)
+        price(blank:true,nullable:true)
+        actual_price(blank:true,nullable:true)
+        price(min:new BigDecimal(0))
+        actual_price(min:new BigDecimal(0))
+        return_fee(min:new BigDecimal(0))
+        return_num(min:0l)
+    }
+
+    static belongsTo = [returnOrder:ReturnOrder]
+    
+    DaiFaGoods daiFaGoods
+    
+    String market
+    String floor
+    String stalls //档口
+    String goods_sn
+    String spec //规格
+    String num //拿货件数
+    BigDecimal price; //单价
+    BigDecimal actual_price //实际拿货价格
+    
+    String type //0 退货 1 换货
+    Long add_user //创建人
+    Long return_num //退货/换货件数
+    BigDecimal return_fee //退货单价/换货商品单价
+
+
+
+    String status;//0:新提交退换货，1:广州办入库 2:分拣完成，等待受理3：已领出办事处 4：已退货，档口退款
+    
+    Date dateCreated
+    Date lastUpdated
+
+}

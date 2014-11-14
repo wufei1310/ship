@@ -1,0 +1,30 @@
+
+<!doctype html>
+<html>
+  <head>
+    <title>Getting Started Extension's Popup</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+      body {
+        min-width:357px;
+        overflow-x:hidden;
+      }
+
+      img {
+        margin:5px;
+        border:2px solid black;
+        vertical-align:middle;
+        width:75px;
+        height:75px;
+      }
+    </style>
+
+    <!-- JavaScript and HTML must be in separate files for security. -->
+    <script src="popup.js"></script>
+  </head>
+  <body>
+	恭喜，金士插件安装成功！安装此插件后，将在您的淘宝订单列表页面自动生成‘去金士代发’按钮，一键同步订单数据到金士代发下单页面，节省您的宝贵时间！<br/>
+	<a target="_blank" href="http://taobao.com">快去试试吧</a>
+  </body>
+</html>
+
