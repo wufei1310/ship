@@ -362,6 +362,37 @@ class MemberDaiFaOrderController extends BaseController {
         // }
     }
 
+
+
+    def proOrderSN(){
+        java.text.DateFormat format2 = new java.text.SimpleDateFormat("yyMMdd");
+
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String nowDate = df.format(new Date())
+        def startDate = Date.parse("yyyy-MM-dd HH:mm:ss", nowDate + " 00:00:00")
+        def endDate = Date.parse("yyyy-MM-dd HH:mm:ss", nowDate + " 23:59:59")
+
+        def todayOrder = DaiFaOrder.executeQuery("select count(a.id) from DaiFaOrder a " +
+                "where a.dateCreated >= ? and a.dateCreated <= ?",
+                [startDate, endDate])[0]
+
+
+
+        String nowOrder = String.valueOf(todayOrder + 1)
+        int less0 = 4 - nowOrder.length()
+        for (int i = 0; i < less0; i++) {
+            nowOrder = "0" + nowOrder;
+        }
+
+        def randoNum = randomService?.nextInteger(100, 999) as String; //加入订单号
+
+        def newNo = nowOrder[0]+randoNum[0]+nowOrder[1]+randoNum[1]+nowOrder[2]+randoNum[2]+nowOrder[3];
+
+
+        return format2.format(new Date()).toString() + newNo;
+    }
+
     def doAdd() {
         if(session.hotMap) {
             session.hotMap = null
@@ -398,27 +429,7 @@ class MemberDaiFaOrderController extends BaseController {
 
 
 
-        java.text.DateFormat format2 = new java.text.SimpleDateFormat("yyMMdd");
-
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String nowDate = df.format(new Date())
-        def startDate = Date.parse("yyyy-MM-dd HH:mm:ss", nowDate + " 00:00:00")
-        def endDate = Date.parse("yyyy-MM-dd HH:mm:ss", nowDate + " 23:59:59")
-
-        def todayOrder = DaiFaOrder.executeQuery("select count(a.id) from DaiFaOrder a " +
-                "where a.dateCreated >= ? and a.dateCreated <= ?",
-                [startDate, endDate])[0]
-
-
-        String nowOrder = String.valueOf(todayOrder + 1)
-        int less0 = 3 - nowOrder.length()
-        for (int i = 0; i < less0; i++) {
-            nowOrder = "0" + nowOrder;
-        }
-
-        def randoNum = randomService?.nextInteger(100, 999); //加入订单号
-        daiFaOrder.orderSN = format2.format(new Date()).toString() + nowOrder + randoNum;
+        daiFaOrder.orderSN = proOrderSN();
 
 
 
@@ -433,7 +444,7 @@ class MemberDaiFaOrderController extends BaseController {
             def daiFaGoods = new DaiFaGoods(num: params.num, price: params.price);
             daiFaGoods.market = params.market
             daiFaGoods.floor = params.floor
-            daiFaGoods.stalls = params.stalls
+            daiFaGoods.stalls = params.stalls.replaceAll(params.market,"").replaceAll(params.floor,"").replaceAll("F","").replaceAll("L","")
             daiFaGoods.goods_sn = params.goods_sn.replaceAll(" ","").replaceAll("＃","#").replaceAll("　","");
             daiFaGoods.spec = params.spec
             daiFaGoods.status = '0'
@@ -457,7 +468,7 @@ class MemberDaiFaOrderController extends BaseController {
                 def daiFaGoods = new DaiFaGoods(num: params.num[i], price: params.price[i]);
                 daiFaGoods.market = params.market[i]
                 daiFaGoods.floor = params.floor[i]
-                daiFaGoods.stalls = params.stalls[i]
+                daiFaGoods.stalls = params.stalls[i].replaceAll(params.market[i],"").replaceAll(params.floor[i],"").replaceAll("F","").replaceAll("L","")
                 daiFaGoods.goods_sn = params.goods_sn[i].replaceAll(" ","").replaceAll("＃","#").replaceAll("　","");
                 daiFaGoods.spec = params.spec[i]
                 daiFaGoods.status = '0'
@@ -498,14 +509,15 @@ class MemberDaiFaOrderController extends BaseController {
         }
 
 
+
+
+
+
+
+
         def line = "-"
-
-
-
-
-
-
-
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String nowDate = df.format(new Date())
         def time16 = Date.parse("yyyy-MM-dd HH:mm:ss", nowDate + " 16:00:00")
         def nowTime = new Date();
         if (nowTime > time16) {
