@@ -26,7 +26,7 @@
 
       <div class="well well-large">
         <form class="form-inline">
-            <input type="hidden" name="orderfrom" value="kings">
+            <input type="hidden" name="orderfrom" value="${params.orderfrom}">
            订单号：
           <input name="orderSN" type="text" class="" placeholder="" value="${params.orderSN}">
            状态：

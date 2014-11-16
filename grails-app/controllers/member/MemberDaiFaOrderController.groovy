@@ -434,7 +434,7 @@ class MemberDaiFaOrderController extends BaseController {
             daiFaGoods.market = params.market
             daiFaGoods.floor = params.floor
             daiFaGoods.stalls = params.stalls
-            daiFaGoods.goods_sn = params.goods_sn
+            daiFaGoods.goods_sn = params.goods_sn.replaceAll(" ","").replaceAll("＃","#").replaceAll("　","");
             daiFaGoods.spec = params.spec
             daiFaGoods.status = '0'
             daiFaGoods.is_qianshou = '0'
@@ -458,7 +458,7 @@ class MemberDaiFaOrderController extends BaseController {
                 daiFaGoods.market = params.market[i]
                 daiFaGoods.floor = params.floor[i]
                 daiFaGoods.stalls = params.stalls[i]
-                daiFaGoods.goods_sn = params.goods_sn[i]
+                daiFaGoods.goods_sn = params.goods_sn[i].replaceAll(" ","").replaceAll("＃","#").replaceAll("　","");
                 daiFaGoods.spec = params.spec[i]
                 daiFaGoods.status = '0'
                 daiFaGoods.is_qianshou = '0'

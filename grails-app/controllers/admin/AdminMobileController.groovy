@@ -991,6 +991,9 @@ class AdminMobileController {
         def returnOrder = new ReturnOrder()
         returnOrder.daiFaOrder = daiFaOrder
         returnOrder.orderSN = "K"+daiFaOrder.orderSN
+
+
+
         returnOrder.status = '1'
         returnOrder.add_user = session.loginPOJO.user.id
         returnOrder.wuliu = "包裹到货登记"
@@ -1035,12 +1038,13 @@ class AdminMobileController {
             returnGoods.goods_sn = goods.goods_sn
             returnGoods.spec = goods.spec
 
-            returnGoods.return_fee = goods.actual_price
+            returnGoods.return_fee = goods.price
 
             returnOrder.addToReturnGoods(returnGoods)
 
 
 
+            println returnGoods as JSON
             goodsFee = goodsFee + returnGoods.return_fee * returnGoods.return_num
             return_num_all = return_num_all + returnGoods.return_num
 
@@ -1159,21 +1163,29 @@ class AdminMobileController {
 
 
         }
-        println returnOrderMap
-        println params.wuliu_sn
+//        println returnOrderMap
+//        println params.wuliu_sn
 
-
+        def mm = new MobileMessage()
+        mm.message = "生成退换货申请成功"
+        mm.result = "success"
 
         returnOrderMap.each { k, v ->
             //为无主包裹自动生成退换货申请
+
+            if(ReturnOrder.findByOrderSN("K"+k.orderSN)){
+                mm.message = "生成退换货申请失败，该退回包裹已经入库登记，已生成退换货"
+                mm.result = "fail"
+                render mm as JSON
+                return;
+            }
+
             proReturn(k, v, params.wuliu_sn)
         }
 
 
 
-        def mm = new MobileMessage()
-        mm.message = "生成退换货申请成功"
-        mm.result = "success"
+
 
         render mm as JSON
 
@@ -1425,6 +1437,9 @@ class AdminMobileController {
     }
 
 
+
+
+
     def findGoodsFromPhone() {
 
 
@@ -1443,25 +1458,39 @@ class AdminMobileController {
 
         def startDate = Date.parse("yyyy-MM-dd HH:mm:ss", findDate + " 00:00:00")
 
+        def searchClosure;
+        if(params.orderSN){
+            searchClosure = {
 
-        def searchClosure = {
+                daiFaOrder {
 
-            daiFaOrder {
+                        eq('orderSN', params.orderSN)
 
-                if (params.contphone) {
-                    eq('contphone', params.contphone)
                 }
-                if (params.reperson) {
-                    eq('reperson', params.reperson)
-                }
-
-
-                eq('status', 'shipped')
 
             }
-            gt("dateCreated", startDate)
+        }else{
+            searchClosure = {
 
+                daiFaOrder {
+
+                    if (params.contphone) {
+                        eq('contphone', params.contphone)
+                    }
+                    if (params.reperson) {
+                        eq('reperson', params.reperson)
+                    }
+
+
+                    eq('status', 'shipped')
+
+                }
+                gt("dateCreated", startDate)
+
+            }
         }
+
+
 
         def o = DaiFaGoods.createCriteria();
         def results = o.list(params, searchClosure)
