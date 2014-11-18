@@ -95,6 +95,8 @@ class ImageController extends BaseController{
                 if(fileName!=null && fileName!=''){  
                     fileType = fileName.substring(fileName.indexOf(".")) //得到文件类型  
                 }  
+                
+                
 
 		String newFileName = FileUtil.getNewFileName(session.loginPOJO.user.id) + fileType;
 		

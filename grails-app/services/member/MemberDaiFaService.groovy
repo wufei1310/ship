@@ -866,8 +866,8 @@ class MemberDaiFaService {
                 goodsLog.logdesc = "会员强制停止订单,商品已受理，等待代发员判断是否已经拿货"
                 goodsLog.save()
             } else if (it.status == "2") {
-                it.status = "kill_return"
-                goodsLog.logdesc = "会员强制停止订单,商品已拿货，等待进入退货流程"
+                it.status = "kill_wait"
+                goodsLog.logdesc = "会员强制停止订单,商品已拿货，由代发人员自行退货"
                 goodsLog.save()
             } else if (it.status == "3") {
                 it.status = "killing"
@@ -937,7 +937,7 @@ class MemberDaiFaService {
         if (isKillingAndKill_return.count(false) == 0) {    //当　false数量为０时，说明  订单下的商品都已经是中止退货，和中止可直接退款的
 
             BigDecimal return_fee = 0.0
-
+            println "killingkillingkilling"+killing
             killing.each { goodskilling ->
                 return_fee = return_fee + (goodskilling.price * goodskilling.num)     //计算需要直接退款的金额
                 goodskilling.status = "killed"
@@ -989,7 +989,8 @@ class MemberDaiFaService {
             //====================进入生成退货申请程序＝＝＝＝＝＝＝＝＝＝＝＝
             if (killreturn.size() > 0) {
                 println "====================进入生成退货申请程序＝＝＝＝＝＝＝＝"
-                killReturn(daifaOrder, killreturn)
+                killReturn(daifaOrder, killreturn,"member") ;
+                killReturn(daifaOrder, killreturn,"kings");
             }
 
         }
@@ -997,12 +998,20 @@ class MemberDaiFaService {
     }
 
     //中止订单开始生成退货申请单
-    def killReturn(daiFaOrder, killreturn) {
+    def killReturn(daiFaOrder, killreturn,orderfrom) {
 
         def returnOrder = new ReturnOrder()
         returnOrder.daiFaOrder = daiFaOrder
-        returnOrder.orderSN = daiFaOrder.orderSN
-        returnOrder.status = '1'
+        if(orderfrom=="member"){
+            returnOrder.status = '1'
+            returnOrder.orderSN = "M"+daiFaOrder.orderSN
+        }
+        if(orderfrom=="kings"){
+            returnOrder.ishuiyuanxiadan = "1"
+            returnOrder.orderSN = "K"+daiFaOrder.orderSN
+            returnOrder.status = '2'
+        }
+
         returnOrder.add_user = daiFaOrder.add_user
         returnOrder.wuliu = "会员中止订单发货"
         returnOrder.wuliu_sn = "会员中止订单发货"
@@ -1010,6 +1019,7 @@ class MemberDaiFaService {
         returnOrder.sendaddress = daiFaOrder.sendaddress
         returnOrder.sendcontphone = daiFaOrder.sendcontphone
         returnOrder.type = "3"
+        returnOrder.orderfrom = orderfrom
         long return_num_all = 0
         BigDecimal goodsFee = new BigDecimal(0)//计算退货总计
         killreturn.each {
@@ -1017,6 +1027,7 @@ class MemberDaiFaService {
             it.status = "killed"
 
             def returnGoods = new ReturnGoods()
+            returnGoods.orderfrom = orderfrom
             returnGoods.market = it.market
             returnGoods.floor = it.floor
             returnGoods.stalls = it.stalls
@@ -1068,6 +1079,7 @@ class MemberDaiFaService {
 
         println     returnOrder as JSON
         returnOrder.save(flush: true)
+
 
 
     }

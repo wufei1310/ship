@@ -935,7 +935,6 @@ class AdminMobileController {
 
         if (!shipSN) {
             shipSN = new ShipSN();
-            shipSN.scanTime = new Date();
         }
         shipSN.addUser = session.loginPOJO.user.id
         shipSN.addEmail = session.loginPOJO.user.email
@@ -943,7 +942,7 @@ class AdminMobileController {
         shipSN.wuliu_sn = params.wuliu_sn
         shipSN.status = "1"
         shipSN.needTui = "1" //无主包裹关联退换货申请
-
+        shipSN.scanTime = new Date();
         shipSN.save();
 
 
@@ -1051,8 +1050,9 @@ class AdminMobileController {
 
             def goodsLog = new GoodsLog();
             goodsLog.daiFaGoods = goods
-            goodsLog.addUser = User.get(daiFaOrder.add_user)
-            goodsLog.logdesc = "管理员收到无主包裹，根据订单号与货号查询出档口等信息，同步生成退货申请，进入退货流程"
+
+            goodsLog.addUser = session.loginPOJO.user
+            goodsLog.logdesc = "退回包裹登记成功，进入退货流程"
             goodsLog.save()
 
 

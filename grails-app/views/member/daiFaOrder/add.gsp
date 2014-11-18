@@ -133,7 +133,7 @@
                         <option value="9楼">9楼</option>
                     </select>
                 </td>
-                <td><input name="stalls" class="input-medium stalls" type="text" placeholder=""></td>
+                <td><input name="stalls" class="input-medium stalls" type="text" placeholder="请不要输入市场和楼层"></td>
                 <td><input name="goods_sn" class="input-small goods_sn" type="text" placeholder=""></td>
                 <td><input name="spec" class="input-small spec" type="text" placeholder=""></td>
                 <td><input onkeyup="if (isNaN(value))execCommand('undo')"

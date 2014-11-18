@@ -96,6 +96,11 @@ class AdminDaiFaGoodsController extends BaseController {
             paramsMap.put("zzfw", g.daiFaOrder.regards)
 
 
+            goodsLog.each {
+                it.operuser = it.addUser.email;
+            }
+
+
 
 
 
@@ -104,10 +109,15 @@ class AdminDaiFaGoodsController extends BaseController {
                 paramsMap.put('daifa_user_name', g.daifa_user.email)
             }
 
+            if(g.check_user){
+                paramsMap.put('check_user_name', g.check_user.email)
+            }
+
             def mm = new MobileMessage()
             mm.message = "获得代发商品成功"
             mm.result = "success"
             mm.model.put("ordergoods", paramsMap)
+            mm.model.put("goodsLogList",goodsLog)
             render mm as JSON
             return;
         } else {

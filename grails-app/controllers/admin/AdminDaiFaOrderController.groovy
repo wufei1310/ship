@@ -218,6 +218,13 @@ class AdminDaiFaOrderController extends BaseController {
                     paramsMap.put("yanshou_count", yanshou_count)
                     m_result.add(paramsMap)
 
+
+                    def trandLog = TranLog.findAllByOrderSNAndType(it.orderSN,"4")
+
+                    if(trandLog.size()>0){
+                        paramsMap.put("buyunfei", "1")
+                    }
+
                 }
                 map.list = m_result
             }
@@ -241,6 +248,12 @@ class AdminDaiFaOrderController extends BaseController {
             def total = DaiFaOrder.executeQuery("select d.id from DaiFaOrder d " +
                     "where d.status = ?  group by substring(" + date_time + ",1,10)", [params.status]).size()
             daiFaOrder.each { it ->
+
+
+
+//
+
+
                 Map paramMap = new HashMap()
                 paramMap.num = it[0]
                 paramMap.dateCreated = it[1].toString().substring(0, 10)

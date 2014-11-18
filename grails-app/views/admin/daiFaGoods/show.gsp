@@ -358,7 +358,7 @@
               <td>${goodsLog.logdesc}
               </td>
               
-             <td>${goodsLog.lastUpdated?goodsLog.lastUpdated.toString()[0..18]:''}</td>
+             <td>${goodsLog.dateCreated?goodsLog.dateCreated.toString()[0..18]:''}</td>
               
             </tr>
           </g:each>

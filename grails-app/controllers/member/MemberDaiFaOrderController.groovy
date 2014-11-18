@@ -1122,6 +1122,7 @@ class MemberDaiFaOrderController extends BaseController {
 
         def searchClosure = {
 
+            eq("orderfrom","member")
             if (params.orderSN) {
                 like('orderSN', "%" + params.orderSN + "%")
             }
