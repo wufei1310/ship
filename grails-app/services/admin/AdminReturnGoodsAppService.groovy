@@ -27,11 +27,14 @@ class AdminReturnGoodsAppService {
                  def fee = goods.tuihuo_num*goods.tuihuo_price
                  def account = addUser.account
                  account.lock()
+                BigDecimal memberamount = account.amount;
                  account.amount = fee +account.amount
                  
                   //插入资金流水表（商品）
                     def tranLog = new TranLog();
                     tranLog.amount = fee
+                memberamount = memberamount + fee;
+                tranLog.memberamount = memberamount
                     tranLog.direction = "1"
                     tranLog.type = "10"
                     tranLog.orderSN = returnGoodsApp.orderSN

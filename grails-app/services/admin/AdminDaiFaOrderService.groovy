@@ -78,12 +78,15 @@ class AdminDaiFaOrderService {
 
                 def account = user.account
                 account.lock()
+                BigDecimal memberamount = account.amount;
                 account.amount = ship_back_fee + account.amount
                 account.save()
 
                 //退回运费 资金流水表
                 def tranLog1 = new TranLog();
                 tranLog1.amount = ship_back_fee
+                memberamount = memberamount +  ship_back_fee
+                tranLog1.memberamount = memberamount
                 tranLog1.direction = "1"
                 tranLog1.type = "6"
                 tranLog1.orderSN = order.orderSN
@@ -106,11 +109,14 @@ class AdminDaiFaOrderService {
 
             def account = user.account
             account.lock()
+            BigDecimal memberamount = account.amount;
             account.amount = daifa_free + account.amount
             account.save()
 
             def tranLog1 = new TranLog();
             tranLog1.amount = daifa_free
+            memberamount = memberamount + daifa_free
+            tranLog1.memberamount =  memberamount
             tranLog1.direction = "1"
             tranLog1.type = "11"
             tranLog1.orderSN = order.orderSN
@@ -156,8 +162,8 @@ class AdminDaiFaOrderService {
 
 
 
-        returnOrder.tui_user = checkUser
-        returnOrder.tui_time = new Date()
+        returnOrder.check_user = checkUser
+        returnOrder.check_time = new Date()
 
 
         //如果是退货
@@ -178,6 +184,14 @@ class AdminDaiFaOrderService {
 
             returnOrder.goodsFee = goodsFee
             returnOrder.save()
+
+            //会员自己民下的单的状态改变
+            def memberReturnOrder = ReturnOrder.findByOrderSN(returnOrder.orderSN.replace("K","M"))
+            memberReturnOrder.status = "2"
+            memberReturnOrder.needTui = "2" //表示已经退货退款到会员账户
+
+            memberReturnOrder.goodsFee = goodsFee
+            memberReturnOrder.save()
 
             //插入资金流水表（档口退货回款）
             def tranLog = new TranLog();

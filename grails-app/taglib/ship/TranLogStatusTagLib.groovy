@@ -54,13 +54,15 @@ class TranLogStatusTagLib {
             break;
             case "24": out << "会员强制停止订单收取物流费"
                 break;
-            case "25": out << "会员强制停止订单退回货款和物流费"
+            case "25": out << "会员强制停止订单退回货款"
+                break;
+            case "28": out << "会员强制停止订单退回物流费"
                 break;
             case "26": out << "管理员直接对订单退运费"
                 break;
             case "27": out << "管理员直接对商品退货款"
                 break;
         }
-
+         //370612
     }
 }

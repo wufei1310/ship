@@ -34,6 +34,10 @@ class MemberDaiFaService {
         } else if (daiFaOrder.status != 'waitpay') {
             return "页面过期，请刷新！"
         } else {
+
+            BigDecimal memberamount = account.amount;
+
+
             daiFaOrder.status = 'waitaccept'
             daiFaOrder.payTime = new Date()
             account.amount = account.amount - totalFee
@@ -48,9 +52,9 @@ class MemberDaiFaService {
                     shichang = shichang + it.market + ","
                 goodsNum = goodsNum + it.num
             }
-            def searchClosure = {
-                eq("user_type", "admin")
-            }
+//            def searchClosure = {
+//                eq("user_type", "admin")
+//            }
 
 //            def o = PushMsg.createCriteria();
 //            def results = o.list(searchClosure)
@@ -63,10 +67,14 @@ class MemberDaiFaService {
 //            pushPOJO.pushMsgList = results
 //            new Push().pushByStore(pushPOJO)
 
+
+
             //插入资金流水表（商品）
             def tranLog = new TranLog();
             tranLog.shouru_type = "0"
             tranLog.amount = daiFaOrder.goodsFee
+            memberamount = memberamount - daiFaOrder.goodsFee
+            tranLog.memberamount = memberamount
             tranLog.direction = "0"
             tranLog.type = "7"
             tranLog.orderSN = daiFaOrder.orderSN
@@ -78,6 +86,9 @@ class MemberDaiFaService {
             def tranLogShip = new TranLog();
             tranLogShip.shouru_type = "0"
             tranLogShip.amount = daiFaOrder.shipFee
+            memberamount = memberamount - daiFaOrder.shipFee
+            tranLogShip.memberamount = memberamount
+
             tranLogShip.direction = "0"
             tranLogShip.type = "8"
             tranLogShip.orderSN = daiFaOrder.orderSN
@@ -89,6 +100,10 @@ class MemberDaiFaService {
             def tranLogDaiFa = new TranLog();
             tranLogDaiFa.shouru_type = "0"
             tranLogDaiFa.amount = daiFaOrder.serviceFee
+
+            memberamount = memberamount - daiFaOrder.serviceFee
+            tranLogDaiFa.memberamount = memberamount
+
             tranLogDaiFa.direction = "0"
             tranLogDaiFa.type = "9"
             tranLogDaiFa.orderSN = daiFaOrder.orderSN
@@ -101,6 +116,10 @@ class MemberDaiFaService {
                 def tranLogRegards = new TranLog();
                 tranLogRegards.shouru_type = "0"
                 tranLogRegards.amount = daiFaOrder.regardsFee
+
+                memberamount = memberamount - daiFaOrder.regardsFee
+                tranLogShip.memberamount = memberamount
+
                 tranLogRegards.direction = "0"
                 tranLogRegards.type = "20"
                 tranLogRegards.orderSN = daiFaOrder.orderSN
@@ -123,12 +142,16 @@ class MemberDaiFaService {
         //退还金额
         println "daiFaGoods.actual_price:" + daiFaGoods.actual_price
         def fee = (daiFaGoods.price - daiFaGoods.actual_price) * daiFaGoods.num
+        def account = addUser.account
+        account.lock()
+        BigDecimal memberamount = account.amount;
+        account.amount = fee + account.amount
 
-
-        println "daiFaGoods.fee:" + fee
         //插入资金流水表(商品)
         def tranLog = new TranLog();
         tranLog.amount = fee
+        memberamount = memberamount + fee
+        tranLog.memberamount = memberamount
         tranLog.direction = "1"
         tranLog.type = "22"
         tranLog.orderSN = daiFaGoods.daiFaOrder.orderSN
@@ -139,9 +162,7 @@ class MemberDaiFaService {
 
         //修改订单总金额　
         daiFaGoods.daiFaOrder.totalFee = daiFaGoods.daiFaOrder.totalFee - fee
-        def account = addUser.account
-        account.lock()
-        account.amount = fee + account.amount
+
 
 
         def goodsLog = new GoodsLog();
@@ -196,10 +217,16 @@ class MemberDaiFaService {
 
         //退还金额
         def fee = goods.price * goods.num
+        def account = addUser.account
+        account.lock()
+        BigDecimal memberamount = account.amount;
+
 
         //插入资金流水表(商品)
         def tranLog = new TranLog();
         tranLog.amount = fee
+        memberamount = memberamount + fee
+        tranLog.memberamount = memberamount
         tranLog.direction = "1"
         tranLog.type = "5"
         tranLog.orderSN = daiFaOrder.orderSN
@@ -229,6 +256,8 @@ class MemberDaiFaService {
             //插入资金流水表(商品)
             def tranLogShip = new TranLog();
             tranLogShip.amount = daiFaOrder.shipFee
+            memberamount = memberamount + daiFaOrder.shipFee
+            tranLogShip.memberamount = memberamount
             tranLogShip.direction = "1"
             tranLogShip.type = "6"
             tranLogShip.orderSN = daiFaOrder.orderSN
@@ -240,6 +269,10 @@ class MemberDaiFaService {
                 //插入资金流水表（会员取消商品退礼品费）
                 def tranLogRegards = new TranLog();
                 tranLogRegards.amount = daiFaOrder.regardsFee
+
+                memberamount = memberamount + daiFaOrder.regardsFee
+                tranLogRegards.memberamount = memberamount
+
                 tranLogRegards.direction = "1"
                 tranLogRegards.type = "21"
                 tranLogRegards.orderSN = daiFaOrder.orderSN
@@ -255,8 +288,7 @@ class MemberDaiFaService {
             daiFaOrder.regardsFee = 0
         }
 
-        def account = addUser.account
-        account.lock()
+
         account.amount = fee + account.amount
 
 
@@ -325,6 +357,9 @@ class MemberDaiFaService {
             daiFaOrder.totalFee = daiFaOrder.totalFee + decimal;
             daiFaOrder.goodsFee = daiFaOrder.goodsFee + decimal;
             //资金划拨
+
+
+            BigDecimal memberamount = account.amount;
             account.amount = account.amount - decimal
 
 
@@ -354,6 +389,8 @@ class MemberDaiFaService {
             def tranLog = new TranLog();
             tranLog.shouru_type = "0"
             tranLog.amount = decimal
+            memberamount = memberamount - decimal
+            tranLog.memberamount = memberamount
             tranLog.direction = "0"
             tranLog.type = "3"
             tranLog.orderSN = daiFaOrder.orderSN
@@ -392,7 +429,7 @@ class MemberDaiFaService {
         }
 
 
-
+        BigDecimal memberamount = account.amount;
         account.amount = account.amount - daiFaOrder.diffShip
 
         def poSearchClosure = {
@@ -412,6 +449,8 @@ class MemberDaiFaService {
         def tranLog = new TranLog();
         tranLog.shouru_type = "0"
         tranLog.amount = daiFaOrder.diffShip
+        memberamount = memberamount - daiFaOrder.diffShip
+        tranLog.memberamount = memberamount
         tranLog.direction = "0"
         tranLog.type = "4"
         tranLog.orderSN = daiFaOrder.orderSN
@@ -660,6 +699,7 @@ class MemberDaiFaService {
             returnOrder.status = '1'
             returnOrder.payTime = new Date()
             // returnOrder.daiFaOrder.type = '1'
+            BigDecimal memberamount = account.amount;
             account.amount = account.amount - totalFee
 
 
@@ -674,6 +714,8 @@ class MemberDaiFaService {
             def tranLog = new TranLog();
             tranLog.shouru_type = "0"
             tranLog.amount = returnOrder.serviceFee
+            memberamount = memberamount - returnOrder.serviceFee
+            tranLog.memberamount =  memberamount
             tranLog.direction = "0"
             tranLog.type = "12"
             tranLog.orderSN = returnOrder.orderSN
@@ -690,6 +732,8 @@ class MemberDaiFaService {
                 def tranLog1 = new TranLog();
                 tranLog1.shouru_type = "0"
                 tranLog1.amount = returnOrder.shipFee
+                memberamount = memberamount - returnOrder.shipFee
+                tranLog1.memberamount =  memberamount
                 tranLog1.direction = "0"
                 tranLog1.type = "14"
                 tranLog1.orderSN = returnOrder.orderSN
@@ -701,6 +745,8 @@ class MemberDaiFaService {
                     def tranLog2 = new TranLog();
                     tranLog2.shouru_type = "0"
                     tranLog2.amount = returnOrder.chajia
+                    memberamount = memberamount - returnOrder.chajia
+                    tranLog2.memberamount =  memberamount
                     tranLog2.direction = "0"
                     tranLog2.type = "13"
                     tranLog2.orderSN = returnOrder.orderSN
@@ -955,10 +1001,13 @@ class MemberDaiFaService {
             if (return_fee > 0) {
                 //退钱  到会员
                 def account = add_user.account
+                BigDecimal memberamount = account.amount;
                 account.amount = (return_fee + daifaOrder.shipFee - 3.5) + account.amount
                 //插入资金流水表（商品）
                 def tranLog = new TranLog();
                 tranLog.amount = return_fee
+                memberamount = memberamount + return_fee
+                tranLog.memberamount = memberamount
                 tranLog.direction = "1"
                 tranLog.type = "25"
                 tranLog.orderSN = daifaOrder.orderSN
@@ -968,8 +1017,10 @@ class MemberDaiFaService {
                 //插入资金流水表（商品）
                 tranLog = new TranLog();
                 tranLog.amount = daifaOrder.shipFee
+                memberamount = memberamount + daifaOrder.shipFee
+                tranLog.memberamount = memberamount
                 tranLog.direction = "1"
-                tranLog.type = "25"
+                tranLog.type = "28"
                 tranLog.orderSN = daifaOrder.orderSN
                 tranLog.order_user = daifaOrder.add_user
                 tranLog.save()
@@ -977,6 +1028,8 @@ class MemberDaiFaService {
                 //会员强制停止订单收取３.5元费用
                 tranLog = new TranLog();
                 tranLog.amount = 3.5
+                memberamount = memberamount -3.5
+                tranLog.memberamount = memberamount
                 tranLog.direction = "0"
                 tranLog.type = "24"
                 tranLog.orderSN = daifaOrder.orderSN

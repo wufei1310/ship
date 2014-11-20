@@ -217,11 +217,11 @@
                 </strong>
                   
                   <br/>
-                  <g:if test="${returnOrder.tui_time}">
-                    退款人：<strong >${returnOrder.tui_user.email}</strong>
+                  <g:if test="${returnOrder.check_time}">
+                    退款人：<strong >${returnOrder.check_user.email}</strong>
                     <br/>
                     退款审核时间：
-                    <strong >${returnOrder.tui_time.toString()[0..18]}</strong>
+                    <strong >${returnOrder.check_time.toString()[0..18]}</strong>
                    <br/>                  
                   </g:if>
                 </td>

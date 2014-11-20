@@ -15,6 +15,7 @@ import ship.TranLog
 import ship.ReturnOrder
 import ship.ReturnGoods
 import exception.MessageException
+import util.StringUtil
 
 class AdminDaiFaOrderController extends BaseController {
     def properties = PropertiesLoaderUtils.loadProperties(new ClassPathResource("sysSetting.properties"))
@@ -696,6 +697,7 @@ class AdminDaiFaOrderController extends BaseController {
 
 
     def updateForShipped() {
+        def mm = new MobileMessage()
         def o = DaiFaOrder.createCriteria();
         def order = o.get { eq("status", "allaccept") eq("id", new Long(params.id)) }
         def map = [:]
@@ -705,27 +707,40 @@ class AdminDaiFaOrderController extends BaseController {
             flash.message = "发货失败,订单不存在";
             flash.messageClass = this.error
             map = [status: 'allaccept']
-        }
-        //        else if(!order.processing_user_id.equals(session.loginPOJO.user.id)){
-        //            flash.message="发货失败，不可以发货别人受理的订单";
-        //            flash.messageClass=this.error
-        //            map = [status:'processing']
-        //        }
-        else {
-            // order.lock() 
+        } else {
+            // order.lock()
 
-            adminDaiFaOrderService.updateForShipped(params, order)
-            flash.message = "发货成功";
-            flash.messageClass = this.success
-            map = [status: 'shipped']
+
+
+            Float weight = new Float(params.weight)
+
+            BigDecimal actual_shipfee = StringUtil.checkShipByWeight(order.wuliu,order.area_id,weight)
+
+            if(actual_shipfee>order.shipFee){
+                flash.message = "实际运费"+actual_shipfee+"高于会员支付运费";
+                order.actual_shipfee = actual_shipfee
+                mm.result = "fail"
+                map = [order: order]
+            }else{
+                params.actual_shipfee =   actual_shipfee
+                adminDaiFaOrderService.updateForShipped(params, order)
+                flash.message = "发货成功";
+                flash.messageClass = this.success
+                mm.result = "success"
+                map = [status: 'shipped']
+            }
+
+
+
+
 
 
         }
         if (params.mobile == "mobile") {
-            def mm = new MobileMessage()
+
             map.order = order
             mm.message = flash.message
-            mm.result = "success"
+
             mm.model = map
             render mm as JSON
         } else {
@@ -927,16 +942,24 @@ class AdminDaiFaOrderController extends BaseController {
             if (params.status) {
                 eq('status', params.status)
             }
+            if (params.needTui) {
+                eq('needTui', params.needTui)
+            }
             if (params.type) {
                 eq('type', params.type)
             }
             if (params.needShip) {
                 eq('needShip', params.needShip)
             }
-            if (params.isScan) {
-                eq('isScan', params.isScan)
-            }
+//            if (params.isScan) {
+//                eq('isScan', params.isScan)
+//            }
 
+
+            if (params.mobile == "mobile"){
+                params.orderfrom="kings"
+            }
+            println params.orderfrom
             if (params.orderfrom) {
                 eq('orderfrom', params.orderfrom)
             }

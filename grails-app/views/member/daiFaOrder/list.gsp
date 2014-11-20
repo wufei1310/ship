@@ -104,9 +104,9 @@
         <g:link class="btn ${params.status == 'waitpay' ? 'btn-primary' : ''}" controller="memberDaiFaOrder"
                 action="list" params="[status: 'waitpay']">未付款(<span style="color: red;">${waitpay}</span>)</g:link>
         <g:link class="btn ${params.status == 'error' ? 'btn-primary' : ''}" controller="memberDaiFaOrder" action="list"
-                params="[status: 'error']">补款/缺货(${error})</g:link>
+                params="[status: 'error']">补款/缺货(<span style="color: red;">${error}</span>)</g:link>
         <g:link class="btn ${params.status == 'diffship' ? 'btn-primary' : ''}" controller="memberDaiFaOrder"
-                action="list" params="[status: 'diffship']">补运费(${diffship})</g:link>
+                action="list" params="[status: 'diffship']">补运费(<span style="color: red;">${diffship}</span>)</g:link>
         <g:link class="btn ${params.status == null ? 'btn-primary' : ''}" controller="memberDaiFaOrder"
                 action="list">全部</g:link>
     </form>

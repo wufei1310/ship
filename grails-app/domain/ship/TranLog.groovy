@@ -17,6 +17,8 @@ class TranLog {
         num(blank: true, nullable: true)
         cont(blank: true, nullable: true)
         add_user(blank: true, nullable: true)
+        adminamount(blank: true, nullable: true)
+        memberamount(blank: true, nullable: true)
     }
 
     BigDecimal amount
@@ -47,7 +49,7 @@ class TranLog {
     // 23[收入]会员更换档口超过2次支付费用
     // 24[收入]会员强制停止订单收取物流费
     // 25[支出]会员强制停止订单退回货款和物流费　
-
+    // 28[支出]会员强制停止订单退回物流费
     // 26[支出]管理员直接对订单退运费　
     // 27[支出]管理员直接对商品退货款
 
@@ -61,6 +63,8 @@ class TranLog {
 
     String cont;//备注
     Long add_user
+    BigDecimal memberamount;  //当前会员账户余额
+    BigDecimal adminamount   //当前系统账户余额
     Date dateCreated
     Date lastUpdated
 }

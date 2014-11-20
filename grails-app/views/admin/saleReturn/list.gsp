@@ -30,8 +30,10 @@
            订单号：
           <input name="orderSN" type="text" class="" placeholder="" value="${params.orderSN}">
            状态：
-           <g:select class="input-medium" value="${params.status}" name="status" optionKey="status" optionValue="queryShow" from="${[[status:"",queryShow:"全部"],[status:"0",queryShow:"未支付"],[status:"1",queryShow:"已支付,等待处理"],[status:"2",queryShow:"退货完成,已退款"],[status:"4",queryShow:"退货处理结束，等待审核退款会员"],[status:"5",queryShow:"换货完成,已发货"],[status:"6",queryShow:"换货处理结束，等待发货"]]}" />
-类型：
+           <g:select class="input-medium" value="${params.status}" name="status" optionKey="status" optionValue="queryShow" from="${[[status:"",queryShow:"全部"],[status:"0",queryShow:"未支付"],[status:"1",queryShow:"处理中"],[status:"2",queryShow:"处理结束"]]}" />
+           是否退款：
+           <g:select class="input-medium" value="${params.needTui}" name="needTui" optionKey="status" optionValue="queryShow" from="${[[status:"",queryShow:"全部"],[status:"1",queryShow:"等待退款"],[status:"2",queryShow:"已退款"]]}" />
+           类型：
            <g:select class="input-medium" value="${params.type}" name="type" optionKey="status" optionValue="queryShow" from="${[[status:"",queryShow:"全部"],[status:"0",queryShow:"退货"],[status:"1",queryShow:"换货"]]}" />
            会员是否下单：
            <g:select class="input-medium" value="${params.ishuiyuanxiadan}" name="ishuiyuanxiadan" optionKey="status" optionValue="queryShow" from="${[[status:"",queryShow:"全部"],[status:"0",queryShow:"否"],[status:"1",queryShow:"是"]]}" />
@@ -49,6 +51,7 @@
 <!--              <th>物流单号</th>
               <th>物流公司</th>-->
               <th>状态</th>
+                <th>是否退款</th>
                 <th>会员是否下单</th>
 
               <th>创建时间</th>
@@ -65,13 +68,19 @@
               <td>${returnOrder.wuliu}</td>-->
               <td><g:returnOrder status="${returnOrder.status}" />
 
-            <g:if test="${returnOrder.needTui=='1'}">等待退款</g:if>
-            <g:if test="${returnOrder.needTui=='2'}">已退款</g:if>
 
             &nbsp;&nbsp;
             <g:if test="${returnOrder.needShip=='1'}">等待发货</g:if>
             <g:if test="${returnOrder.needShip=='2'}">已发货</g:if>
               </td>
+                <td>
+                    <g:if test="${returnOrder.needTui=='1'}">等待退款</g:if>
+                    <g:if test="${returnOrder.needTui=='2'}">已退款</g:if>
+
+
+                </td>
+
+
 
                 <td>
                     <g:if test="${returnOrder.ishuiyuanxiadan=='0'}">否</g:if>

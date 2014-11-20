@@ -29,10 +29,13 @@ class TuiController {
 
         //退钱  到会员
         def account = add_user.account
+        BigDecimal memberamount = account.amount;
         account.amount = new BigDecimal(params.return_fee) + account.amount
         //26[支出]管理员直接对订单退运费
         def tranLog = new TranLog();
         tranLog.amount = new BigDecimal(params.return_fee)
+        memberamount =  memberamount + new BigDecimal(params.return_fee)
+        tranLog.memberamount = memberamount
         tranLog.direction = "1"
         tranLog.type = "26"
         tranLog.orderSN = daifaOrder.orderSN
@@ -67,10 +70,13 @@ class TuiController {
 
         //退钱  到会员
         def account = add_user.account
+        BigDecimal memberamount = account.amount;
         account.amount = new BigDecimal(params.return_fee) + account.amount
         //26[支出]管理员直接对商品退货款
         def tranLog = new TranLog();
         tranLog.amount = new BigDecimal(params.return_fee)
+        memberamount = memberamount + new BigDecimal(params.return_fee)
+        tranLog.memberamount = memberamount
         tranLog.direction = "1"
         tranLog.type = "27"
         tranLog.goods_id = goods.id

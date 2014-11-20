@@ -1,5 +1,8 @@
 package ship
 
+import groovy.transform.AutoClone
+
+@AutoClone
 class ReturnOrder {
 
     static constraints = {

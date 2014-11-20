@@ -39,7 +39,8 @@
               <th>金额</th>
               <th>支付方式</th>
               <th>描述</th>
-              <th>时间</th>          
+              <th>时间</th>
+            <th>账户余额</th>
             </tr>
           </thead>
           <tbody>
@@ -56,6 +57,7 @@
               </td>
               <td><tranLog:tranLogStatusDic status="${tranLog.type}"/></td>
               <td>${tranLog.dateCreated.toString()[0..18]}</td>
+                <td>${tranLog.memberamount}</td>
             </tr>
           </g:each>
             

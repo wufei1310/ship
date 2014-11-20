@@ -1,4 +1,7 @@
 package util
+
+import grails.converters.JSON
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -130,7 +133,42 @@ class StringUtil {
 		} 
 		return buffer.toString();
 	}
-        
+
+
+    public static BigDecimal checkShipByWeight(wuliu,area_id,weight){
+        if(!area_id)
+            area_id = "0100"
+
+        if(area_id.length()>7)
+            area_id = area_id.substring(0,7)
+        def express = Express.findByName(wuliu)
+        def areaShip = AreaShip.findByExpressAndArea_id(express,area_id)
+
+        if(!areaShip){
+            areaShip = AreaShip.findByExpressAndArea_id(express,"0100")
+            if(wuliu=="大包"){
+                areaShip = new AreaShip();
+                areaShip.f_price = 0
+            }
+
+        }
+
+        println areaShip as JSON
+        if(weight<=1){
+            return areaShip.f_price
+        }else{
+            int w = weight as int
+            if(weight>w){
+                return areaShip.f_price + ((w)*areaShip.x_price)
+            }else{
+                return areaShip.f_price + ((w-1)*areaShip.x_price)
+            }
+
+
+        }
+    }
+
+
         public static BigDecimal checkShip(wuliu,area_id,num){
         
             if(!area_id)

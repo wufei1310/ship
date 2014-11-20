@@ -171,6 +171,7 @@ class AdminMobileController {
 
         if ((huanSucc != 0) && huanGoodsCount == (huanSucc + huanFail)) {
             returnOrder.needShip = "1"
+
         } else if (huanGoodsCount == huanFail) {
 
             returnOrder.needShip = "3"
@@ -187,6 +188,7 @@ class AdminMobileController {
 
             if (huanGoodsCount == (huanSucc + huanFail)) {  //订单下商品都处理完才可以退款
                 returnOrder.needTui = "1"
+                returnOrder.tui_time = new Date()
             }
 
 
@@ -1244,7 +1246,7 @@ class AdminMobileController {
         o = DaiFaGoods.createCriteria();
         def yanshou = o.list(searchClosure)[0]
         def goods_shipped = DaiFaGoods.executeQuery("select count(a.id) from DaiFaGoods a  where  a.status='9'")[0]
-        def tuihuancount = ReturnOrder.executeQuery("select count(a.id) from ReturnOrder a  where a.orderfrom='kings' and  a.isScan='0'")[0]
+        def tuihuancount = ReturnOrder.executeQuery("select count(a.id) from ReturnOrder a  where a.orderfrom='kings' ")[0]
         //统计新提交未扫描的退换货申请数据
         def canExport = DaiFaOrder.executeQuery("select count(a.id) from DaiFaOrder a  where  a.isCanExport='1'")[0]
         def noowner = ShipSN.countByStatusInList(["0", "2"])

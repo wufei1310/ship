@@ -610,12 +610,14 @@ class MemberDaiFaOrderController extends BaseController {
                 redirect(action: "show", params: [id: params.orderId])
                 return;
             } else {
-
+                BigDecimal memberamount = account.amount;
                 account.amount = account.amount - decimal
                 //插入资金流水表
                 def tranLog = new TranLog();
                 tranLog.shouru_type = "0"
                 tranLog.amount = decimal
+                memberamount = memberamount - decimal
+                tranLog.memberamount = memberamount
                 tranLog.direction = "0"
                 tranLog.type = "23"
                 tranLog.orderSN = daiFaGoods.daiFaOrder.orderSN
@@ -1123,6 +1125,7 @@ class MemberDaiFaOrderController extends BaseController {
         def searchClosure = {
 
             eq("orderfrom","member")
+
             if (params.orderSN) {
                 like('orderSN', "%" + params.orderSN + "%")
             }
