@@ -111,12 +111,19 @@ class AdminEmailController extends BaseController {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
         def startDate = Date.parse("yyyy-MM-dd HH:mm:ss","2014-11-1 00:00:00")
-        def endDate = Date.parse("yyyy-MM-dd HH:mm:ss","2014-11-10 23:59:59")
+        def endDate = Date.parse("yyyy-MM-dd HH:mm:ss","2014-11-15 23:59:59")
 
         def returnOrderList = ReturnOrder.findAllByDateCreatedBetween(startDate,endDate);
         returnOrderList.each{
 
-            it.orderSN = "M"+ it.orderSN
+            if(it.orderSN.startsWith("K")){
+
+            }else{
+                if(!it.orderSN.startsWith("M")){
+                    it.orderSN = "M"+ it.orderSN
+                }
+            }
+
             println it.orderSN
         }
     }

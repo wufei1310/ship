@@ -1,5 +1,6 @@
 package admin
 
+import grails.converters.JSON
 import util.StringUtil
 import ship.TranLog
 import ship.User
@@ -193,13 +194,15 @@ class AdminDaiFaOrderService {
             memberReturnOrder.goodsFee = goodsFee
             memberReturnOrder.save()
 
+
+
             //插入资金流水表（档口退货回款）
             def tranLog = new TranLog();
             tranLog.amount = goodsFee
             tranLog.direction = "0"
             tranLog.type = "16"
             tranLog.orderSN = returnOrder.orderSN
-            tranLog.order_user = returnOrder.add_user
+            tranLog.order_user = memberReturnOrder.add_user
             tranLog.num = goodsNum
             if (returnOrder.flat == '1') { //如果是非平台订单则记录一下
                 tranLog.flat = '1'
@@ -208,17 +211,20 @@ class AdminDaiFaOrderService {
 
 
             //退钱  到会员
-            def  addUser = User.get(returnOrder.add_user)
+            def  addUser = User.get(memberReturnOrder.add_user)
             def account = addUser.account
+            BigDecimal memberamount = account.amount;
             account.amount = goodsFee +account.amount
 
             //插入资金流水表（商品）
             tranLog = new TranLog();
             tranLog.amount = goodsFee
+            memberamount = memberamount + goodsFee
+            tranLog.memberamount = memberamount
             tranLog.direction = "1"
             tranLog.type = "10"
             tranLog.orderSN = returnOrder.orderSN
-            tranLog.order_user = returnOrder.add_user
+            tranLog.order_user = memberReturnOrder.add_user
             if(returnOrder.flat == '1'){ //如果是非平台订单则记录一下
                 tranLog.flat = '1'
             }
