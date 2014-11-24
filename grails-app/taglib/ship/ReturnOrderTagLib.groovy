@@ -39,7 +39,7 @@ class ReturnOrderTagLib {
 
     def returnGoods = {attrs->
         switch (attrs.status){
-            case "0": out << "收到退换货申请"
+            case "0": out << "收到退货申请"
                 break;
             case "1": out << "收到退回货物"
                 break;
@@ -47,7 +47,7 @@ class ReturnOrderTagLib {
                 break;
             case "4": out << "已退货"//"已退货，档口退款"
                 break;
-            case "5": out << "正在退换中"//"已受理,领出办事处"
+            case "5": out << "正在退中"//"已受理,领出办事处"
                 break;
             case "6": out << "退货不成功"
                 break;
@@ -66,7 +66,7 @@ class ReturnOrderTagLib {
                         break;
                     case "1": out << "已支付,等待处理"
                         break;
-                    case "2": out << "退换货处理结束"
+                    case "2": out << "退货处理结束"
                         break;
                     }
             }

@@ -82,14 +82,14 @@ class AdminEmailService {
         def h_kong = new BigDecimal(0)
         
         
-        def tui_ali_goods = new BigDecimal(0) //退换货ali支付换货差价
-        def tui_yu_goods = new BigDecimal(0) //退换货余额支付换货差价
+        def tui_ali_goods = new BigDecimal(0) //退货ali支付换货差价
+        def tui_yu_goods = new BigDecimal(0) //退货余额支付换货差价
         
-        def tui_ali_ship = new BigDecimal(0) //退换货ali支付换货运费
-        def tui_yu_ship = new BigDecimal(0) //退换货余额支付换货运费
+        def tui_ali_ship = new BigDecimal(0) //退货ali支付换货运费
+        def tui_yu_ship = new BigDecimal(0) //退货余额支付换货运费
         
-        def tui_ali_service = new BigDecimal(0)  //阿里支付退换货服务费
-        def tui_yu_service = new BigDecimal(0) //余额支付退换货服务费
+        def tui_ali_service = new BigDecimal(0)  //阿里支付退货服务费
+        def tui_yu_service = new BigDecimal(0) //余额支付退货服务费
         def tui_huikuan = new BigDecimal(0) //档口回款
         
         def newCount = new BigDecimal(0)
@@ -163,7 +163,7 @@ class AdminEmailService {
                 }
             }
             
-            else if(it.type == '12'){//支付退换货服务费
+            else if(it.type == '12'){//支付退货服务费
                 if(it.shouru_type == '0'){
                     tui_yu_service = tui_yu_service + it.amount
                 }else if(it.shouru_type == '1'){
@@ -326,7 +326,7 @@ class AdminEmailService {
             
         }
         
-        def zhichu_tranList = TranLog.findAllByDateCreatedBetweenAndTypeInList(startDate,endDate,['1','2','5','6','11'])//退换货另算
+        def zhichu_tranList = TranLog.findAllByDateCreatedBetweenAndTypeInList(startDate,endDate,['1','2','5','6','11'])//退货另算
         
         //已发货的订单
         def ship_zhichu_tranList = TranLog.findAllByDateCreatedBetweenAndType(startDate,endDate,"2").orderSN
@@ -559,7 +559,7 @@ class AdminEmailService {
 //            async true 
 //            from "service@findyi.com"
 //            to "findyi@icloud.com","mail3298@gmail.com","wufei1310@126.com","425501056@qq.com"
-//            subject f_Date+"退换货申请收入支出对照明细报表"     
+//            subject f_Date+"退货申请收入支出对照明细报表"
 //            // body new File("src/groovy/report.html").getText()
 //            html groovyPageRenderer.render(template:"/mailTemplate/dayReturnOrderInOutWaterTemplate",model:[returnOrderList:returnOrder,mapParam:mapParam])
 //        }

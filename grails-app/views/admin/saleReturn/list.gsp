@@ -18,8 +18,8 @@
       <div class="page-header">
         <h3>
 
-            <g:if test="${params.orderfrom=='kings'}">系统包裹退换货申请</g:if>
-            <g:if test="${params.orderfrom=='member'}">会员提交退换货申请</g:if>
+            <g:if test="${params.orderfrom=='kings'}">系统包裹退货申请</g:if>
+            <g:if test="${params.orderfrom=='member'}">会员提交退货申请</g:if>
 
         </h3>
        </div>
@@ -33,8 +33,6 @@
            <g:select class="input-medium" value="${params.status}" name="status" optionKey="status" optionValue="queryShow" from="${[[status:"",queryShow:"全部"],[status:"0",queryShow:"未支付"],[status:"1",queryShow:"处理中"],[status:"2",queryShow:"处理结束"]]}" />
            是否退款：
            <g:select class="input-medium" value="${params.needTui}" name="needTui" optionKey="status" optionValue="queryShow" from="${[[status:"",queryShow:"全部"],[status:"1",queryShow:"等待退款"],[status:"2",queryShow:"已退款"]]}" />
-           类型：
-           <g:select class="input-medium" value="${params.type}" name="type" optionKey="status" optionValue="queryShow" from="${[[status:"",queryShow:"全部"],[status:"0",queryShow:"退货"],[status:"1",queryShow:"换货"]]}" />
            会员是否下单：
            <g:select class="input-medium" value="${params.ishuiyuanxiadan}" name="ishuiyuanxiadan" optionKey="status" optionValue="queryShow" from="${[[status:"",queryShow:"全部"],[status:"0",queryShow:"否"],[status:"1",queryShow:"是"]]}" />
 

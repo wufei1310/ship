@@ -18,58 +18,56 @@ import admin.BaseController
 import util.ImageManagerUtil
 
 
-class ImageController extends BaseController{
-    
-    public static final String IMG_BUCKET = SysPropertUtil.getString("QN.IMG_BUCKET")
- 
-    def index() { }
+class ImageController extends BaseController {
 
-   
-    
-    private String getError(String message) {
-	JSONObject obj = new JSONObject();
-	obj.put("error", 1);
-	obj.put("message", message);
-	return obj.toString();
+    public static final String IMG_BUCKET = SysPropertUtil.getString("QN.IMG_BUCKET")
+
+    def index() {
+        render "333"
     }
-    
-    
-    
-    
-    def doImgUpload(){
-     //文件保存目录路径
+
+
+    private String getError(String message) {
+        JSONObject obj = new JSONObject();
+        obj.put("error", 1);
+        obj.put("url", "");
+        obj.put("message", message);
+        return obj.toString();
+    }
+
+
+    def doImgUpload() {
+
+
+
+        //文件保存目录路径
         String savePath = request.getRealPath("/") + "attached/";
 
         //文件保存目录URL
-        String saveUrl  = "attached/";
-        
-        
+        String saveUrl = "attached/";
+
 //        //定义允许上传的文件扩展名
 //        HashMap<String, String> extMap = new HashMap<String, String>();
 //        extMap.put("image", "gif,jpg,jpeg,png,bmp");
 ////        extMap.put("flash", "swf,flv");
 ////        extMap.put("media", "swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb");
 ////        extMap.put("file", "doc,docx,xls,xlsx,ppt,htm,html,txt,zip,rar,gz,bz2");
-        
-        
+
         //最大文件大小
         long maxSize = 2100000;
-        
-        
+
         //检查目录
         File uploadDir = new File(savePath);
-        if(!uploadDir.isDirectory()){
+        if (!uploadDir.isDirectory()) {
 //            render(getError("上传目录不存在。"));
         }
         //检查目录写权限
-        if(!uploadDir.canWrite()){
+        if (!uploadDir.canWrite()) {
 //            render(getError("上传目录没有写权限。"));
         }
-        
+
         String dirName = "image";
 
-
-        
         //创建文件夹
         savePath += dirName + "/";
         saveUrl += dirName + "/";
@@ -77,55 +75,60 @@ class ImageController extends BaseController{
         if (!saveDirFile.exists()) {
             saveDirFile.mkdirs();
         }
-        
-       
-        
-        try {  
-            def f = request.getFile('imgFile') 
-            if (f.getSize() > maxSize){
-                 render(getError(f.getOriginalFilename()+"尺寸过大超过2M"));
-                 return 
+
+
+
+        try {
+            def f = request.getFile('imgFile')
+            if (f.getSize() > maxSize) {
+                render(getError(f.getOriginalFilename() + "尺寸过大超过2M"));
+                return
             }
-               
-           
-            if(!f.empty){  
-                def fileName=f.getOriginalFilename() //得到文件名称 
-                 
-                String fileType = ".jpg";  
-                if(fileName!=null && fileName!=''){  
+
+
+            if (!f.empty) {
+                def fileName = f.getOriginalFilename() //得到文件名称
+
+                String fileType = ".jpg";
+                if (fileName != null && fileName != '') {
                     fileType = fileName.substring(fileName.indexOf(".")) //得到文件类型  
-                }  
-                
-                
+                }
 
-		String newFileName = FileUtil.getNewFileName(session.loginPOJO.user.id) + fileType;
-		
-                
-                def file= new File(savePath, newFileName);
 
-                if(!file.exists()){  
+
+                String newFileName = FileUtil.getNewFileName(session.loginPOJO.user.id) + fileType;
+
+
+                def file = new File(savePath, newFileName);
+
+                if (!file.exists()) {
                     file.mkdirs()//如果file不存在自动创建  
-                }  
+                }
                 f.transferTo(file) //上传  
-                
+
                 ImageManagerUtil imageManager = new ImageManagerUtil();
-		BufferedImage image = imageManager.readImage(file);
-		imageManager.setFlat(false);
-					//生成等大缩略图快照
-		imageManager.writeImage(imageManager.zoom(image, "200","200"), fileType, new File(savePath+newFileName));               
-  
+                BufferedImage image = imageManager.readImage(file);
+                imageManager.setFlat(false);
+                //生成等大缩略图快照
+                imageManager.writeImage(imageManager.zoom(image, "200", "200"), fileType, new File(savePath + newFileName));
+
                 Map resultMap = new HashMap()
-		resultMap.put("error", 0);
-                resultMap.put("width",imageManager.getWidth())
-                resultMap.put("height",imageManager.getHeight())
-		resultMap.put("url", saveUrl + newFileName);
-//                println(obj.toJSONString())
-		render resultMap as JSON
-            }  
-        } catch (Exception e) {  
-            e.printStackTrace()  
-            render(getError("图片上传出错")) 
-        }   
+                resultMap.put("error", 0);
+                resultMap.put("width", imageManager.getWidth())
+                resultMap.put("height", imageManager.getHeight())
+                resultMap.put("message","上传成功")
+                resultMap.put("url", saveUrl + newFileName);
+                //println(obj.toJSONString())
+                println resultMap as JSON
+                render resultMap as JSON
+
+
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace()
+            render(getError("图片上传出错"))
+        }
 //        print request.getFileMap()
 //        def file = request.getFile("imgFile")
 //        long maxSize = 2100000
@@ -149,8 +152,7 @@ class ImageController extends BaseController{
 //            render(getError(file.getOriginalFilename()+"上传失败"));
 //        }
     }
-    
-   
+
 
 }
 

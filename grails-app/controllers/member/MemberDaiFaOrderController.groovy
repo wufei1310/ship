@@ -887,7 +887,7 @@ class MemberDaiFaOrderController extends BaseController {
 
 
 //        if(daiFaOrder.type=="1"){
-//            flash.message = "订单已经提交过一次退换货申请，不支持重复提交"
+//            flash.message = "订单已经提交过一次退货申请，不支持重复提交"
 //            flash.messageClass = "error"
 //            redirect(action: "list")
 //        }
@@ -943,9 +943,9 @@ class MemberDaiFaOrderController extends BaseController {
 
 
 
-        def returnOrder = ReturnOrder.findByOrderSNAndAdd_user(daiFaOrder.orderSN,session.loginPOJO.user.id)
+        def returnOrder = ReturnOrder.findByOrderSNAndAdd_user("M"+daiFaOrder.orderSN,session.loginPOJO.user.id)
         if(returnOrder){
-            flash.message = "您已经提交过该订单号的退换货申请了"
+            flash.message = "您已经提交过该订单号的退货申请了"
             flash.messageClass = "error"
             render(view: this.commonSuccess)
             return false
@@ -961,29 +961,32 @@ class MemberDaiFaOrderController extends BaseController {
         def addUser = User.get(session.loginPOJO.user.id)
 
         returnOrder = memberDaiFaService.doSaleExchange(params, addUser)//添加申请
-        returnOrder.isScan = "0"//默认退换货申请是未扫描的,当找到了与他对应的无主包裹时，我们认为这个退换货申请扫描过了的
+        returnOrder.isScan = "0"//默认退货申请是未扫描的,当找到了与他对应的无主包裹时，我们认为这个退货申请扫描过了的
         def shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
 
+        if (shipSN) { //在提交新的退货申请时，判断是否已经有了物流单号。
 
-        if (shipSN) { //在提交新的退换货申请时，判断是否已经有了物流单号。
 
 
-            shipSN.orderSN =  returnOrder.orderSN
-            if (shipSN.status == "0") { //如果有物流单号在无主包裹中，我们认为这相退换货申请等同于扫描入库了，从无主包裹中消失
-                shipSN.status = "1"
+            if (shipSN.status == "1") { //如果有物流单号在无主包裹中，我们认为这相退货申请等同于扫描入库了，从无主包裹中消失
                 shipSN.needTui = "1"
+
+                shipSN.orderSN = shipSN.orderSN + "|" + daiFaOrder.orderSN
+
+
                 returnOrder.isScan = "1"
                 returnOrder.returnGoods.each { it ->
                     it.rukuUser = session.loginPOJO.user.email
                     it.rukuTime = new Date();
-                    it.status = "1" //记录该退换货商品办事处入库
+                    it.status = "1" //记录该退货商品办事处入库
                 }
 
-            } else if (shipSN.status == "4") {
-                shipSN.needTui = "1"
-            } else if (shipSN.status == "5") {
-                shipSN.needTui = "3"
             }
+//            else if (shipSN.status == "4") {
+//                shipSN.needTui = "1"
+//            } else if (shipSN.status == "5") {
+//                shipSN.needTui = "3"
+//            }
 
 
 
@@ -1149,7 +1152,12 @@ class MemberDaiFaOrderController extends BaseController {
 
     def saleReturnShow() {
         def returnOrder = ReturnOrder.findByIdAndAdd_user(params.id, session.loginPOJO.user.id)
-        def map = [returnOrder: returnOrder]
+
+
+        def kingsReturnOrder  = ReturnOrder.findByOrderSNAndOrderfrom("K"+returnOrder.orderSN.substring(1),"kings")
+
+
+        def map = [returnOrder: returnOrder,kingsReturnOrder:kingsReturnOrder]
 //        if (returnOrder.type == '0') {
 //            render(view: "/member/saleReturn/show", model: map)
 //        } else {

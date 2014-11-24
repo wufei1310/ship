@@ -31,6 +31,10 @@ class AdminShipSNController extends BaseController{
         def searchClosure =  {
 
 
+            if(params.wuliu_sn){
+                like('wuliu_sn',"%"+params.wuliu_sn+"%")
+            }
+
             if(params.orderSN){
                 like('orderSN',"%"+params.orderSN+"%")
             }
@@ -102,8 +106,8 @@ class AdminShipSNController extends BaseController{
 
     }
 
-    //通过包裹查看可能对应的退换货申请数据。若包裹中的物流单号和退换货申请对应，
-    // 或者物流单号已经与退换货申请关联，则直接显示这个退换货申请
+    //通过包裹查看可能对应的退货申请数据。若包裹中的物流单号和退货申请对应，
+    // 或者物流单号已经与退货申请关联，则直接显示这个退货申请
 
     def saleReturnList(){
 
@@ -156,7 +160,7 @@ class AdminShipSNController extends BaseController{
     }
 
 
-    //将无主包裹与退换货申请关联
+    //将无主包裹与退货申请关联
     def checkReturn(){
         ReturnOrder returnOrder = ReturnOrder.get(params.returnOrderId)
 
@@ -166,7 +170,7 @@ class AdminShipSNController extends BaseController{
 
             it.rukuUser = session.loginPOJO.user.email
             it.rukuTime = new Date();
-            it.status = "1" //记录该退换货商品办事处入库
+            it.status = "1" //记录该退货商品办事处入库
         }
 
         def shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
@@ -179,7 +183,7 @@ class AdminShipSNController extends BaseController{
         return
     }
 
-    //为包裹核实到一个退换货申请,则该申请等同与扫描入库
+    //为包裹核实到一个退货申请,则该申请等同与扫描入库
     def returnShow(){
         def returnOrder = ReturnOrder.get(params.id)
 
@@ -315,7 +319,7 @@ class AdminShipSNController extends BaseController{
         shipSN.actual_returnTime = new Date();
         shipSN.status = "5"
 
-        if(shipSN.needTui=="1"){ //表示该无主包裹已经与一个退换货申请关联了的 ，那么退货完成时，将等待管理员审核退款给会员　
+        if(shipSN.needTui=="1"){ //表示该无主包裹已经与一个退货申请关联了的 ，那么退货完成时，将等待管理员审核退款给会员　
             shipSN.needTui="3"
         }else if(shipSN.needTui=="0"){
             shipSN.needTui="2"
@@ -351,7 +355,7 @@ class AdminShipSNController extends BaseController{
         shipSN.needTui = "4"
 
 
-        def goodsNum = 0;//退换货商品数量
+        def goodsNum = 0;//退货商品数量
         def returnOrder = ReturnOrder.findByOrderSN(shipSN.orderSN)
         returnOrder.returnGoods.each{
             if(it.type=="0" && it.status=="4"){  // 4：已退货，档口退款

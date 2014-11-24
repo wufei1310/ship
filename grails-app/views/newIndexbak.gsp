@@ -97,9 +97,9 @@
         </div><!-- /.span4 -->
         <div class="span4">
             <!--          <img class="img-circle" data-src="holder.js/140x140">-->
-            <h2>退换货服务</h2>
+            <h2>退货服务</h2>
 
-            <p class="lead">当您需要为您的买家提供退换货服务时，我们可以为您效劳！</p>
+            <p class="lead">当您需要为您的买家提供退货服务时，我们可以为您效劳！</p>
         </div><!-- /.span4 -->
     </div><!-- /.row -->
 

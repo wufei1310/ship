@@ -28,7 +28,7 @@ class TranLogStatusTagLib {
             break;
         case "11": out << "空包退还代发费用"
             break;
-        case "12": out << "会员支付退换货服务费"
+        case "12": out << "会员支付退货服务费"
             break;
         case "13": out << "会员换货支付差价"
             break;
@@ -52,11 +52,11 @@ class TranLogStatusTagLib {
             break;
         case "23": out << "会员更换档口超过2次支付费用"
             break;
-            case "24": out << "会员强制停止订单收取物流费"
+            case "24": out << "会员终止订单收取服务费"
                 break;
-            case "25": out << "会员强制停止订单退回货款"
+            case "25": out << "会员终止订单退回货款"
                 break;
-            case "28": out << "会员强制停止订单退回物流费"
+            case "28": out << "会员终止订单退回物流费"
                 break;
             case "26": out << "管理员直接对订单退运费"
                 break;

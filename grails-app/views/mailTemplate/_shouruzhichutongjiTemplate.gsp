@@ -222,7 +222,7 @@ and open the template in the editor.
         </tr>
 
         <tr>
-          <td>会员支付退换货服务费</td>
+          <td>会员支付退货服务费</td>
           <td>${paytuiservicegoodsnum}</td>
           <td>${tui_ali_service}</td>
           <td>${tui_yu_service}</td>

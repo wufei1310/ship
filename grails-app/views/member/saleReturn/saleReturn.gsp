@@ -163,7 +163,7 @@
           </table>
         </div>
         
-        <h4>退回商品物流信息<span  style="font-size: 0.8em;color:red;">（请如实填写物流信息，若因物流信息不正确，不能正常退换货，手续费不予退换）</span></h4>
+        <h4>退回商品物流信息<span  style="font-size: 0.8em;color:red;">（请如实填写物流信息，若因物流信息不正确，不能正常退货，手续费不予退）</span></h4>
         <div class="bs-docs-example">
           <table class="table table-bordered">
 

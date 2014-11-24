@@ -24,7 +24,7 @@
       </g:if>
 
       <div class="page-header">
-        <h3>退换货详情(<small>订单号：</small>${returnOrder.orderSN})</h3>
+        <h3>退货详情(<small>订单号：</small>${returnOrder.orderSN})</h3>
       </div>
       <g:form  name="checkSaleReturnForm"  data-validate="parsley" class="form-signin checkSaleReturnForm" action="checkSaleReturn" method="post" target="innerFrame">
         <input type="hidden" name="id" value="${returnOrder.id}">
@@ -39,9 +39,9 @@
                 <th style="width: 200px;">档口号</th>
                 <th >商品货号</th>
                 <th>规格（颜色/尺码）</th>
-                <th>退换货货件数</th>
+                <th>退货货件数</th>
                 <th>单件拿货价格</th>
-              <th>退换货信息</th>
+              <th>退货信息</th>
               </tr>
             </thead>
             <tbody>

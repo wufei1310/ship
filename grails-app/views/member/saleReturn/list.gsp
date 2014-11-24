@@ -17,8 +17,8 @@
 
       <div class="page-header">
         <h3>
-          退换货申请列表
-          %{--<span class="pull-right">不是本平台订单？<g:link controller="memberDaiFaOrder" action="toSaleReturnAdd" class="btn btn-primary btn-large">申请非平台订单退货</g:link></span>--}%
+          退货申请列表
+            <g:link controller="memberDaiFaOrder" action="list" class="btn btn-primary btn-large pull-right">申请退货</g:link>
         </h3>
        </div>
 

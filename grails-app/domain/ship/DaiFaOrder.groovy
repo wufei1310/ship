@@ -79,7 +79,7 @@ class DaiFaOrder {
     
     String area_id
     
-    String type = "0" //0没有退换货  1有退换货
+    String type = "0" //0没有退货  1有退货
    // String is_tuihuo = "0" //0 正常订单  1 退货 2换货
 
 

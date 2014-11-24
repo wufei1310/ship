@@ -17,7 +17,7 @@
 
       <div class="page-header">
         <h3>
-            退换货列表(<small>匹配物流单:</small>${params.wuliu_sn})
+            退货列表(<small>匹配物流单:</small>${params.wuliu_sn})
 
 
             <g:link  controller="adminShipSN" action="list" class=" btn btn-large btn-primary">返回包裹管理</g:link>

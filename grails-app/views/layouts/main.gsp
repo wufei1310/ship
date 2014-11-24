@@ -312,7 +312,7 @@ margin-top: -120px; /* Vertically center images part 3: negative margin up the i
                             <ul class="dropdown-menu">
 
                                 <li><g:link controller="memberDaiFaOrder" action="list">我的代发订单</g:link></li>
-                                <li><g:link controller="memberDaiFaOrder" action="saleReturnList">我的退换货</g:link></li>
+                                <li><g:link controller="memberDaiFaOrder" action="saleReturnList">我的退货</g:link></li>
                             </ul>
                         </li>
 
@@ -332,7 +332,7 @@ margin-top: -120px; /* Vertically center images part 3: negative margin up the i
                   <ul class="dropdown-menu">
                     <li><g:link controller="memberDaiFaOrder" action="add">创建新订单</g:link></li>
 
-                     <li><g:link controller="memberDaiFaOrder" action="goToReturn">我要退换货</g:link></li>
+                     <li><g:link controller="memberDaiFaOrder" action="list">我要退货</g:link></li>
 
                      <li><g:link controller="memberImportGoods" action="toGoodsImport">批量上传商品</g:link></li>
                   </ul>

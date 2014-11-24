@@ -122,7 +122,7 @@ and open the template in the editor.
           
           
           <tr>
-            <td rowspan="4">退换货</td>
+            <td rowspan="4">退货</td>
             <td>支付换货差价</td>
             <td>${tui_ali_goods}</td>
             <td>${tui_yu_goods}</td>

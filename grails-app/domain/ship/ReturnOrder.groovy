@@ -54,10 +54,10 @@ class ReturnOrder {
     String needShip;// 0：暂不需要 1：换货处理完成，等待发货 2 已发货给会员 3 处理完成，无发货商品
 
      String status //0 未支付 1 已支付,系统分配处理中    2 处理结束         //2 退货完成,已退款会员账户 3 审核不通过 4 退货处理结束，等待审核退款会员 5 换货完成,已发货  6 换货处理结束，等待发货
-     String type //0 退货 1换货 2 同时含有退换货  3 会员中止订单自动生成退货 4 扫描无主包裹自动生成退货申请　5　管理员对无主包裹录入商品后生成退货
+     String type //0 退货 1换货 2 同时含有退货  3 会员中止订单自动生成退货 4 扫描无主包裹自动生成退货申请　5　管理员对无主包裹录入商品后生成退货
      Long add_user //下单人
-     User tui_user //退换货操作人
-     Date tui_time //退换货操作时间
+     User tui_user //退货操作人
+     Date tui_time //退货操作时间
      User check_user //审核人
      Date check_time
      String reason

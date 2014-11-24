@@ -152,7 +152,7 @@
 
                     <g:if test="${daiFaOrder.status == 'waitpay'}">
                         <g:link controller="memberDaiFaOrder" action="show" id="${daiFaOrder.id}" params="${params}"
-                                class="btn btn-danger">该订单还未付款</g:link>
+                                class="btn btn-danger">点击处理未付款订单</g:link>
                     </g:if>
                     <g:if test="${daiFaOrder.status == 'waitaccept'}">
 
@@ -186,12 +186,12 @@
                     </g:if>
                     <g:if test="${daiFaOrder.status == 'error'}">
                         <g:link controller="memberDaiFaOrder" action="show" id="${daiFaOrder.id}" params="${params}"
-                                class="btn btn-danger">等待补款/缺货</g:link>
+                                class="btn btn-danger">点击处理补款/缺货订单</g:link>
 
                     </g:if>
                     <g:if test="${daiFaOrder.status == 'diffship'}">
                         <g:link controller="memberDaiFaOrder" action="show" id="${daiFaOrder.id}" params="${params}"
-                                class="btn btn-danger">需要补运费</g:link>
+                                class="btn btn-danger">点击处理补运费订单</g:link>
 
                     </g:if>
                     <g:if test="${daiFaOrder.status == 'close'}">
@@ -215,7 +215,7 @@
                         <br/>
                         <g:link controller="memberDaiFaOrder" action="saleReturnList"
                                                                    target="_blank"
-                                                                   params="[orderSN: daiFaOrder.orderSN]">查看退换货信息</g:link></g:if>
+                                                                   params="[orderSN: daiFaOrder.orderSN]">查看退货信息</g:link></g:if>
 
 
                 </td>
@@ -243,7 +243,7 @@
 
                         <g:if test="${daiFaOrder.type == '0'}">
                         <g:link controller="memberDaiFaOrder" action="toSaleExchange" id="${daiFaOrder.id}"
-                                params="${params}" class="btn btn-small">申请退换货</g:link>
+                                params="${params}" class="btn btn-small">申请退货</g:link>
                             </g:if>
 
                     </g:if>

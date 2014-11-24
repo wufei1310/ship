@@ -27,13 +27,13 @@ class ShipSNTagLib {
 
     def needTui = {attrs->
         switch (attrs.status){
-            case "0": out << "未关联退换货申请"
+            case "0": out << "未关联退货申请"
                 break;
-            case "1": out << "已关联退换货申请，退货未结束"
+            case "1": out << "已关联退货申请，退货未结束"
                 break;
-            case "2": out << "退货结束，未关联退换货申请"
+            case "2": out << "退货结束，未关联退货申请"
                 break;
-            case "3": out << "退货结束，已关联退换货申请，等待审核退款"
+            case "3": out << "退货结束，已关联退货申请，等待审核退款"
                 break;
             case "4": out << "退款结束"
                 break;

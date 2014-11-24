@@ -252,7 +252,7 @@ class MemberAlipayController {
                 tranLog.order_user = daiFaOrder.add_user
                 tranLog.num = goodsNum
                 tranLog.save()
-            }else if(payType == '3'){//支付退换货费用
+            }else if(payType == '3'){//支付退货费用
                 
                 
                 
@@ -396,7 +396,7 @@ class MemberAlipayController {
             def daiFaOrder = DaiFaOrder.findByOrderSN(orderSN)
             total_fee = daiFaOrder.diffShip;
             orderSN = "S"+orderSN
-        }else if(payType == '3'){//支付退换货费用
+        }else if(payType == '3'){//支付退货费用
             def returnOrder = ReturnOrder.findByIdAndStatus(params.body,"0")
             total_fee = returnOrder.totalFee
             orderSN = orderSN + "T"+body

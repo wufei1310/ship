@@ -35,12 +35,12 @@ class AdminMobileController {
         returnGoods.save();
 
         def mm = new MobileMessage()
-        mm.message = "退换货商品分拣完毕，等待代发人员领货退换"
+        mm.message = "退货商品分拣完毕，等待代发人员领货退"
         mm.result = "success"
         render mm as JSON
     }
 
-    //获取退换货市场统计
+    //获取退货市场统计
     def shipForMarket() {
 
         def returnGoodsList = ReturnGoods.findAllByStatusInList(["1", "2"])
@@ -57,7 +57,7 @@ class AdminMobileController {
             def m_map = [:]
             returnGoodsList.each { returnGoods ->
 
-                if (returnGoods.status == params.returnGoodsStatus&&returnGoods.orderfrom=="kings") {  //1:新入库退换货商品统计 2:分拣完毕退换货商品统计
+                if (returnGoods.status == params.returnGoodsStatus&&returnGoods.orderfrom=="kings") {  //1:新入库退货商品统计 2:分拣完毕退货商品统计
 
                     if (market.market_name == returnGoods.market) {
                         return_num++
@@ -75,14 +75,14 @@ class AdminMobileController {
 
 
         def mm = new MobileMessage()
-        mm.message = "获取市场退换货商品数量成功"
+        mm.message = "获取市场退货商品数量成功"
         mm.result = "success"
         mm.model = [list: resultList]
         render mm as JSON
 
     }
 
-    //会员提交退换货请求处理
+    //会员提交退货请求处理
     def returnToStall() {
         def returnGoods = ReturnGoods.get(params.returnGoodsId as Long)
 
@@ -130,7 +130,7 @@ class AdminMobileController {
 
         //更改退货申请的状态
         def returnOrder = returnGoods.returnOrder;
-        def isTuiOver = "1"  //退换货申请下的退货商品是否都处理了？
+        def isTuiOver = "1"  //退货申请下的退货商品是否都处理了？
         //退货
 
         int returnGoodsCount = 0;
@@ -195,6 +195,22 @@ class AdminMobileController {
         } else if (tuiGoodsCount == tuiFail) {
             returnOrder.needTui = "3"
             returnOrder.status = "2"  //处理结束
+
+
+
+
+            //会员自己民下的单的状态改变
+            def memberReturnOrder = ReturnOrder.findByOrderSN(returnOrder.orderSN.replace("K","M"))
+            memberReturnOrder.status = "2"
+            memberReturnOrder.needTui = "3" //表示已经退货退款到会员账户
+
+            memberReturnOrder.save()
+
+
+
+
+
+
         } else {
             returnOrder.needTui = "0"
         }
@@ -207,7 +223,7 @@ class AdminMobileController {
 
     }
 
-    //代发人员受理退换货
+    //代发人员受理退货
     def daifaShouLiReturn() {
         def returnGoods = ReturnGoods.get(params.returnGoodsId as Long)
 
@@ -218,14 +234,14 @@ class AdminMobileController {
         returnGoods.shouliTime = new Date();
 
         def mm = new MobileMessage()
-        mm.message = "退换货商品已领出"
+        mm.message = "退货商品已领出"
         mm.result = "success"
 
         render mm as JSON
 
     }
 
-    //代发人员已经处理的退换货，成功或者不成功的,管理员查看
+    //代发人员已经处理的退货，成功或者不成功的,管理员查看
     def hasDoneReturnOfWuliu() {
 
 
@@ -313,10 +329,10 @@ class AdminMobileController {
             def mm = new MobileMessage()
 
             if (params.status == "4") {
-                mm.message = "代发人员已成功的退换货商品列表"
+                mm.message = "代发人员已成功的退货商品列表"
             }
             if (params.status == "6") {
-                mm.message = "代发人员不成功的退换货商品列表"
+                mm.message = "代发人员不成功的退货商品列表"
             }
 
 
@@ -335,7 +351,7 @@ class AdminMobileController {
 
     }
 
-    //代发人员已经处理的退换货，成功或者不成功的
+    //代发人员已经处理的退货，成功或者不成功的
     def hasDoneReturnOfDaiFa() {
         if (!params.sort) params.sort = "actual_returnTime"
         if (!params.order) params.order = "desc"
@@ -407,10 +423,10 @@ class AdminMobileController {
             def mm = new MobileMessage()
 
             if (params.status == "4") {
-                mm.message = "代发人员已成功的退换货商品列表"
+                mm.message = "代发人员已成功的退货商品列表"
             }
             if (params.status == "6") {
-                mm.message = "代发人员不成功的退换货商品列表"
+                mm.message = "代发人员不成功的退货商品列表"
             }
 
 
@@ -421,7 +437,7 @@ class AdminMobileController {
         }
     }
 
-    //管理员查询退换货中的商品
+    //管理员查询退货中的商品
     def returnGoodsListOfAdmin() {
 
 
@@ -448,10 +464,10 @@ class AdminMobileController {
                 inList("daiFaGoods", daiFaGoods)
             }
 
-            if (params.thIng == "1") {  //退换货处理中
+            if (params.thIng == "1") {  //退货处理中
                 eq("status", '5')
             }
-            if (params.thFail == "1") { //退换不成功
+            if (params.thFail == "1") { //退不成功
                 inList("status", ['6', '8'])
             }
 
@@ -519,7 +535,7 @@ class AdminMobileController {
 
             def mm = new MobileMessage()
 
-            mm.message = "物流获取退换货商品列表成功"
+            mm.message = "物流获取退货商品列表成功"
 
 
             mm.result = "success"
@@ -530,7 +546,7 @@ class AdminMobileController {
 
     }
 
-    //物流查询退换货中的商品
+    //物流查询退货中的商品
     def returnGoodsListOfWuliu() {
 
 
@@ -624,7 +640,7 @@ class AdminMobileController {
 
             def mm = new MobileMessage()
 
-            mm.message = "物流获取退换货商品列表成功"
+            mm.message = "物流获取退货商品列表成功"
 
 
             mm.result = "success"
@@ -635,7 +651,7 @@ class AdminMobileController {
 
     }
 
-    //已被代发人员领出办理处，需要退换处理的
+    //已被代发人员领出办理处，需要退处理的
     def returnGoodsListOfDaiFa() {
         def returnGoods = ReturnGoods.findAllByShouliUserIdAndStatus(session.loginPOJO.user.id, "5")
         def m_list = []
@@ -675,19 +691,22 @@ class AdminMobileController {
             returnGoodsPOJO.returnReason = it.returnReason
             returnGoodsPOJO.reason = it.reason;
 
+
+            println  it.returnReason
+
             m_list.add(returnGoodsPOJO)
 
         }
 
         def mm = new MobileMessage()
-        mm.message = "获取我的退换货商品列表成功"
+        mm.message = "获取我的退货商品列表成功"
         mm.result = "success"
         mm.model = [list: m_list]
 
         render mm as JSON
     }
 
-    //代发人员的退换货商品列表接口
+    //代发人员的退货商品列表接口
     def returnGoodsListForDaiFa() {
 
         def returnGoods = ReturnGoods.findAllByStatusAndOrderfrom("2","kings")
@@ -725,14 +744,14 @@ class AdminMobileController {
         }
 
         def mm = new MobileMessage()
-        mm.message = "获取" + params.market + "退换货商品列表成功,等待代发人员受理"
+        mm.message = "获取" + params.market + "退货商品列表成功,等待代发人员受理"
         mm.result = "success"
         mm.model = [list: m_list]
 
         render mm as JSON
     }
 
-    //根据市场查询下面的退换货商品
+    //根据市场查询下面的退货商品
     def returnGoodsList() {
 
 //        def shipSN = ShipSN.findAllByStatus("1")
@@ -743,8 +762,8 @@ class AdminMobileController {
 //                    eq("status","1")
 //                    or{
 //                        eq("type", "3")//查询中止订单自动生成的退货
-//                        eq("type", "4")  //查询由于包裹先到生成的退换货申请
-//                        eq("type", "5")  //查询由于管理员为包裹录入商品数据生成的退换货申请
+//                        eq("type", "4")  //查询由于包裹先到生成的退货申请
+//                        eq("type", "5")  //查询由于管理员为包裹录入商品数据生成的退货申请
 //                    }
 //                }
 //
@@ -797,7 +816,7 @@ class AdminMobileController {
         }
 
         def mm = new MobileMessage()
-        mm.message = "获取" + params.market + "退换货商品列表成功"
+        mm.message = "获取" + params.market + "退货商品列表成功"
         mm.result = "success"
         mm.model = [list: m_list]
 
@@ -816,7 +835,7 @@ class AdminMobileController {
             params.max = new Long(params.max)
         }
         if (!params.offset) params.offset = 0
-        if (!params.sort) params.sort = "dateCreated"
+        if (!params.sort) params.sort = "orderSN"
         if (!params.order) params.order = "desc"
 
 
@@ -830,7 +849,7 @@ class AdminMobileController {
 
             if (params.status == "noowner") {
 
-                eq("status", "0")
+                eq("status", "1")
             }
 
             if (params.status == "noownerandhasreturn") {
@@ -903,19 +922,63 @@ class AdminMobileController {
     }
 
 
+    def checkNoOwnerPackgeWuliu_SN(){
+
+
+
+        def returnOrderList =  ReturnOrder.findAllByWuliu_sn(params.wuliu_sn)
+        def shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
+        returnOrderList.each{
+            shipSN.orderSN = shipSN.orderSN + "|" + it.orderSN
+        }
+        shipSN.save();
+
+
+        def mm = new MobileMessage()
+        mm.result = "success"
+        mm.message = "获取商品成功"
+        if (returnOrderList.size() == 0) {
+            mm.result = "fail"
+            mm.message = "未查询到商品"
+        }
+
+
+        render mm as JSON
+
+
+
+    }
+
+
     def proNoOwnerPackge() {
         ShipSN shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
         if (!shipSN) {
             shipSN = new ShipSN();
             shipSN.scanTime = new Date();
         }
-        shipSN.num = params.num as int
+
         shipSN.wuliu_sn = params.wuliu_sn
-        shipSN.status = "0"
-        shipSN.orderSN = "0000"
-        shipSN.needTui = "0" //无主包裹没有关联退换货申请
+        shipSN.status = "1"
+        shipSN.orderSN = ""
+        shipSN.needTui = "0" //无主包裹没有关联退货申请
         shipSN.addUser = session.loginPOJO.user.id
         shipSN.addEmail = session.loginPOJO.user.email
+
+
+        def imgStr = '';
+        params.imgStr.split("\\|").each{
+            if(it!=""){
+                def pic = util.RemoteFileUtil.remoteFileCopy(request, it)
+                imgStr = imgStr + "|" + pic
+            }
+        }
+
+        shipSN.imgStr = imgStr;
+
+        def retunOrderList = ReturnOrder.findAllByWuliu_sn(params.wuliu_sn)
+        retunOrderList.each{
+            shipSN.orderSN = shipSN.orderSN + "|" + it.orderSN
+        }
         shipSN.save();
 
         def mm = new MobileMessage()
@@ -943,11 +1006,15 @@ class AdminMobileController {
         //shipSN.num = params.num as int
         shipSN.wuliu_sn = params.wuliu_sn
         shipSN.status = "1"
-        shipSN.needTui = "1" //无主包裹关联退换货申请
+        shipSN.needTui = "1" //无主包裹关联退货申请
         shipSN.scanTime = new Date();
+
+
+        def retunOrderList = ReturnOrder.findAllByWuliu_sn(params.wuliu_sn)
+        retunOrderList.each{
+            shipSN.orderSN = shipSN.orderSN + "|" + it.orderSN
+        }
         shipSN.save();
-
-
 
 
 
@@ -986,7 +1053,7 @@ class AdminMobileController {
         return;
     }
 
-    //收到无主包裹，录入订单号和货号，自动维护退换货申请。
+    //收到无主包裹，录入订单号和货号，自动维护退货申请。
     def proReturn(daiFaOrder, goods_sn_map, wuliu_sn) {
 
         def returnOrder = new ReturnOrder()
@@ -1094,11 +1161,6 @@ class AdminMobileController {
             mm.result = "success"
             mm.message = "订单号：" + returnOrder.orderSN + "退货申请已经存在,是否继续录入其它订单号？"
         } else {
-//            ShipSN shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
-//            shipSN.shopOrderSN = params.shopOrderSN
-//            shipSN.goods_sn = params.goods_sn
-//            shipSN.status = "7" // 7:已关联订单号包裹
-//            shipSN.save();
 
 
             def goods_sn_map = [:]
@@ -1115,7 +1177,7 @@ class AdminMobileController {
                 }
             }
 
-            //为无主包裹自动生成退换货申请
+            //为无主包裹自动生成退货申请
             proReturn(daiFaOrder, goods_sn_map, params.wuliu_sn)
 
 
@@ -1123,7 +1185,7 @@ class AdminMobileController {
 
 
             mm.result = "success"
-            mm.message = "退换货申请登记成功,是否继续录入？"
+            mm.message = "退货申请登记成功,是否继续录入？"
         }
 
 
@@ -1136,7 +1198,7 @@ class AdminMobileController {
 
     }
 
-    //物流app选择商品生成退换货申请　
+    //物流app选择商品生成退货申请　
     def wuliuselectgoodsproReturn() {
 
 
@@ -1152,7 +1214,6 @@ class AdminMobileController {
         ids_nums_arr.each {
             def goodsstr = it.split("#");
             def daifaGoods = DaiFaGoods.get(goodsstr[0] as Long)
-            println daifaGoods
 
             if (returnOrderMap.containsKey(daifaGoods.daiFaOrder)) {
                 def goods_sn_map = returnOrderMap.get(daifaGoods.daiFaOrder)
@@ -1169,14 +1230,14 @@ class AdminMobileController {
 //        println params.wuliu_sn
 
         def mm = new MobileMessage()
-        mm.message = "生成退换货申请成功"
+        mm.message = "生成退货申请成功"
         mm.result = "success"
 
         returnOrderMap.each { k, v ->
-            //为无主包裹自动生成退换货申请
+            //为无主包裹自动生成退货申请
 
             if(ReturnOrder.findByOrderSN("K"+k.orderSN)){
-                mm.message = "生成退换货申请失败，该退回包裹已经入库登记，已生成退换货"
+                mm.message = "生成退货申请失败，该退回包裹已经入库登记，已生成退货"
                 mm.result = "fail"
                 render mm as JSON
                 return;
@@ -1185,9 +1246,9 @@ class AdminMobileController {
             proReturn(k, v, params.wuliu_sn)
         }
 
-
-
-
+        def shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
+        shipSN.status = '7'
+        shipSN.save();
 
         render mm as JSON
 
@@ -1247,18 +1308,18 @@ class AdminMobileController {
         def yanshou = o.list(searchClosure)[0]
         def goods_shipped = DaiFaGoods.executeQuery("select count(a.id) from DaiFaGoods a  where  a.status='9'")[0]
         def tuihuancount = ReturnOrder.executeQuery("select count(a.id) from ReturnOrder a  where a.orderfrom='kings' ")[0]
-        //统计新提交未扫描的退换货申请数据
+        //统计新提交未扫描的退货申请数据
         def canExport = DaiFaOrder.executeQuery("select count(a.id) from DaiFaOrder a  where  a.isCanExport='1'")[0]
-        def noowner = ShipSN.countByStatusInList(["0", "2"])
+        def noowner = ShipSN.countByStatus("1")
 
         def noownerandhasreturn = ShipSN.countByNeedTui("2")
 
         def ddthhcount = ReturnGoods.executeQuery("select count(a.id) from ReturnGoods a  where a.orderfrom='kings' and  a.status='2'")[0]
-        //等待退换货商品数量
+        //等待退货商品数量
         def thIng = ReturnGoods.executeQuery("select count(a.id) from ReturnGoods a  where a.orderfrom='kings' and  a.status='5'")[0]
-        //退换货处理中,代发已领货
+        //退货处理中,代发已领货
         def thFail = ReturnGoods.countByStatusInListAndOrderfrom(['6', '8'],'kings')
-        //等待发货的退换货申请
+        //等待发货的退货申请
         def needShip = ReturnOrder.executeQuery("select count(a.id) from ReturnOrder a  where a.orderfrom='kings' and  a.needShip='1'")[0]
 
         def xrkcount = ReturnGoods.executeQuery("select count(a.id) from ReturnGoods a  where a.orderfrom='kings' and a.status='1'")[0]
@@ -1332,15 +1393,15 @@ class AdminMobileController {
 
         def partaccept = DaiFaOrder.executeQuery("select count(a.id) from DaiFaOrder a  where  a.status='partaccept'")[0]
         def ddthhcount = ReturnGoods.executeQuery("select count(a.id) from ReturnGoods a  where a.orderfrom='kings' and a.status='2'")[0]
-        //等待退换货商品数量
+        //等待退货商品数量
         def thIng = ReturnGoods.executeQuery("select count(a.id) from ReturnGoods a  where a.orderfrom='kings' and a.status='5'")[0]
-        //退换货处理中,代发已领货
+        //退货处理中,代发已领货
         def thFail = ReturnGoods.countByStatusInListAndOrderfrom(['6', '8'],'kings')
-        def noowner = ShipSN.countByStatusInList(["0", "2"])
+        def noowner = ShipSN.countByStatus("1")
         def xrkcount = ReturnGoods.executeQuery("select count(a.id) from ReturnGoods a  where a.orderfrom='kings' and a.status='1'")[0]
         //新入库商品数量
         def needShip = ReturnOrder.executeQuery("select count(a.id) from ReturnOrder a  where a.orderfrom='kings' and a.needShip='1'")[0]
-        //等待发货的退换货申请
+        //等待发货的退货申请
 
         def map = [goods_shipped: goods_shipped, shipped: shipped, allaccept: allaccept, yanshou: yanshou, canExport: canExport, weishouli: weishouli, shouli: shouli,
                    partaccept   : partaccept, ddthhcount: ddthhcount, thIng: thIng, thFail: thFail, noowner: noowner, xrkcount: xrkcount, needShip: needShip]
@@ -1455,7 +1516,7 @@ class AdminMobileController {
         params.order = "desc"
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String findDate = df.format(new Date() - 30)
+        String findDate = df.format(new Date() - 90)
 
 
         def startDate = Date.parse("yyyy-MM-dd HH:mm:ss", findDate + " 00:00:00")
@@ -1466,12 +1527,34 @@ class AdminMobileController {
 
                 daiFaOrder {
 
-                        eq('orderSN', params.orderSN)
+                    eq('orderSN', params.orderSN)
 
                 }
 
             }
-        }else{
+        }
+        else if(params.wuliu_sn){
+            def shipsn = ShipSN.findByWuliu_sn(params.wuliu_sn);
+            def ordersn = shipsn.orderSN.split("\\|")
+
+
+            searchClosure = {
+
+                daiFaOrder {
+
+                    or{
+                        ordersn.each{
+                            if(it){
+                                eq("orderSN",it.replace("M",""))
+                            }
+                        }
+                    }
+
+                }
+
+            }
+        }
+        else{
             searchClosure = {
 
                 daiFaOrder {

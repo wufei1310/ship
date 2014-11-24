@@ -71,7 +71,7 @@ class AdminDaiFaOrderController extends BaseController {
         def goods_shipped = DaiFaGoods.countByStatus('9')
 
 
-        def tuihuancount = ReturnOrder.countByIsScan("0")//统计新提交未扫描的退换货申请数据
+        def tuihuancount = ReturnOrder.countByIsScan("0")//统计新提交未扫描的退货申请数据
 
         def searchClosure = {
 
@@ -126,11 +126,11 @@ class AdminDaiFaOrderController extends BaseController {
 
 
         def returnFail = ReturnGoods.countByStatusInList(['6', '8'])
-        def ddthhcount = ReturnGoods.countByStatus('2') //等待退换货商品数量
+        def ddthhcount = ReturnGoods.countByStatus('2') //等待退货商品数量
         def xrkcount = ReturnGoods.countByStatus('1') //新入库商品数量
-        def thIng = ReturnGoods.countByStatus('5') //退换货处理中,代发已领货
-        def thFail = returnFail //退换不成功
-        def needShip = ReturnOrder.countByNeedShip("1");//等待发货的退换货申请
+        def thIng = ReturnGoods.countByStatus('5') //退货处理中,代发已领货
+        def thFail = returnFail //退不成功
+        def needShip = ReturnOrder.countByNeedShip("1");//等待发货的退货申请
 
 
         def map = [needShip     : needShip, xrkcount: xrkcount, thFail: thFail, thIng: thIng, ddthhcount: ddthhcount, canExport: canExport, tuihuancount: tuihuancount, waitpay: waitpay, waitaccept: waitaccept,
@@ -360,7 +360,43 @@ class AdminDaiFaOrderController extends BaseController {
         def o = DaiFaOrder.createCriteria();
         def results = o.list(params, searchClosure)
 
-        def map = [list: results, total: results.totalCount]
+
+        List m_result = new ArrayList()
+
+        results.each { it ->
+            def paramsMap = new HashMap()
+            it.properties.each { k, v ->
+                if (v) {
+                    paramsMap.put(k, v.toString())
+                } else {
+                    paramsMap.put(k, null)
+                }
+            }
+            paramsMap.put("id", it.id)
+
+            int yanshou_count = 0
+            it.daiFaGoods.each { goods ->
+                if (goods.status == "7") {
+                    yanshou_count = yanshou_count + goods.num;
+                }
+
+            }
+
+            paramsMap.put("yanshou_count", yanshou_count)
+            m_result.add(paramsMap)
+
+
+            def trandLog = TranLog.findAllByOrderSNAndType(it.orderSN,"4")
+
+            if(trandLog.size()>0){
+                paramsMap.put("buyunfei", "1")
+            }
+
+        }
+
+
+
+        def map = [list: m_result, total: results.totalCount]
 
 
         if (params.mobile == "mobile") {

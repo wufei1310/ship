@@ -14,11 +14,18 @@ import ship.User
  */
 class MemberAlipayService {
 	def chongzhi(params,orderSN){
-               
+                def user = User.get(params.body)
+                //用户充值
+                def account = user.account
+                account.lock()
+                BigDecimal memberamount = account.amount;
+
                 //插入资金流水表（会员充值（收入））
                 def tranLog = new TranLog();
                 tranLog.shouru_type = "1"
                 tranLog.amount = new BigDecimal(params.total_fee)
+                memberamount = memberamount + new BigDecimal(params.total_fee)
+                tranLog.memberamount =  memberamount
                 tranLog.direction = "0"
                 tranLog.type = "18"
                 tranLog.orderSN = orderSN
@@ -36,7 +43,7 @@ class MemberAlipayService {
                 tranLog1.flat = '2'
                 tranLog1.save()
                 
-                def user = User.get(params.body)
+
                 //支付宝表
                 def alipayRemit = new AlipayRemit()
                 alipayRemit.remitSN = orderSN
@@ -44,9 +51,7 @@ class MemberAlipayService {
                 alipayRemit.amount = new BigDecimal(params.total_fee)
                 alipayRemit.save()
                 
-                //用户充值
-                def account = user.account
-                account.lock()
+
                 account.amount = alipayRemit.amount +account.amount
                 account.save()
         }

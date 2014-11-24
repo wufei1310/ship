@@ -26,9 +26,13 @@ class AdminTranLogController extends BaseController{
         if (!params.offset) params.offset = 0  
         params.sort = "dateCreated"  
         params.order = "desc" 
-        
+
+
         def searchClosure =  {
-            
+
+            if(params.userid){
+                eq('order_user',params.userid as Long)
+            }
            
             if(params.orderSN){
                 like('orderSN',"%"+params.orderSN+"%")
@@ -59,6 +63,9 @@ class AdminTranLogController extends BaseController{
             projections{
               sum("amount")
             }
+            if(params.userid){
+                eq('order_user',params.userid as Long)
+            }
             if(params.orderSN){
                 like('orderSN',"%"+params.orderSN+"%")
             }
@@ -82,7 +89,9 @@ class AdminTranLogController extends BaseController{
             projections{
               sum("amount")
             }
-            
+            if(params.userid){
+                eq('order_user',params.userid as Long)
+            }
             if(params.orderSN){
                 like('orderSN',"%"+params.orderSN+"%")
             }

@@ -191,7 +191,7 @@ lang=EN-US>QQ<br>
 </span>服务说明<span lang=EN-US> (</span>创建订单后可选择类型<span lang=EN-US>)<br>
 1</span>元基本代发<span lang=EN-US>(</span>拿货、检查，剪线头，发货<span lang=EN-US>)<br>
 </span>代发服务包括： <strong><span style='font-family:宋体'>拿货，剪线头，检查明显的质量问题</span></strong>，包装，发货（颜色和码数在检查范围，发错本店负责来回运费
-，<strong><span style='font-family:宋体'>回程运费以发出运费为准</span></strong>；衣服的面料、做工由您选的档口负责，不在检查范围，以上都提供退换货服务）<span
+，<strong><span style='font-family:宋体'>回程运费以发出运费为准</span></strong>；衣服的面料、做工由您选的档口负责，不在检查范围，以上都提供退货服务）<span
 lang=EN-US><br>
 </span>我们也保证：凡发生<strong><span style='font-family:宋体'>拿错码、颜色、拿错款</span></strong>的情况所产生的一切后果由我们全部负责，您的满意是我们的服务宗旨。</p>
 

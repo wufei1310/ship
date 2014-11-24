@@ -33,9 +33,78 @@
       </g:if>
 
       <div class="page-header">
-        <h3>退换货申请(<small>订单号：</small>${returnOrder.daiFaOrder.orderSN})</h3>
+        <h3>退货申请(<small>订单号：</small>${returnOrder.daiFaOrder.orderSN})</h3>
       </div>
       <g:form >
+
+
+      <g:if test="${kingsReturnOrder}">
+      <h4>真实退货情况</h4>
+      <div class="bs-docs-example">
+          <table class="table table-bordered">
+              <thead>
+              <tr>
+                  <th colspan="2" style="color: red" >收货的包裹退货情况</th>
+                  <th style="width: 200px;">市场位置</th>
+                  <th style="width: 200px;">档口号</th>
+                  <th >商品货号</th>
+                  <th>规格（颜色/尺码）</th>
+                  <th>退货货件数</th>
+                  <th>单件拿货价格</th>
+                  <th>退货信息</th>
+              </tr>
+              </thead>
+              <tbody>
+              <g:each in="${kingsReturnOrder.returnGoods}" status="i" var="returnGoods">
+              %{--<tr class="daiFaGoods" >--}%
+              %{--<td rowspan="2"></td>--}%
+              %{--<td><font color="red">原商品</font></td>--}%
+              %{--<td >--}%
+              %{--${returnGoods.daiFaGoods.market} - ${returnGoods.daiFaGoods.floor}--}%
+              %{--</td>--}%
+              %{--<td>${returnGoods.daiFaGoods.stalls}</td>--}%
+              %{--<td>${returnGoods.daiFaGoods.goods_sn}</td>--}%
+              %{--<td>${returnGoods.daiFaGoods.spec}</td>--}%
+              %{--<td>${returnGoods.daiFaGoods.num}</td>--}%
+              %{--<td>${returnGoods.daiFaGoods.actual_price}</td>--}%
+              %{--<td>--}%
+              %{--<g:returnGoods status="${returnGoods.status}" />--}%
+
+
+              %{--</td>--}%
+              %{--</tr>--}%
+                  <tr class="daiFaGoods" style="background-color: lavender">
+                      <td colspan="2"><font color="red">
+
+                          <g:if test="${returnGoods.type=='0'}">退货</g:if>
+                          <g:if test="${returnGoods.type=='1'}">换货</g:if>
+
+                      </font></td>
+                      <td >
+                          ${returnGoods.market} - ${returnGoods.floor}
+                      </td>
+                      <td>${returnGoods.stalls}</td>
+                      <td>${returnGoods.goods_sn}</td>
+                      <td>${returnGoods.spec}</td>
+                      <td>${returnGoods.return_num}  </td>
+                      <td>会员期望退回：${returnGoods.actual_price}
+                          <br/>
+                          实际退回：<span style="color: red">${returnGoods.actual_return_fee}</span>
+                      </td>
+                      <input type="hidden" name="returnGoods_id" value="${returnGoods.id}"/>
+                      <td>${returnGoods.reason}</td>
+                  </tr>
+              </g:each>
+              </tbody>
+          </table>
+
+
+      </div>
+
+      </g:if>
+
+
+
         <h4>商品信息</h4>
         <div class="bs-docs-example">
           <table class="table table-bordered">
@@ -46,9 +115,9 @@
                 <th style="width: 200px;">市场-档口</th>
                 <th >商品货号</th>
                 <th>规格（颜色/尺码）</th>
-                <th>退换货件数</th>
+                <th>退货件数</th>
                 <th>价格</th>
-                <th>退换货信息</th>
+                <th>退货信息</th>
               </tr>
             </thead>
             <tbody>

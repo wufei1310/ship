@@ -19,7 +19,7 @@ class SecurityFilters {
 
 
             before = {
-                
+
                 request.setCharacterEncoding("utf-8");
                 
 //                String serverName = request.getServerName()
@@ -44,18 +44,18 @@ class SecurityFilters {
                     }
 
                 }
-                
-                
-               
+
+
 
                 if((!session.loginPOJO?.user || !session.loginPOJO.user.user_type.equals("admin"))
                     && controllerName.startsWith('admin') && !actionName.equals("reqLogin") && !actionName.equals("doLogin")) {//请求后台页面
                     redirect(controller:"adminUser",action: "reqLogin" ,params:[sessionFail:"sessionFail"])
                     return false
                 }
-                
                 //如果是访问图片服务器 则必须登录
-               if(controllerName == "image" && !session.loginPOJO?.user){
+               if(controllerName == "image"
+                       && !session.loginPOJO?.user
+               ){
                    return false
                }
 

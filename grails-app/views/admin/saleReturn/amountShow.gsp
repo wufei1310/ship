@@ -30,7 +30,7 @@
         <input type="hidden" name="id" value="${returnOrder.id}">
 
           <g:if test="${memberReturnOrder}">
-              <h4>会员提交退货申请信息</h4>
+              <h4>会员提交退货申请信息(退款账户：<g:link target="_blank" controller="adminTranLog" action="list" params="[userid:memberReturnOrder.add_user]">${memberReturnOrder.add_user}</g:link>)</h4>
               <div class="bs-docs-example">
                   <table class="table table-bordered">
                       <thead>
@@ -40,9 +40,9 @@
                           <th style="width: 200px;">档口号</th>
                           <th >商品货号</th>
                           <th>规格（颜色/尺码）</th>
-                          <th>退换货货件数</th>
+                          <th>退货货件数</th>
                           <th>单件拿货价格</th>
-                          <th>退换货信息</th>
+                          <th>退货信息</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -105,9 +105,9 @@
                       <th style="width: 200px;">档口号</th>
                       <th >商品货号</th>
                       <th>规格（颜色/尺码）</th>
-                      <th>退换货货件数</th>
+                      <th>退货货件数</th>
                       <th>单件拿货价格</th>
-                      <th>退换货信息</th>
+                      <th>退货信息</th>
                   </tr>
                   </thead>
                   <tbody>

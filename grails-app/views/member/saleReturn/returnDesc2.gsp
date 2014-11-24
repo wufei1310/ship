@@ -87,7 +87,7 @@
         </g:if>
         <g:else>
             还未收到该物流单号包裹，请进入<g:link controller="memberDaiFaOrder" action="list"
-                                   class="btn btn-success ">我的订单</g:link>直接提交退换货申请
+                                   class="btn btn-success ">我的订单</g:link>直接提交退货申请
 
         </g:else>
 
@@ -137,7 +137,7 @@
                     <g:if test="${daiFaOrder.status == 'shipped'}">
 
                         <g:link controller="memberDaiFaOrder" action="toSaleExchange" id="${daiFaOrder.id}"
-                                params="${params}" class="btn">申请退换货</g:link>
+                                params="${params}" class="btn">申请退货</g:link>
 
                     </g:if>
                 </td>

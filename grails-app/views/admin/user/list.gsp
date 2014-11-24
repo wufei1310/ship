@@ -37,6 +37,7 @@
         <table class="table table-bordered">
           <thead>
             <tr>
+                <th>ID</th>
               <th>用户名/email</th>
               <th>用户类型</th>
               <th>姓名</th>
@@ -53,6 +54,9 @@
             
           <g:each in="${list}" status="i" var="user">
             <tr>
+                <td>
+                    <g:link target="_blank" controller="adminTranLog" action="list" params="[userid:user.id]">${user.id}</g:link>
+                    </td>
               <td>${user.email}</td>
               <td>
                 <g:if test="${user.role=='admin'}">管理员</g:if>

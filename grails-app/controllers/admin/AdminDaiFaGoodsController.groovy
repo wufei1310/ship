@@ -1068,7 +1068,7 @@ class AdminDaiFaGoodsController extends BaseController {
 
     def daifaMarketList() {
 
-        //查询退换货信息
+        //查询退货信息
         def shipSN = ShipSN.findAllByStatus("1")
         def returnOrdersearchClosure = {
             or{
@@ -1076,8 +1076,8 @@ class AdminDaiFaGoodsController extends BaseController {
                     eq("status","1")
                     or{
                         eq("type", "3")//查询中止订单自动生成的退货
-                        eq("type", "4")  //查询由于包裹先到生成的退换货申请
-                        eq("type", "5")  //查询由于管理员为包裹录入商品数据生成的退换货申请
+                        eq("type", "4")  //查询由于包裹先到生成的退货申请
+                        eq("type", "5")  //查询由于管理员为包裹录入商品数据生成的退货申请
                     }
                 }
 
@@ -1114,7 +1114,7 @@ class AdminDaiFaGoodsController extends BaseController {
             param.count = DaiFaGoods.executeQuery("select count(a.id) from DaiFaGoods a join a.daiFaOrder d where a.market = ? and a.status='0' and d.status<>'delete' and  d.status<>'waitpay'", [it.market_name])[0]
 
             returnOrder.returnGoods.flatten().each { returnGoods ->
-                if (returnGoods.status == "2"&&returnGoods.orderfrom=="kings") {  //1:新入库退换货商品统计2:分拣完毕退换货商品统计
+                if (returnGoods.status == "2"&&returnGoods.orderfrom=="kings") {  //1:新入库退货商品统计2:分拣完毕退货商品统计
                     if (it.market_name == returnGoods.market) {
                         return_num = return_num + returnGoods.return_num
                     }

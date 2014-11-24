@@ -34,7 +34,7 @@ and open the template in the editor.
     </head>
     <body>
         <div class="page-header">
-        <h3>退换货申请收入支出对照明细(${mapParam.startDate}~${mapParam.endDate})</h3>
+        <h3>退货申请收入支出对照明细(${mapParam.startDate}~${mapParam.endDate})</h3>
       </div>
         
         <table class="table table-bordered">
@@ -56,7 +56,7 @@ and open the template in the editor.
             <td>类型</td>
             <td>状态</td>
             <td>提交时间</td>
-            <td>会员支付退换货服务费</td>
+            <td>会员支付退货服务费</td>
             <td>会员支付换货运费</td>
             <td>会员换货支付差价</td>
             <td>退货档口回款</td>

@@ -266,8 +266,8 @@ class AdminFinaceReportService {
         def t_yu_buship = new BigDecimal(0)//会员余额对运费补款
         
         
-        def tui_ali_service = new BigDecimal(0)//会员支付退换货服务费
-        def tui_yu_service = new BigDecimal(0)//会员余额支付退换货服务费
+        def tui_ali_service = new BigDecimal(0)//会员支付退货服务费
+        def tui_yu_service = new BigDecimal(0)//会员余额支付退货服务费
         def tui_ali_goods =  new BigDecimal(0)//会员支付换货差价
         def tui_yu_goods =  new BigDecimal(0)//会员余额支付换货差价
         
@@ -321,7 +321,7 @@ class AdminFinaceReportService {
         def paybugoodsnum = 0;//会员对商品补款商品数量
         def paybushipgoodsnum = 0;//会员对运费补款 商品数量
         def payhuangoodsnum = 0;//会员支付换货差价商品数量
-        def paytuiservicegoodsnum = 0;//会员支付退换货服务费商品数量
+        def paytuiservicegoodsnum = 0;//会员支付退货服务费商品数量
         def payhuanshipgoodsnum = 0;//会员支付换货运费商品数量
 
 
@@ -462,7 +462,7 @@ class AdminFinaceReportService {
             }
 
 
-            else if(it.type == '12'){//会员支付退换货服务费
+            else if(it.type == '12'){//会员支付退货服务费
                 //如果是余额支付
                 if(it.shouru_type == '0'){
                     tui_yu_service = tui_yu_service + it.amount
@@ -617,7 +617,7 @@ class AdminFinaceReportService {
         mapParam.paybugoodsnum = paybugoodsnum;//会员对商品补款商品数量
         mapParam.paybushipgoodsnum = paybushipgoodsnum;//会员对运费补款 商品数量
         mapParam.payhuangoodsnum = payhuangoodsnum;//会员支付换货差价商品数量
-        mapParam.paytuiservicegoodsnum = paytuiservicegoodsnum;//会员支付退换货服务费商品数量
+        mapParam.paytuiservicegoodsnum = paytuiservicegoodsnum;//会员支付退货服务费商品数量
         mapParam.payhuanshipgoodsnum = payhuanshipgoodsnum;//会员支付换货运费商品数量
         mapParam.changestallgoodsnum = changestallgoodsnum;//会员支付换货运费商品数量
         mapParam.huikangoodsnum = huikangoodsnum;//退货档口回款商品数量

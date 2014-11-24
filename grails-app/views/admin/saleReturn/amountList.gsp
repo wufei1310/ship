@@ -61,8 +61,8 @@
 
               <td>退货</td>
               <td>
-                  <g:if test="${returnOrder.status=='1'}">退换货处理中</g:if>
-                  <g:if test="${returnOrder.status=='2'}">退换货处理结束</g:if>
+                  <g:if test="${returnOrder.status=='1'}">退货处理中</g:if>
+                  <g:if test="${returnOrder.status=='2'}">退货处理结束</g:if>
 
 
 

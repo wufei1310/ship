@@ -154,11 +154,11 @@ class AdminDaiFaOrderService {
     def checkSaleReturn(params, checkUser) {
         def returnOrder = ReturnOrder.get(params.id)
         if (!returnOrder) {
-            throw new RuntimeException("退换货不存在")
+            throw new RuntimeException("退货不存在")
         }
 
         if(returnOrder.needTui!="1"&&returnOrder.needShip!="1"){
-            throw new RuntimeException("退换货不是处理完成的状态，当前returnOrder.needTui状态："+returnOrder.needTui+",当前returnOrder.needShip状态:"+returnOrder.needShip)
+            throw new RuntimeException("退货不是处理完成的状态，当前returnOrder.needTui状态："+returnOrder.needTui+",当前returnOrder.needShip状态:"+returnOrder.needShip)
         }
 
 
@@ -170,7 +170,7 @@ class AdminDaiFaOrderService {
         //如果是退货
         if (params.returnOrderOperType == 'tui') {
             def goodsFee = new BigDecimal(0)
-            def goodsNum = 0;//退换货商品数量
+            def goodsNum = 0;//退货商品数量
             returnOrder.returnGoods.each{
                 if(it.type=="0" && it.status=="4"){  // 4：已退货，档口退款
                     goodsFee = goodsFee + it.actual_return_fee * it.return_num
@@ -195,6 +195,8 @@ class AdminDaiFaOrderService {
             memberReturnOrder.save()
 
 
+//            println "================"
+//            println  memberReturnOrder as JSON
 
             //插入资金流水表（档口退货回款）
             def tranLog = new TranLog();
@@ -246,7 +248,7 @@ class AdminDaiFaOrderService {
 
 
             def goodsFee = new BigDecimal(0)
-            def goodsNum = 0;//退换货商品数量
+            def goodsNum = 0;//退货商品数量
             returnOrder.returnGoods.each{
                 if(it.type=="1" &&  it.status=="7"){  //
                     goodsFee = goodsFee + it.return_fee * it.return_num
@@ -254,7 +256,7 @@ class AdminDaiFaOrderService {
                 }
             }
 
-            returnOrder.status = "2" //退换货申请处理结束
+            returnOrder.status = "2" //退货申请处理结束
             returnOrder.needShip = "2" //表示已经发货
             returnOrder.goodsFee = goodsFee
             returnOrder.h_wuliu_sn = params.h_wuliu_sn
@@ -316,7 +318,7 @@ class AdminDaiFaOrderService {
 //        }
 //
 //
-//        def goodsNum = 0;//退换货商品数量
+//        def goodsNum = 0;//退货商品数量
 //        //商品
 //        def goodsList = returnOrder.returnGoods
 //        goodsList.eachWithIndex { it, i ->

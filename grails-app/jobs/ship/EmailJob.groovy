@@ -40,6 +40,19 @@ class EmailJob {
             }
         }
 
+        //无退款订单状态更新
+        def noReturnOrderList = ReturnOrder.findAllByOrderfromAndStatusAndNeedTui("kings","2","3")
+        returnOrderList.each{
+            //  render it.orderSN.substring(1)
+            def memberReturnOrder = ReturnOrder.findByOrderSNAndOrderfrom("M"+it.orderSN.substring(1),"member")
+            // render memberReturnOrder as JSON
+            if(memberReturnOrder){
+                it.ishuiyuanxiadan="1"
+                it.status = "2"
+                it.status = "3"
+                it.save();
+            }
+        }
     }
 }
 

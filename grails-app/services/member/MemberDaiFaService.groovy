@@ -459,7 +459,7 @@ class MemberDaiFaService {
         tranLog.save()
     }
 
-    //添加退换货申请
+    //添加退货申请
     def doSaleExchange(params, addUser) {
 
         //params.returnReason[i]
@@ -474,7 +474,7 @@ class MemberDaiFaService {
 
 //        def returnOrder = ReturnOrder.findByDaiFaOrderAndWuliu_sn(daiFaOrder, params.wuliu_sn)
 
-//        if (returnOrder) {  //根据物流单号和订单查到系统已经由包裹先到已经生成的退换货申请
+//        if (returnOrder) {  //根据物流单号和订单查到系统已经由包裹先到已经生成的退货申请
 //            returnOrder.wuliu = params.wuliu //物流公司
 //            returnOrder.wuliu_sn = params.wuliu_sn
 //            returnOrder.add_user = addUser.id
@@ -487,7 +487,7 @@ class MemberDaiFaService {
 //                    def goodsLog = new GoodsLog();
 //                    goodsLog.daiFaGoods = it.daiFaGoods
 //                    goodsLog.addUser = addUser
-//                    goodsLog.logdesc = "会员自己提交退换货申请，更新由于包裹先到产生的退换货商品数据记录"
+//                    goodsLog.logdesc = "会员自己提交退货申请，更新由于包裹先到产生的退货商品数据记录"
 //                    goodsLog.save()
 //
 //
@@ -503,7 +503,7 @@ class MemberDaiFaService {
 //                        def goodsLog = new GoodsLog();
 //                        goodsLog.daiFaGoods = returnGoods.daiFaGoods
 //                        goodsLog.addUser = addUser
-//                        goodsLog.logdesc = "会员自己提交退换货申请，更新由于包裹先到产生的退换货商品数据记录"
+//                        goodsLog.logdesc = "会员自己提交退货申请，更新由于包裹先到产生的退货商品数据记录"
 //                        goodsLog.save()
 //                    }
 //
@@ -571,7 +571,7 @@ class MemberDaiFaService {
 
 
             returnGoods.type = params.returnGoodsType
-            returnOrder.type = params.returnGoodsType //退换货申请状态
+            returnOrder.type = params.returnGoodsType //退货申请状态
             returnGoods.status = "0"
             returnGoods.add_user = addUser.id
 
@@ -619,7 +619,7 @@ class MemberDaiFaService {
 
                 if (!returnOrder.type) {
                     returnOrder.type = params.returnGoodsType[i]
-                } else if (returnOrder.type != params.returnGoodsType[i]) {   //说明退换货申请中同时有退换两人种类型的商品
+                } else if (returnOrder.type != params.returnGoodsType[i]) {   //说明退货申请中同时有退两人种类型的商品
                     returnOrder.type = "2"
                 }
 
@@ -703,14 +703,14 @@ class MemberDaiFaService {
             account.amount = account.amount - totalFee
 
 
-            def goodsNum = 0;//退换货商品数量
+            def goodsNum = 0;//退货商品数量
             //商品
             def goodsList = returnOrder.returnGoods
             goodsList.eachWithIndex { it, i ->
                 goodsNum = goodsNum + it.return_num
             }
 
-            //插入资金流水表（退换货服务费）
+            //插入资金流水表（退货服务费）
             def tranLog = new TranLog();
             tranLog.shouru_type = "0"
             tranLog.amount = returnOrder.serviceFee

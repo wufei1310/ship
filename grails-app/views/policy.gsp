@@ -153,7 +153,7 @@
               style='font-family:宋体'>．换货运费承担规则：</span></b></p>
 
         <p class=MsoNormal style='text-indent:15.75pt;line-height:18.0pt'><span
-            style='font-family:宋体'>换货的运费由哪一方承担，取决于换货的原因。如是我方发错衣服款号引起换货退货，请记得要拒签退回所造成的发往运费由我方承担，如客人因此衣服不要并要求退款则衣服货款也可全额给您退款。（质量问题退换的商品运费均按照发出的计算）</span></p>
+            style='font-family:宋体'>换货的运费由哪一方承担，取决于换货的原因。如是我方发错衣服款号引起换货退货，请记得要拒签退回所造成的发往运费由我方承担，如客人因此衣服不要并要求退款则衣服货款也可全额给您退款。（质量问题退的商品运费均按照发出的计算）</span></p>
 
         <p class=MsoNormal style='line-height:18.0pt'><span style='font-family:宋体'>非我方过失引起的换货，运费由客户承担。</span></p>
 

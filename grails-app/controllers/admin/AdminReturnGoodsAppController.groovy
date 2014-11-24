@@ -16,7 +16,7 @@ class AdminReturnGoodsAppController extends BaseController{
     
     def doAdd(){
         
-            flash.message="退换货申请已由会员提交，现已不支持管理员提交申请，请安装最新客户端程序包！";
+            flash.message="退货申请已由会员提交，现已不支持管理员提交申请，请安装最新客户端程序包！";
             flash.messageClass=this.error
             
             def mm = new MobileMessage()

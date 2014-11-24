@@ -4,7 +4,7 @@ package ship
  * Created by wufei on 14-8-8.
  */
 
-//用于收集退换货商品订单相关信息，返回给前端
+//用于收集退货商品订单相关信息，返回给前端
 class ReturnGoodsPOJO {
 
 

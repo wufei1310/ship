@@ -8,7 +8,7 @@
   <body>
     <script>
       function beforeTuikuan(){
-            if(window.confirm("确认将退换货申请与此无主包裹关联吗？")){
+            if(window.confirm("确认将退货申请与此无主包裹关联吗？")){
                 toActionFormCom('checkSaleReturnForm')  
             }
         }
@@ -24,7 +24,7 @@
       </g:if>
 
       <div class="page-header">
-        <h3>退换货排查(<small>订单号：</small>${returnOrder.orderSN})(<small>物流单号：</small>${params.wuliu_sn})</h3>
+        <h3>退货排查(<small>订单号：</small>${returnOrder.orderSN})(<small>物流单号：</small>${params.wuliu_sn})</h3>
       </div>
 
         <input type="hidden" name="id" value="${returnOrder.id}">
@@ -39,9 +39,9 @@
                 <th style="width: 200px;">档口号</th>
                 <th >商品货号</th>
                 <th>规格（颜色/尺码）</th>
-                <th>退换货货件数</th>
+                <th>退货货件数</th>
                 <th>单件拿货价格</th>
-              <th>退换货信息</th>
+              <th>退货信息</th>
               </tr>
             </thead>
             <tbody>
