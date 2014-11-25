@@ -89,7 +89,10 @@
                       <td>${returnGoods.return_num}  </td>
                       <td>会员期望退回：${returnGoods.actual_price}
                           <br/>
-                          实际退回：<span style="color: red">${returnGoods.actual_return_fee}</span>
+                          <g:if test="${kingsReturnOrder.status=='2'}">
+                              实际退回：<span style="color: red">${returnGoods.actual_return_fee}</span>
+                          </g:if>
+
                       </td>
                       <input type="hidden" name="returnGoods_id" value="${returnGoods.id}"/>
                       <td>${returnGoods.reason}</td>
@@ -105,7 +108,9 @@
 
 
 
-        <h4>商品信息</h4>
+        <h4>商品信息(<span style="color: red;">
+        <g:if test="${returnOrder.isScan=='1'}">收到包裹</g:if><g:else>没收到包裹</g:else></span>)
+        </h4>
         <div class="bs-docs-example">
           <table class="table table-bordered">
             <thead>

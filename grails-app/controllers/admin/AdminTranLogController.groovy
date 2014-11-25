@@ -24,8 +24,8 @@ class AdminTranLogController extends BaseController{
             params.max = new Long(params.max)
         }
         if (!params.offset) params.offset = 0  
-        params.sort = "dateCreated"  
-        params.order = "desc" 
+        params.sort = "id"
+        params.order = "desc"
 
 
         def searchClosure =  {

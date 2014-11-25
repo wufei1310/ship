@@ -23,7 +23,7 @@ class MemberTranLogController extends BaseController{
             params.max = new Long(params.max)
         }
         if (!params.offset) params.offset = 0  
-        params.sort = "dateCreated"  
+        params.sort = "id"
         params.order = "desc" 
         
         def searchClosure =  {

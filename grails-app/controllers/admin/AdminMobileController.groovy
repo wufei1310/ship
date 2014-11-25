@@ -709,12 +709,11 @@ class AdminMobileController {
     //代发人员的退货商品列表接口
     def returnGoodsListForDaiFa() {
 
-        def returnGoods = ReturnGoods.findAllByStatusAndOrderfrom("2","kings")
+        def returnGoods = ReturnGoods.findAllByStatusAndOrderfromAndMarket("2","kings",params.market)
 
 
         def m_list = []
         returnGoods.each { it ->
-            if (params.market == it.market) {
 
                 ReturnGoodsPOJO returnGoodsPOJO = new ReturnGoodsPOJO();
                 returnGoodsPOJO.returnOrderId = it.returnOrder.id
@@ -739,7 +738,6 @@ class AdminMobileController {
                 returnGoodsPOJO.status = it.status
 
                 m_list.add(returnGoodsPOJO)
-            }
 
         }
 
@@ -929,6 +927,7 @@ class AdminMobileController {
         def returnOrderList =  ReturnOrder.findAllByWuliu_sn(params.wuliu_sn)
         def shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
         returnOrderList.each{
+            it.isScan = "1";
             shipSN.orderSN = shipSN.orderSN + "|" + it.orderSN
         }
         shipSN.save();

@@ -1070,26 +1070,29 @@ class AdminDaiFaGoodsController extends BaseController {
 
         //查询退货信息
         def shipSN = ShipSN.findAllByStatus("1")
-        def returnOrdersearchClosure = {
-            or{
-                and{
-                    eq("status","1")
-                    or{
-                        eq("type", "3")//查询中止订单自动生成的退货
-                        eq("type", "4")  //查询由于包裹先到生成的退货申请
-                        eq("type", "5")  //查询由于管理员为包裹录入商品数据生成的退货申请
-                    }
-                }
-
-
-                inList('wuliu_sn',shipSN.wuliu_sn)
-            }
-
-
-        }
-
-        def returnOrderSearch = ReturnOrder.createCriteria();
-        def returnOrder = returnOrderSearch.list(returnOrdersearchClosure)
+//        def returnOrdersearchClosure = {
+//
+//            eq("orderfrom","kings")
+//
+//            or{
+//                and{
+//                    eq("status","1")
+//                    or{
+//                        eq("type", "3")//查询中止订单自动生成的退货
+//                        eq("type", "4")  //查询由于包裹先到生成的退货申请
+//                        eq("type", "5")  //查询由于管理员为包裹录入商品数据生成的退货申请
+//                    }
+//                }
+//
+//
+//                inList('wuliu_sn',shipSN.wuliu_sn)
+//            }
+//
+//
+//        }
+//
+//        def returnOrderSearch = ReturnOrder.createCriteria();
+//        def returnOrder = returnOrderSearch.list(returnOrdersearchClosure)
 
 
 
@@ -1113,14 +1116,18 @@ class AdminDaiFaGoodsController extends BaseController {
             param.name = it.market_name
             param.count = DaiFaGoods.executeQuery("select count(a.id) from DaiFaGoods a join a.daiFaOrder d where a.market = ? and a.status='0' and d.status<>'delete' and  d.status<>'waitpay'", [it.market_name])[0]
 
-            returnOrder.returnGoods.flatten().each { returnGoods ->
-                if (returnGoods.status == "2"&&returnGoods.orderfrom=="kings") {  //1:新入库退货商品统计2:分拣完毕退货商品统计
-                    if (it.market_name == returnGoods.market) {
-                        return_num = return_num + returnGoods.return_num
-                    }
-                }
-            }
-            param.thh = return_num
+
+
+            param.thh = ReturnGoods.executeQuery("select count(g.id) from ReturnGoods g where g.market = ? and g.status = '2' and g.orderfrom = 'kings'",[it.market_name])[0]
+             println   param as JSON
+//            returnOrder.returnGoods.flatten().each { returnGoods ->
+//                if (returnGoods.status == "2"&&returnGoods.orderfrom=="kings") {  //1:新入库退货商品统计2:分拣完毕退货商品统计
+//                    if (it.market_name == returnGoods.market) {
+//                        return_num = return_num + returnGoods.return_num
+//                    }
+//                }
+//            }
+//            param.thh = return_num
 
             m_result.add(param)
         }
