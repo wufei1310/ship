@@ -38,7 +38,7 @@
       <g:form >
 
 
-      <g:if test="${kingsReturnOrder}">
+      <g:if test="${kingsReturnOrder&&kingsReturnOrder.status=='2'}">
       <h4>真实退货情况</h4>
       <div class="bs-docs-example">
           <table class="table table-bordered">

@@ -56,14 +56,23 @@
               <td>${returnOrder.wuliu}</td>-->
               <td>
 
-                <g:returnOrder status="${returnOrder.status}" />
 
-                 <g:if test="${returnOrder.needTui=='1'}">等待退款</g:if>
-                 <g:if test="${returnOrder.needTui=='2'}">已退款</g:if>
+                <g:if test="${returnOrder.status=='0'}">未支付</g:if>
+                <g:else>
+                    <g:if test="${returnOrder.isScan!='1'}">没收到包裹</g:if>
+                    <g:else>
+                        <g:if test="${returnOrder.needTui=='2'}">已退款</g:if>
+                        <g:else>处理中</g:else>
 
-                 &nbsp;&nbsp;
-                <g:if test="${returnOrder.needShip=='1'}">等待发货</g:if>
-                <g:if test="${returnOrder.needShip=='2'}">已发货</g:if>
+                    </g:else>
+
+                </g:else>
+
+
+
+
+
+
               </td>
              
               <td>${returnOrder.dateCreated.toString()[0..18]}</td>
