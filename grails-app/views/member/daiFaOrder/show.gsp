@@ -322,6 +322,10 @@
          
         </g:if>
           <g:if test="${order.status == 'diffship'}">
+
+            包裹重量：${order.weight}
+              <br/>
+
            选择支付方式： <input type="radio" id="yuePay" name="pay_type" value="0" onclick="$('#safepassSpan').show();$('#zfbSpan').hide()" checked/>余额支付 &nbsp;&nbsp;
                                 <input type="radio" id="zfbPay" name="pay_type" value="1" onclick="$('#safepassSpan').hide();$('#zfbSpan').show()" />支付宝支付 
                                 <br/>

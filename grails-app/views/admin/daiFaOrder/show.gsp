@@ -242,6 +242,8 @@
                   
                   <br/>
                   运&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费：&nbsp;<strong id="shipFee">${order.shipFee}</strong>
+
+                    &nbsp;包裹重量：${order.weight}
                   
                   <br/>
                   代&nbsp; 发&nbsp; 费：&nbsp;<strong id="serviceFee">${order.serviceFee}(代发每件1元)</strong>

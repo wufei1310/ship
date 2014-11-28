@@ -592,6 +592,14 @@ class AdminDaiFaGoodsController extends BaseController {
                     paramsMap.put(k, null)
                 }
             }
+
+
+
+
+
+            def shouli_amount = DaiFaGoods.executeQuery("select sum(d.price*d.num) as amount from DaiFaGoods d " +
+                    "where d.status = '1' and d.daifa_user = ?", [User.get(session.loginPOJO.user.id)])[0]
+
             paramsMap.put("orderSN", goods.daiFaOrder.orderSN)
             paramsMap.put("id", goods.id)
 
@@ -601,6 +609,7 @@ class AdminDaiFaGoodsController extends BaseController {
             mm.result = "success"
             mm.model.put("ordergoods", paramsMap)
             mm.model.put("nahuook", "1")
+            mm.model.put("shouli_amount", shouli_amount)
             render mm as JSON
         } else {
             render(view: this.commonSuccess)
@@ -671,12 +680,14 @@ class AdminDaiFaGoodsController extends BaseController {
             }
             paramsMap.put("orderSN", goods.daiFaOrder.orderSN)
             paramsMap.put("id", goods.id)
-
+            def shouli_amount = DaiFaGoods.executeQuery("select sum(d.price*d.num) as amount from DaiFaGoods d " +
+                    "where d.status = '1' and d.daifa_user = ?", [User.get(session.loginPOJO.user.id)])[0]
 
             def mm = new MobileMessage()
             mm.message = flash.message
             mm.result = "success"
             mm.model.put("ordergoods", paramsMap)
+            mm.model.put("shouli_amount", shouli_amount)
             render mm as JSON
         } else {
             render(view: this.commonSuccess)
@@ -804,12 +815,15 @@ class AdminDaiFaGoodsController extends BaseController {
             }
             paramsMap.put("orderSN", goods.daiFaOrder.orderSN)
             paramsMap.put("id", goods.id)
-
+            def shouli_amount = DaiFaGoods.executeQuery("select sum(d.price*d.num) as amount from DaiFaGoods d " +
+                    "where d.status = '1' and d.daifa_user = ?", [User.get(session.loginPOJO.user.id)])[0]
+            paramsMap.put("shouli_amount", shouli_amount)
 
             def mm = new MobileMessage()
             mm.message = flash.message
             mm.result = "success"
             mm.model.put("ordergoods", paramsMap)
+            mm.model.put("shouli_amount", shouli_amount)
             render mm as JSON
         } else {
             render(view: this.commonSuccess)

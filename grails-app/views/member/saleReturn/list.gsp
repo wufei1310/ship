@@ -56,15 +56,22 @@
               <td>${returnOrder.wuliu}</td>-->
               <td>
 
+              %{--${returnOrder.status}--}%
 
+              %{--${returnOrder.needTui}--}%
+
+              %{--${returnOrder.isScan}--}%
                 <g:if test="${returnOrder.status=='0'}">未支付</g:if>
+
                 <g:else>
-                    <g:if test="${returnOrder.isScan!='1'}">没收到包裹</g:if>
+                    <g:if test="${returnOrder.needTui=='2'}">已退款</g:if>
+                    <g:elseif test="${returnOrder.status=='2'}">处理结束</g:elseif>
                     <g:else>
-                        <g:if test="${returnOrder.needTui=='2'}">已退款</g:if>
+                        <g:if test="${returnOrder.isScan!='1'}">没收到包裹</g:if>
                         <g:else>处理中</g:else>
 
                     </g:else>
+
 
                 </g:else>
 

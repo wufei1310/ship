@@ -145,7 +145,7 @@
                           <td>${returnGoods.return_num}  </td>
                           <td>会员期望退回：${returnGoods.actual_price}
                               <br/>
-                          实际退回：<span style="color: red">${returnGoods.actual_return_fee}</span>
+                          档口实际退回：<span style="color: red">${returnGoods.actual_return_fee}</span>
                           </td>
                           <input type="hidden" name="returnGoods_id" value="${returnGoods.id}"/>
                           <td>${returnGoods.reason}</td>
@@ -209,11 +209,18 @@
                 <td >
                   申请状态：
                   <strong >
-                    <g:returnOrder status="${returnOrder.status}" />
-                    &nbsp;
-                    <g:needTui status="${returnOrder.needTui}" />
-                    &nbsp;
-                    <g:needShip status="${returnOrder.needShip}" />
+                    <g:if test="${returnOrder.status=='0'}">未支付</g:if>
+                    <g:elseif test="${returnOrder.status=='2'}">处理结束</g:elseif>
+                    <g:else>
+                        <g:if test="${returnOrder.needTui=='2'}">已退款</g:if>
+                        <g:else>
+                            <g:if test="${returnOrder.isScan!='1'}">没收到包裹</g:if>
+                            <g:else>处理中</g:else>
+
+                        </g:else>
+
+
+                    </g:else>
                 </strong>
                   
                   <br/>

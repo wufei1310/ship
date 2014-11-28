@@ -12,8 +12,8 @@
          alert('${flash.message}')
         </script>
       </g:if>
-      
-      
+
+
 
       <div class="page-header">
         <h3>
@@ -57,19 +57,34 @@
             </tr>
           </thead>
           <tbody>
-            
+
           <g:each in="${list}" status="i" var="returnOrder">
             <tr>
               <td>${returnOrder.orderSN}<g:if test="${returnOrder.flat == '1'}">(非平台订单)</g:if>
               </td>
 <!--              <td>${returnOrder.wuliu_sn}</td>
               <td>${returnOrder.wuliu}</td>-->
-              <td><g:returnOrder status="${returnOrder.status}" />
+              <td>  status: ${returnOrder.status}
+
+                    needTui: ${returnOrder.needTui}
+
+                    isScan: ${returnOrder.isScan}
+
+                <br/>
+
+            <g:if test="${returnOrder.status=='0'}">未支付</g:if>
+
+            <g:else>
+                <g:if test="${returnOrder.needTui=='2'}">已退款</g:if>
+                <g:elseif test="${returnOrder.status=='2'}">处理结束</g:elseif>
+                <g:else>
+                    <g:if test="${returnOrder.isScan!='1'}">没收到包裹</g:if>
+                    <g:else>处理中</g:else>
+
+                </g:else>
 
 
-            &nbsp;&nbsp;
-            <g:if test="${returnOrder.needShip=='1'}">等待发货</g:if>
-            <g:if test="${returnOrder.needShip=='2'}">已发货</g:if>
+            </g:else>
               </td>
                 <td>
                     <g:if test="${returnOrder.needTui=='1'}">等待退款</g:if>
@@ -85,7 +100,7 @@
                     <g:if test="${returnOrder.ishuiyuanxiadan=='1'}">会员已经下单</g:if>
 
                 </td>
-             
+
               <td>${returnOrder.dateCreated.toString()[0..18]}</td>
               <td>
 
@@ -106,32 +121,32 @@
                 </td>
             </tr>
           </g:each>
-            
-            
-            
+
+
+
           </tbody>
         </table>
       </div>
       <div class="row-fluid">
         <div class="span12">
           <div  class="pagination pagination-right new-pagination">
-          
+
 
 
             <g:if test="${total != 0}">
                 <g:paginate total="${total}"  params="${params}" action="saleReturnList"  update="page" />
            </g:if>
-            
+
             <span class="currentStep">共${total}条数据</span>
           </div>
-        
+
         </div>
       </div>
-        
+
 <g:render template="/layouts/footer"/>
 
 
     </div> <!-- /container -->
-    
+
   </body>
 </html>

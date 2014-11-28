@@ -39,17 +39,17 @@
 
 
       <g:if test="${kingsReturnOrder&&kingsReturnOrder.status=='2'}">
-      <h4>真实退货情况</h4>
+      <h4>收到包裹情况</h4>
       <div class="bs-docs-example">
           <table class="table table-bordered">
               <thead>
               <tr>
-                  <th colspan="2" style="color: red" >收货的包裹退货情况</th>
+                  <th colspan="2" style="color: red" ></th>
                   <th style="width: 200px;">市场位置</th>
                   <th style="width: 200px;">档口号</th>
                   <th >商品货号</th>
                   <th>规格（颜色/尺码）</th>
-                  <th>退货货件数</th>
+                  <th>收到件数</th>
                   <th>单件拿货价格</th>
                   <th>退货信息</th>
               </tr>
@@ -89,8 +89,8 @@
                       <td>${returnGoods.return_num}  </td>
                       <td>会员期望退回：${returnGoods.actual_price}
                           <br/>
-                          <g:if test="${kingsReturnOrder.status=='2'}">
-                              实际退回：<span style="color: red">${returnGoods.actual_return_fee}</span>
+                          <g:if test="${returnOrder.status=='2'}">
+                              档口实际退回：<span style="color: red">${returnGoods.actual_return_fee}</span>
                           </g:if>
 
                       </td>
@@ -108,8 +108,7 @@
 
 
 
-        <h4>商品信息(<span style="color: red;">
-        <g:if test="${returnOrder.isScan=='1'}">收到包裹</g:if><g:else>没收到包裹</g:else></span>)
+        <h4>会员下单情况
         </h4>
         <div class="bs-docs-example">
           <table class="table table-bordered">
@@ -122,7 +121,7 @@
                 <th>规格（颜色/尺码）</th>
                 <th>退货件数</th>
                 <th>价格</th>
-                <th>退货信息</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -140,7 +139,7 @@
                     <td>${returnGoods.daiFaGoods.spec}</td>
                     <td>${returnGoods.daiFaGoods.num}</td>
                     <td>${returnGoods.daiFaGoods.actual_price}</td>
-                      <td><g:returnGoods status="${returnGoods.status}" /></td>
+                      <td></td>
                   </tr>
                   <tr class="daiFaGoods" style="background-color: lavender">
                     
@@ -155,7 +154,7 @@
                     <td>${returnGoods.spec}</td>
                     <td>${returnGoods.return_num}</td>
                     <td>${returnGoods.return_fee}
-                    <td>${returnGoods.reason}</td>
+                    <td></td>
                   </tr>
               </g:each>
             </tbody>
@@ -262,7 +261,18 @@
               <tr>
                 <td >
                   申请状态：
-                  <strong ><g:returnOrder status="${returnOrder.status}" /></strong>
+                  <strong ><g:if test="${returnOrder.status=='0'}">未支付</g:if>
+                    <g:elseif test="${returnOrder.status=='2'}">处理结束</g:elseif>
+                    <g:else>
+                        <g:if test="${returnOrder.needTui=='2'}">已退款</g:if>
+                        <g:else>
+                            <g:if test="${returnOrder.isScan!='1'}">没收到包裹</g:if>
+                            <g:else>处理中</g:else>
+
+                        </g:else>
+
+
+                    </g:else></strong>
                   
                   <br/>
                 </td>

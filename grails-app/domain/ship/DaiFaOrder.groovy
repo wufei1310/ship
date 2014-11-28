@@ -27,6 +27,7 @@ class DaiFaOrder {
         is_explore(blank:true,nullable:true)
         isCanExport(blank:true,nullable:true)
         canExport_date(blank:true,nullable:true)
+        weight(blank:true,nullable:true)
     }
     
     static mapping = {
@@ -83,7 +84,7 @@ class DaiFaOrder {
    // String is_tuihuo = "0" //0 正常订单  1 退货 2换货
 
 
-    
+    String weight
     Date dateCreated
     Date lastUpdated
     String isCanExport //0否1可 当订单下所有商品都已拿货时，表示可以导出物流单号了。2订单已经发出.3 已关联

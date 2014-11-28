@@ -746,7 +746,7 @@ class AdminDaiFaOrderController extends BaseController {
         } else {
             // order.lock()
 
-
+             order.weight = params.weight
 
             Float weight = new Float(params.weight)
 
@@ -1236,3 +1236,19 @@ class AdminDaiFaOrderController extends BaseController {
     }
 
 }
+
+
+//
+//reperson: 李佳宁
+//contphone: 18714512495
+//wuliu_sn: 560163826414
+//mobile: mobile
+//Cannot invoke method split() on null object. Stacktrace follows:
+//java.lang.NullPointerException: Cannot invoke method split() on null object
+//at admin.AdminMobileController.findGoodsFromPhone(AdminMobileController.groovy:1539)
+//at grails.plugin.cache.web.filter.PageFragmentCachingFilter.doFilter(PageFragmentCachingFilter.java:195)
+//at grails.plugin.cache.web.filter.AbstractFilter.doFilter(AbstractFilter.java:63)
+//at java.lang.Thread.run(Thread.java:662)
+//Hibernate: select count(returngood0_.id) as col_0_0_ from return_goods returngood0_ where returngood0_.market=? and returngood0_.status='2' and returngood0_.orderfrom='kings'
+//        {"name":"西街","count":2,"thh":0}
+//Hibernate: select count(daifagoods0_.id) as col_0_0_ from dai_fa_goods daifagoods0_ inner join dai_fa_order daifaorder1_ on daifagoods0_.dai_fa_order_id=daifaorder1_.id where daifagoods0_.market=? and daifagoods0_.status

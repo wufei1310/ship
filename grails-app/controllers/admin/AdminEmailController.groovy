@@ -3,6 +3,7 @@ package admin
 import ship.LoginPOJO
 import ship.ReturnGoods
 import ship.ReturnOrder
+import ship.TranLog
 import ship.User
 import ship.Menu
 import ship.Role
@@ -85,13 +86,10 @@ class AdminEmailController extends BaseController {
         }
 
 
-
-
-
     }
 
 
-    def updateReturnOrderKM(){
+    def updateReturnOrderKM() {
         def returnOrderList = ReturnOrder.findAllByOrderfromAndStatusAndNeedTui("kings", "2", "1")
         // render    returnOrderList as JSON
 
@@ -106,25 +104,54 @@ class AdminEmailController extends BaseController {
         }
     }
 
-    def updateReturnOrderKM1115(){
+    def updateReturnOrderKM1115() {
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-        def startDate = Date.parse("yyyy-MM-dd HH:mm:ss","2014-11-1 00:00:00")
-        def endDate = Date.parse("yyyy-MM-dd HH:mm:ss","2014-11-15 23:59:59")
+        def startDate = Date.parse("yyyy-MM-dd HH:mm:ss", "2014-11-1 00:00:00")
+        def endDate = Date.parse("yyyy-MM-dd HH:mm:ss", "2014-11-15 23:59:59")
 
-        def returnOrderList = ReturnOrder.findAllByDateCreatedBetween(startDate,endDate);
-        returnOrderList.each{
+        def returnOrderList = ReturnOrder.findAllByDateCreatedBetween(startDate, endDate);
+        returnOrderList.each {
 
-            if(it.orderSN.startsWith("K")){
+            if (it.orderSN.startsWith("K")) {
 
-            }else{
-                if(!it.orderSN.startsWith("M")){
-                    it.orderSN = "M"+ it.orderSN
+            } else {
+                if (!it.orderSN.startsWith("M")) {
+                    it.orderSN = "M" + it.orderSN
                 }
             }
 
             println it.orderSN
         }
+    }
+
+    def searchNoPayOrderList() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+        def startDate = Date.parse("yyyy-MM-dd HH:mm:ss", "2014-10-15 00:00:00")
+        def endDate = Date.parse("yyyy-MM-dd HH:mm:ss", "2014-11-27 23:59:59")
+
+        def returnOrderList = ReturnOrder.findAllByDateCreatedBetweenAndOrderfrom(startDate, endDate, "member");
+//        render returnOrderList.orderSN
+        def nokorder = []
+        render '<table border="1"><tr><td>M单号</td><td>K单号</td><td>退款金额</td><td>退款时间</td><td>代发结账</td></tr>'
+        returnOrderList.each {
+            if(it.orderSN.startsWith("M")){
+                def sn = it.orderSN.substring(1)
+                def korder = ReturnOrder.findByOrderSN("K"+sn);
+                if(!korder){
+
+                    def tranLog = TranLog.findByTypeAndOrderSNLike("10","%"+sn)
+
+
+                    render '<tr><td>'+it.orderSN+'</td><td>'+ korder?.orderSN+'</td><td>'+ tranLog?.amount+'</td><td>'+tranLog?.dateCreated +'</td><td>'+ it.returnGoods.is_qianshou+ '</td></tr>'
+
+                }
+
+            }
+
+        }
+        render "</table>"
     }
 }
