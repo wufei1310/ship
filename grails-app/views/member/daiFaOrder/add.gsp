@@ -58,7 +58,7 @@
             <th>件数</th>
             <th>单件价格</th>
             <th>图片</th>
-            <th><button onclick="addDaiFaGoods()" type="button" class="btn btn-primary">增加</button></th>
+            <th><button onclick="addDaiFaGoods()" type="button" class="btn btn-primary">增加商品</button></th>
         </tr>
         </thead>
         <tbody>
@@ -110,7 +110,7 @@
                         <input type="hidden" id="imgInput${i}" class="imgInput" name="attach_id"
                                value="${daiFaGoods.attach_id}">
                     </td>
-                    <td><button onclick="removeDaiFaGoods(this)" type="button" class="btn btn-danger">删除</button>
+                    <td><button onclick="removeDaiFaGoods(this)" type="button" class="btn btn-danger">删除商品</button>
                     <br/>
                         <a style="margin-top: 2px;" href="javascript:void(0)" onclick="toHot(this)" class="btn btn-info">热门货源</a>
 
@@ -152,7 +152,7 @@
                                                                                                          class="imgInput"
                                                                                                          name="attach_id">
                 </td>
-                <td><button onclick="removeDaiFaGoods(this)" type="button" class="btn btn-danger">删除</button>
+                <td><button onclick="removeDaiFaGoods(this)" type="button" class="btn btn-danger">删除商品</button>
                     <br/>
                     <a style="margin-top: 2px;" href="javascript:void(0)" onclick="toHot(this)" class="btn btn-info">热门货源</a></td>
             </tr>

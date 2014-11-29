@@ -39,7 +39,7 @@
                   <td>${daifa.sendperson}</td>
                   <td>广州</td>
                   <td>广州市天河区先烈东路虚地街５号３０２</td>
-                  <td> 18677050002
+                  <td> 15018939589
                       %{--${daifa.sendcontphone}--}%
                   </td>
                   <td>${daifa.reperson}</td>

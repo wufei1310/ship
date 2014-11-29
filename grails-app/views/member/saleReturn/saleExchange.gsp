@@ -582,7 +582,7 @@
 </div>
 
 <div>
-    <a href="javascript:void(0)" onclick="yuePay1()" class=" btn btn-large btn-primary">支付</a>
+    <a href="javascript:void(0)" onclick="yuePay1()" class=" btn btn-large btn-primary">支付退货费</a>
     <g:link controller="memberDaiFaOrder" action="list" params="${params}" class=" btn btn-large ">返回</g:link>
 </div>
 

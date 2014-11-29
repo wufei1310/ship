@@ -962,6 +962,13 @@ class MemberDaiFaOrderController extends BaseController {
 
         returnOrder = memberDaiFaService.doSaleExchange(params, addUser)//添加申请
         returnOrder.isScan = "0"//默认退货申请是未扫描的,当找到了与他对应的无主包裹时，我们认为这个退货申请扫描过了的
+
+        def kreturnOrder = ReturnOrder.findByOrderSN(returnOrder.orderSN.replace("M", "K"))
+
+        if(kreturnOrder){
+            kreturnOrder.ishuiyuanxiadan = "1"
+        }
+
         def shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)
 
         if (shipSN) { //在提交新的退货申请时，判断是否已经有了物流单号。
@@ -982,11 +989,6 @@ class MemberDaiFaOrderController extends BaseController {
                 }
 
             }
-//            else if (shipSN.status == "4") {
-//                shipSN.needTui = "1"
-//            } else if (shipSN.status == "5") {
-//                shipSN.needTui = "3"
-//            }
 
 
 

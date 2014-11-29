@@ -196,13 +196,13 @@ class AdminMobileController {
         } else if (tuiGoodsCount == tuiFail) {
             returnOrder.needTui = "3"
             returnOrder.status = "2"  //处理结束
-
+            println "sn:"+returnOrder.orderSN
             //会员自己民下的单的状态改变
             def memberReturnOrder = ReturnOrder.findByOrderSN(returnOrder.orderSN.replace("K", "M"))
-            memberReturnOrder.status = "2"
-            memberReturnOrder.needTui = "3" //表示已经退货退款到会员账户
+            memberReturnOrder?.status = "2"
+            memberReturnOrder?.needTui = "3" //表示已经退货退款到会员账户
 
-            memberReturnOrder.save()
+            memberReturnOrder?.save()
 
 
         } else {
@@ -959,8 +959,8 @@ class AdminMobileController {
         def imgStr = '';
         params.imgStr.split("\\|").each {
             if (it != "") {
-                def pic = util.RemoteFileUtil.remoteFileCopy(request, it)
-                imgStr = imgStr + "|" + pic
+                //def pic = util.RemoteFileUtil.remoteFileCopy(request, it)
+               // imgStr = imgStr + "|" + pic
             }
         }
 
@@ -1066,7 +1066,7 @@ class AdminMobileController {
         goods_sn_map.each { k, v ->
 //            println "k:" + k
 //            println "V:" + v
-            def goods = DaiFaGoods.findByDaiFaOrderAndGoods_sn(daiFaOrder, k)
+            def goods = DaiFaGoods.get(k as Long)
             if (!goods) {
                 return
             }
@@ -1128,69 +1128,18 @@ class AdminMobileController {
         returnOrder.save(flush: true)
 
 
-    }
-
-    //为无主包裹关联订单号
-    def noownershopOrderSN() {
-        def mm = new MobileMessage()
-
-        def daiFaOrder = DaiFaOrder.findByOrderSN(params.shopOrderSN)
-
-        if (!daiFaOrder) {
-            mm.result = "fail"
-            mm.message = "输入订单号不存在，请检查！"
-            mm.model = [shopOrderSN: params.shopOrderSN, wuliu_sn: params.wuliu_sn]
-            render mm as JSON
-            return;
+        def mreturnOrder = ReturnOrder.findByOrderSN(returnOrder.orderSN.replace("K", "M"))
+        if(mreturnOrder){
+            returnOrder.ishuiyuanxiadan = "1"
         }
 
-
-        def returnOrder = ReturnOrder.findByOrderSNAndOrderfrom("K" + daiFaOrder.orderSN, 'kings')
-        if (returnOrder) {
-            mm.result = "success"
-            mm.message = "订单号：" + returnOrder.orderSN + "退货申请已经存在,是否继续录入其它订单号？"
-        } else {
-
-
-            def goods_sn_map = [:]
-            def goods_sn = full2HalfChange(params.goods_sn) + "!"
-            goods_sn.split("!").each {  //拆分无主包裹的每一个商品
-                if (it != "") {
-                    if (goods_sn_map.containsKey(it)) {
-                        int num = goods_sn_map.get(it) + 1
-                        goods_sn_map.put(it, num)
-                    } else {
-                        goods_sn_map.put(it, 1)
-                    }
-
-                }
-            }
-
-            //为无主包裹自动生成退货申请
-            proReturn(daiFaOrder, goods_sn_map, params.wuliu_sn)
-
-
-
-
-
-            mm.result = "success"
-            mm.message = "退货申请登记成功,是否继续录入？"
-        }
-
-
-        def map = [num: params.num, wuliu_sn: params.wuliu_sn]
-
-        mm.model = map
-
-        render mm as JSON
-        return;
-
     }
+
 
     //物流app选择商品生成退货申请　
     def wuliuselectgoodsproReturn() {
 
-
+        println params.ids_nums
         def returnOrderMap = [:]
 
         def ids_nums_arr = []
@@ -1206,10 +1155,10 @@ class AdminMobileController {
 
             if (returnOrderMap.containsKey(daifaGoods.daiFaOrder)) {
                 def goods_sn_map = returnOrderMap.get(daifaGoods.daiFaOrder)
-                goods_sn_map.put(daifaGoods.goods_sn, goodsstr[1])
+                goods_sn_map.put(daifaGoods.id, goodsstr[1])
             } else {
                 def goods_sn_map = [:]
-                goods_sn_map.put(daifaGoods.goods_sn, goodsstr[1])
+                goods_sn_map.put(daifaGoods.id, goodsstr[1])
                 returnOrderMap.put(daifaGoods.daiFaOrder, goods_sn_map)
             }
 
