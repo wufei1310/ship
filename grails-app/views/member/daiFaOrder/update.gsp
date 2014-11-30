@@ -147,7 +147,11 @@
                   下&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人：
                   <input data-error-message="下单人不能为空" data-required="true"  name="sendperson" type="text" class="" placeholder="" value="${order.sendperson}">
                   <br/>
-                  发&nbsp;&nbsp;&nbsp;件&nbsp;&nbsp;地&nbsp;&nbsp;&nbsp;址：
+                    您&nbsp;的&nbsp;网&nbsp;店&nbsp;名：
+                    <input name="wangdianming" id="wangdianming"
+                           type="text" class="input-xxlarge" placeholder="我们将以您的网店名名义发货，可选填" value="${order.wangdianming}">
+                    <br/>
+                    发&nbsp;&nbsp;&nbsp;件&nbsp;&nbsp;地&nbsp;&nbsp;&nbsp;址：
                   <input data-error-message="下单人地址不能为空" data-required="true"  name="sendaddress" type="text" class="input-xxlarge" placeholder="" value="${order.sendaddress}">
                   <br/>
                   联系手机/电话：

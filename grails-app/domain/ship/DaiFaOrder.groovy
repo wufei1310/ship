@@ -28,6 +28,7 @@ class DaiFaOrder {
         isCanExport(blank:true,nullable:true)
         canExport_date(blank:true,nullable:true)
         weight(blank:true,nullable:true)
+        wangdianming(blank:true,nullable:true)
     }
     
     static mapping = {
@@ -83,7 +84,7 @@ class DaiFaOrder {
     String type = "0" //0没有退货  1有退货
    // String is_tuihuo = "0" //0 正常订单  1 退货 2换货
 
-
+   String wangdianming//网店名称
     String weight
     Date dateCreated
     Date lastUpdated

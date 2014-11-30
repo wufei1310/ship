@@ -36,7 +36,15 @@
              <tr>
                   <td>${i+1}</td>
                   <td>${daifa.orderSN} 件数：${num_map[daifa.id]}</td>
-                  <td>${daifa.sendperson}</td>
+                  <td>
+                      <g:if test="${daifa.wangdianming}">
+                          ${daifa.wangdianming}
+                      </g:if>
+                      <g:else>
+                          ${daifa.sendperson}
+                      </g:else>
+
+                     </td>
                   <td>广州</td>
                   <td>广州市天河区先烈东路虚地街５号３０２</td>
                   <td> 15018939589

@@ -135,7 +135,7 @@ class AdminEmailController extends BaseController {
         def returnOrderList = ReturnOrder.findAllByDateCreatedBetweenAndOrderfrom(startDate, endDate, "member");
 //        render returnOrderList.orderSN
         def nokorder = []
-        render '<table border="1"><tr><td>M单号</td><td>K单号</td><td>退款金额</td><td>退款时间</td><td>代发结账</td></tr>'
+        render '<table border="1"><tr><td>物流单</td><td>M单号</td><td>K单号</td><td>退款金额</td><td>退款时间</td><td>代发结账</td></tr>'
         returnOrderList.each {
             if(it.orderSN.startsWith("M")){
                 def sn = it.orderSN.substring(1)
@@ -145,7 +145,7 @@ class AdminEmailController extends BaseController {
                     def tranLog = TranLog.findByTypeAndOrderSNLike("10","%"+sn)
 
 
-                    render '<tr><td>'+it.orderSN+'</td><td>'+ korder?.orderSN+'</td><td>'+ tranLog?.amount+'</td><td>'+tranLog?.dateCreated +'</td><td>'+ it.returnGoods.is_qianshou+ '</td></tr>'
+                    render '<tr><td>'+it.wuliu_sn+'</td><td>'+it.orderSN+'</td><td>'+ korder?.orderSN+'</td><td>'+ tranLog?.amount+'</td><td>'+tranLog?.dateCreated +'</td><td>'+ it.returnGoods.is_qianshou+ '</td></tr>'
 
                 }
 

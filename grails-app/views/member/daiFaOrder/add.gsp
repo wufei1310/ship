@@ -250,6 +250,10 @@
                 <input data-error-message="联系手机/电话不能为空" data-required="true" name="sendcontphone" type="text" class=""
                        placeholder="" value="${daiFaOrder.sendcontphone}">
                 <br/>
+                您&nbsp;的&nbsp;网&nbsp;店&nbsp;名：
+                <input name="wangdianming" id="wangdianming"
+                       type="text" class="input-xxlarge" placeholder="我们将以您的网店名名义发货，可选填" value="">
+                <br/>
                 下&nbsp;&nbsp;单&nbsp;人&nbsp;地&nbsp;址：
                 %{--<select onchange="checkAddress(this)" onclick="checkAddress(this)">--}%
                     %{--<option value="0">以我的真实地址做为发货地址</option>--}%

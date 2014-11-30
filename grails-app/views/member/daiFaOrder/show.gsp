@@ -396,6 +396,8 @@
                 <td >
                   下&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人：
                   ${order.sendperson}
+                    <br/>
+                您&nbsp;的&nbsp;网&nbsp;店&nbsp;名：${order.wangdianming}
                   <br/>
                   发&nbsp;&nbsp;&nbsp;件&nbsp;&nbsp;地&nbsp;&nbsp;&nbsp;址：
                   ${order.sendaddress}

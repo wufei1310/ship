@@ -47,6 +47,7 @@
               <th>QQ</th>
               <th>店铺url</th>
               <th>状态</th>
+                <th>最后下单</th>
               <th>操作</th>
             </tr>
           </thead>
@@ -71,6 +72,7 @@
               <td>${user.qq}</td>
               <td>${user.store_url}
               </td>
+
               <td><g:if test="${user.status == '1'}">
                  冻结
               </g:if><g:else>
@@ -85,6 +87,10 @@
               </g:else>
 
               </td>
+                <td>
+                    <user:lastbuy id="${user.id}"></user:lastbuy>
+
+                </td>
               <td>
 
 
