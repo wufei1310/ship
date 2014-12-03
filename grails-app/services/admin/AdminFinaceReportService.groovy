@@ -337,7 +337,7 @@ class AdminFinaceReportService {
         
         def killchu = new BigDecimal(0)// 会员紧急中止订单，退回货款物流费
         
-        tranList.each{
+         .each{
             
             
             //=======================================

@@ -75,7 +75,10 @@
                     <td>${returnGoods.return_num}  </td>
                     <td><input onkeyup="if(isNaN(value) || value<0)execCommand('undo')" onafterpaste="if(isNaN(value) || value<0)execCommand('undo')" data-error-message="单件拿货价格不能为空" data-required="true"   name="actual_price" class="input-small" type="text" placeholder="" value="${returnGoods.actual_price}"  onblur="if(isNaN(value) || value<0)execCommand('undo');fee();"></td>
                     <input type="hidden" name="returnGoods_id" value="${returnGoods.id}"/>
-                      <td>${returnGoods.reason}</td>
+                      <td>${returnGoods.reason}
+                          <br/>
+                          档口退货时间：${returnGoods.actual_returnTime}
+                      </td>
                   </tr>
               </g:each>
             </tbody>

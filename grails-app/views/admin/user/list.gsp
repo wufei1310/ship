@@ -88,8 +88,9 @@
 
               </td>
                 <td>
-                    <user:lastbuy id="${user.id}"></user:lastbuy>
+                    %{--<user:lastbuy id="${user.id}"></user:lastbuy>--}%
 
+                    <usert:lastbuy id="${user.id}"></usert:lastbuy>
                 </td>
               <td>
 

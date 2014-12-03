@@ -241,7 +241,7 @@
 
         <tr>
             <td>
-                下&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人：
+                下&nbsp;单&nbsp;人&nbsp;姓&nbsp;名：
                 <input data-error-message="下单人不能为空" data-required="true" name="sendperson" type="text" class=""
                        placeholder="" value="${daiFaOrder.sendperson}">
 

@@ -146,6 +146,8 @@
                           <td>会员期望退回：${returnGoods.actual_price}
                               <br/>
                           档口实际退回：<span style="color: red">${returnGoods.actual_return_fee}</span>
+                              <br/>
+                              档口退货时间：${returnGoods.actual_returnTime}
                           </td>
                           <input type="hidden" name="returnGoods_id" value="${returnGoods.id}"/>
                           <td>${returnGoods.reason}</td>
@@ -223,6 +225,14 @@
                 </strong>
                   
                   <br/>
+
+                    会员下单时间：<strong ><g:memberReturnOrderTime orderSN="${returnOrder.orderSN}"></g:memberReturnOrderTime></strong>
+                    <br/>
+                    包裹扫描时间：<strong ><shipSN:scanTime wuliu_sn="${returnOrder.wuliu_sn}"></shipSN:scanTime> </strong>
+                    <br/>
+                    K数据生成时间：<strong >${returnOrder.dateCreated} </strong>
+                    <br/>
+                    包裹关联单号：<strong ><shipSN:packOrderSN wuliu_sn="${returnOrder.wuliu_sn}"></shipSN:packOrderSN> </strong>
                   <g:if test="${returnOrder.check_time}">
                     退款人：<strong >${returnOrder.check_user.email}</strong>
                     <br/>

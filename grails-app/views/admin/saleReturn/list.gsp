@@ -71,13 +71,14 @@
                     </td>
                     <!--              <td>${returnOrder.wuliu_sn}</td>
               <td>${returnOrder.wuliu}</td>-->
-                    <td>status: ${returnOrder.status}
+                    <td>
+                    %{--status: ${returnOrder.status}--}%
 
-                    needTui: ${returnOrder.needTui}
+                    %{--needTui: ${returnOrder.needTui}--}%
 
-                    isScan: ${returnOrder.isScan}
+                    %{--isScan: ${returnOrder.isScan}--}%
 
-                        <br/>
+                        %{--<br/>--}%
 
                         <g:if test="${params.orderfrom == 'kings'}">
                             <g:if test="${returnOrder.status == '0'}">未支付</g:if>

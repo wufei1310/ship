@@ -40,4 +40,19 @@ class ShipSNTagLib {
 
         }
     }
+
+    def scanTime = { attrs->
+        def shipSN = ShipSN.findByWuliu_sn(attrs.wuliu_sn)
+        if(shipSN){
+            out << shipSN.scanTime
+        }
+
+    }
+
+    def packOrderSN = {  attrs->
+        def shipSN = ShipSN.findByWuliu_sn(attrs.wuliu_sn)
+        if(shipSN){
+            out << shipSN.orderSN
+        }
+    }
 }

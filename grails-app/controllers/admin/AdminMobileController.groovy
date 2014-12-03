@@ -1247,7 +1247,7 @@ class AdminMobileController {
         def goods_shipped = DaiFaGoods.executeQuery("select count(a.id) from DaiFaGoods a  where  a.status='9'")[0]
         def tuihuancount = ReturnOrder.executeQuery("select count(a.id) from ReturnOrder a  where a.orderfrom='kings' ")[0]
         //统计新提交未扫描的退货申请数据
-        def canExport = DaiFaOrder.executeQuery("select count(a.id) from DaiFaOrder a  where  a.isCanExport='1'")[0]
+        def canExport = DaiFaOrder.executeQuery("select count(a.id) from DaiFaOrder a  where  a.isCanExport in ('1','3')")[0]
         def noowner = ShipSN.countByStatus("1")
 
         def noownerandhasreturn = ShipSN.countByNeedTui("2")
@@ -1293,7 +1293,7 @@ class AdminMobileController {
 
         def o = DaiFaGoods.createCriteria();
         def yanshou = o.list(searchClosure)[0]
-        def canExport = DaiFaOrder.executeQuery("select count(a.id) from DaiFaOrder a  where  a.isCanExport='1'")[0]
+        def canExport = DaiFaOrder.executeQuery("select count(a.id) from DaiFaOrder a  where  a.isCanExport in ('1','3')")[0]
         searchClosure = {
             projections {
                 rowCount()

@@ -6,6 +6,16 @@ class ReturnOrderTagLib {
 //    String needTui;//0：暂不需要 1：退货处理完成，等待退款 2 已退款给会员 3 处理完成，无退款商品
 //    String needShip;// 0：暂不需要 1：换货处理完成，等待发货 2 已发货给会员 3 处理完成，无发货商品
 
+
+    def memberReturnOrderTime = {attrs->
+       def mordersn = attrs.orderSN.replace("K","M");
+       def mReturnOrder = ReturnOrder.findByOrderSN(mordersn);
+        if(mReturnOrder){
+            out << mReturnOrder.dateCreated
+        }
+    }
+
+
     def needTui = {attrs->
         switch (attrs.status){
             case "0": out << "退货处理中"
