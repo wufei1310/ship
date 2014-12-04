@@ -36,7 +36,7 @@ class AdminOrderShipController extends BaseController {
         Long backEndWuliuSN = ("1"+ endWuliuSN.substring(len-4,len)) as Long;
 
 
-        def daifaOrderList = DaiFaOrder.findAllByWuliuAndIsCanExportInList(startDaifaOrder.wuliu, ['1', '3'], [sort: "canExport_date", order: "asc"])
+        def daifaOrderList = DaiFaOrder.findAllByWuliuAndIsCanExportInListAndStatusNotEqual(startDaifaOrder.wuliu, ['1', '3'],'kill', [sort: "canExport_date", order: "asc"])
 
 
 
@@ -92,7 +92,7 @@ class AdminOrderShipController extends BaseController {
         println  "backEndWuliuSN:"+backEndWuliuSN
         def daifaOrder = DaiFaOrder.findByOrderSN(orderSN)
         daifaOrder.wuliu_no = startWuliuSN;
-        def daifaOrderList = DaiFaOrder.findAllByWuliuAndIsCanExportInList(daifaOrder.wuliu, ['1', '3'], [sort: "canExport_date", order: "asc"])
+        def daifaOrderList = DaiFaOrder.findAllByWuliuAndIsCanExportInListAndStatusNotEqual(daifaOrder.wuliu, ['1', '3'],'kill', [sort: "canExport_date", order: "asc"])
         boolean isIndex = false;
         def endDaifaOrder;
 
@@ -125,9 +125,10 @@ class AdminOrderShipController extends BaseController {
         def express = Express.list();
         express.each {
             String name = it.name
-//            def n_explore = DaiFaOrder.countByWuliuAndIsCanExportInListAndIs_explore(name, ['1', '3'], "0")
-            def y_explore = DaiFaOrder.countByWuliuAndIsCanExportInList(name, ['1', '3'])
+            def n_explore = DaiFaOrder.countByWuliuAndIsCanExportInListAndIs_exploreAndStatusNotEqual(name, ['1', '3'], "0",'kill')
+            def y_explore = DaiFaOrder.countByWuliuAndIsCanExportInListAndIs_exploreAndStatusNotEqual(name, ['1', '3'],'1','kill')
             it.y_explore = y_explore
+            it.n_explore = n_explore
         }
         def map = [list: express]
         render(view: "/admin/daifaShip/list", model: map)
@@ -144,7 +145,7 @@ class AdminOrderShipController extends BaseController {
         express.add(dabao)
         express.each {
             String name = it.name
-            def n_explore = DaiFaOrder.countByWuliuAndIsCanExportInList(name, ['1', '3'])
+            def n_explore = DaiFaOrder.countByWuliuAndIsCanExportInListAndStatusNotEqual(name, ['1', '3'],'kill')
             it.n_explore = n_explore
         }
         def map = [list: express]
@@ -164,7 +165,7 @@ class AdminOrderShipController extends BaseController {
 
     def explore() {
         def date = new Date()
-        def explore = DaiFaOrder.findAllByWuliuAndIsCanExportInList(params.name, ['1', '3'], [sort: "canExport_date", order: "asc"])
+        def explore = DaiFaOrder.findAllByWuliuAndIsCanExportInListAndStatusNotEqualAndIs_explore(params.name, ['1', '3'],'kill',params.is_explore, [sort: "canExport_date", order: "asc"])
         def num_map = [:]
 
         explore.each {
@@ -174,6 +175,9 @@ class AdminOrderShipController extends BaseController {
                 goodsNum = goodsNum + i.num
             }
             num_map.put(it.id, goodsNum)
+            if(params.is_explore == '0'){
+                DaiFaOrder.executeUpdate("update DaiFaOrder set is_explore = '1' where id = '"+it.id+"'")
+            }
         }
         def map = [list: explore, num_map: num_map]
         String file = date.format('MM-dd-yyyy') + params.name + date.format('HH：mm') + ".xls"

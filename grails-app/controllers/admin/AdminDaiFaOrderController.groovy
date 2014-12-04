@@ -449,6 +449,7 @@ class AdminDaiFaOrderController extends BaseController {
             }
             inList("isCanExport", ['1', '3'])
             ne("status", "delete")
+            ne("status", "kill")
         }
 
         def o = DaiFaOrder.createCriteria();

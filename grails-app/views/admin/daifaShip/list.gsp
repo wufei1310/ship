@@ -29,16 +29,17 @@
           <thead>
             <tr>
               <th>快递公司</th>
-              <th>已导出</th>
-
+                <th>已导出</th>
+                <th>未导出</th>
             </tr>
           </thead>
           <tbody>
             
           <g:each in="${list}" status="i" var="express">
-            <tr>
-              <td>${express.name}</td>
-              <td>${express.y_explore}&nbsp;&nbsp;&nbsp;<g:link controller="adminOrderShip" action="explore" params="[name:express.name]" >导出</g:link></td>
+              <tr>
+                <td>${express.name}</td>
+              <td>${express.y_explore}&nbsp;&nbsp;&nbsp;<g:link controller="adminOrderShip" action="explore" params="[name:express.name,is_explore:'1']" >再次导出</g:link></td>
+              <td>${express.n_explore}&nbsp;&nbsp;&nbsp;<g:link controller="adminOrderShip" action="explore" params="[name:express.name,is_explore:'0']" >导出</g:link></td>
 
               </td>
             </tr>

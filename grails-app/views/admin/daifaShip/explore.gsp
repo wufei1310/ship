@@ -35,7 +35,7 @@
            <g:each status="i" in="${list}" var="daifa">
              <tr>
                   <td>${i+1}</td>
-                  <td>${daifa.orderSN} 件数：${num_map[daifa.id]}</td>
+                  <td> ${daifa.orderSN} 件数：${num_map[daifa.id]}</td>
                   <td>
                       <g:if test="${daifa.wangdianming}">
                           ${daifa.wangdianming}
