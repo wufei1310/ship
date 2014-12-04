@@ -336,8 +336,8 @@ class AdminFinaceReportService {
         def changeStallchu = new BigDecimal(0)//会员更换档口退货款
         
         def killchu = new BigDecimal(0)// 会员紧急中止订单，退回货款物流费
-        
-         .each{
+
+        tranList.each{
             
             
             //=======================================

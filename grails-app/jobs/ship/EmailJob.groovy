@@ -49,7 +49,6 @@ class EmailJob {
             if(memberReturnOrder){
                 it.ishuiyuanxiadan="1"
                 it.status = "2"
-                it.status = "3"
                 it.save();
             }
         }
