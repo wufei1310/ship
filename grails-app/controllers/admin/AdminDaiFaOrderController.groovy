@@ -447,7 +447,7 @@ class AdminDaiFaOrderController extends BaseController {
             if (params.end_date) {
                 le('ship_time', Date.parse("yyyy-MM-dd HH:mm:ss", params.end_date + " 23:59:59"))
             }
-            inList("isCanExport", ['1', '3'])
+            inList("isCanExport", ['1'])
             ne("status", "delete")
             ne("status", "kill")
         }

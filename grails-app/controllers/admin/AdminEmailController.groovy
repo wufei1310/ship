@@ -92,16 +92,20 @@ class AdminEmailController extends BaseController {
     def updateReturnOrderKM() {
         def returnOrderList = ReturnOrder.findAllByOrderfromAndStatusAndNeedTui("kings", "2", "1")
         // render    returnOrderList as JSON
-
+        int i = 0;
         returnOrderList.each {
             //  render it.orderSN.substring(1)
             def memberReturnOrder = ReturnOrder.findByOrderSNAndOrderfrom("M" + it.orderSN.substring(1), "member")
             // render memberReturnOrder as JSON
+
             if (memberReturnOrder) {
                 it.ishuiyuanxiadan = "1"
                 it.save();
+                i++;
+                render it.orderSN + "<br/>"
             }
         }
+        render "同步"+i+"条退货完成数据，会员已经下单，可审核"
     }
 
     def updateReturnOrderKM1115() {

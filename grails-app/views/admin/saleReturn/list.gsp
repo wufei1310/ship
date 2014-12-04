@@ -21,7 +21,7 @@
 
             <g:if test="${params.orderfrom == 'kings'}">系统包裹退货申请</g:if>
             <g:if test="${params.orderfrom == 'member'}">会员提交退货申请</g:if>
-
+            <g:link controller="adminEmail" action="updateReturnOrderKM" target="_blank" class="btn btn-primary btn-large pull-right">同步退货数据</g:link>
         </h3>
     </div>
 
