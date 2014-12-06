@@ -68,19 +68,36 @@ class MemberDaiFaService {
 //            new Push().pushByStore(pushPOJO)
 
 
+            if(!daiFaOrder.orderSN.startsWith("T")){
+                //插入资金流水表（商品）
+                def tranLog = new TranLog();
+                tranLog.shouru_type = "0"
+                tranLog.amount = daiFaOrder.goodsFee
+                memberamount = memberamount - daiFaOrder.goodsFee
+                tranLog.memberamount = memberamount
+                tranLog.direction = "0"
+                tranLog.type = "7"
+                tranLog.orderSN = daiFaOrder.orderSN
+                tranLog.order_user = daiFaOrder.add_user
+                tranLog.num = goodsNum
+                tranLog.save()
 
-            //插入资金流水表（商品）
-            def tranLog = new TranLog();
-            tranLog.shouru_type = "0"
-            tranLog.amount = daiFaOrder.goodsFee
-            memberamount = memberamount - daiFaOrder.goodsFee
-            tranLog.memberamount = memberamount
-            tranLog.direction = "0"
-            tranLog.type = "7"
-            tranLog.orderSN = daiFaOrder.orderSN
-            tranLog.order_user = daiFaOrder.add_user
-            tranLog.num = goodsNum
-            tranLog.save()
+                //插入资金流水表（代发费）
+                def tranLogDaiFa = new TranLog();
+                tranLogDaiFa.shouru_type = "0"
+                tranLogDaiFa.amount = daiFaOrder.serviceFee
+
+                memberamount = memberamount - daiFaOrder.serviceFee
+                tranLogDaiFa.memberamount = memberamount
+
+                tranLogDaiFa.direction = "0"
+                tranLogDaiFa.type = "9"
+                tranLogDaiFa.orderSN = daiFaOrder.orderSN
+                tranLogDaiFa.order_user = daiFaOrder.add_user
+                tranLogDaiFa.num = goodsNum
+                tranLogDaiFa.save()
+            }
+
 
             //插入资金流水表（运费）
             def tranLogShip = new TranLog();
@@ -96,20 +113,7 @@ class MemberDaiFaService {
             tranLogShip.num = goodsNum
             tranLogShip.save()
 
-            //插入资金流水表（代发费）
-            def tranLogDaiFa = new TranLog();
-            tranLogDaiFa.shouru_type = "0"
-            tranLogDaiFa.amount = daiFaOrder.serviceFee
 
-            memberamount = memberamount - daiFaOrder.serviceFee
-            tranLogDaiFa.memberamount = memberamount
-
-            tranLogDaiFa.direction = "0"
-            tranLogDaiFa.type = "9"
-            tranLogDaiFa.orderSN = daiFaOrder.orderSN
-            tranLogDaiFa.order_user = daiFaOrder.add_user
-            tranLogDaiFa.num = goodsNum
-            tranLogDaiFa.save()
 
             if (daiFaOrder.regardsFee > 0) {
                 //插入资金流水表（礼品费）

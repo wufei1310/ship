@@ -63,7 +63,7 @@ class ReturnGoods{
     Date actual_returnTime  //档口退货时间
 
 
-    String status;//0:新提交退货，1:广州办入库 2:分拣完成，等待受理  4：已退货，档口退款 5 已受理,领出办事处  6 退货不成功  7 换货成功 8 换货不成功
+    String status;//0:新提交退货，1:广州办入库 2:分拣完成，等待受理  4：已退货，档口退款 5 已受理,领出办事处  6 退货不成功  7 换货成功 8 换货不成功 9 寄回　１０不要了
     String is_qianshou //是否提现 0 未提现 1申请提现 2已提现
     String returnReason //会员要求退货原因
     String reason //退货不成功原因

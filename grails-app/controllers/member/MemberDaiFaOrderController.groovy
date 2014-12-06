@@ -286,6 +286,44 @@ class MemberDaiFaOrderController extends BaseController {
     }
 
 
+    def giveup(){
+        def kingsReturnOrder = ReturnOrder.get(params.id)
+        kingsReturnOrder.returnGoods.each{
+            if(it.status=="6"){
+                it.status="10"
+                it.save();
+            }
+        }
+        redirect(controller: "memberDaiFaOrder",action: "saleReturnShow",id:params.mid  )
+    }
+
+
+
+
+    //提交为我寄回的商品新订单，该订单提交就是等待发货的状态
+    def addBack() {
+
+        def goodsList = []
+        def kingsReturnOrder = ReturnOrder.get(params.id)
+        kingsReturnOrder.returnGoods.each{
+            if(it.status=="6"){
+                it.daiFaGoods.num = it.return_num;
+                goodsList.add(it.daiFaGoods)
+            }
+        }
+
+
+
+        def market = Market.list().market_name
+        def areaChild = SysInitParams.getAreaChildMap().get("0100");
+
+
+        def map = [kingsReturnOrder:kingsReturnOrder,daiFaOrder: kingsReturnOrder.daiFaOrder, market: market,areaChild:areaChild,goodsList:goodsList]
+        render(view: "/member/daiFaOrder/addBack", model: map)
+    }
+
+
+
     def payDaiFaAllOrder() {
 
 
@@ -391,6 +429,77 @@ class MemberDaiFaOrderController extends BaseController {
 
 
         return format2.format(new Date()).toString() + newNo;
+    }
+
+
+    def doAddBack(){
+
+        if (params.pay_type == '0') {
+            if (!session.loginPOJO.user.safepass) {
+                flash.message = "请先设置支付密码"
+                flash.messageClass = "error"
+                render(view: this.commonSuccess)
+                return false
+            }
+            if (!params.safepass || params.safepass.encodeAsPassword() != session.loginPOJO.user.safepass) {
+                flash.message = "支付密码不正确"
+                flash.messageClass = "error"
+                render(view: this.commonSuccess)
+                return false
+            }
+
+        }
+        def kingsReturnOrder = ReturnOrder.get(params.kid as Long)
+
+        def TReturnOrder = DaiFaOrder.findByOrderSN("T"+kingsReturnOrder.daiFaOrder.orderSN)
+        if(TReturnOrder){
+            flash.message = "您已经向该退货申请提交寄回商品了，无需重新提交！"
+            flash.messageClass = "error"
+            render(view: this.commonSuccess)
+            return false
+        }
+
+
+        def daiFaOrder = new DaiFaOrder(params)
+        daiFaOrder.senddesc = "帮我寄回退货不成功商品"
+        daiFaOrder.orderSN = "T"+kingsReturnOrder.daiFaOrder.orderSN;
+        daiFaOrder.add_user = session.loginPOJO.user.id
+        daiFaOrder.status = "allaccept"
+        daiFaOrder.diffFee = 0
+        def num = 0;
+        kingsReturnOrder.returnGoods.each{
+            if(it.status=="6"){
+                it.status = "9"
+                num = (it.num as Long) + num
+                def daiFaGoods = it.daiFaGoods;
+                daiFaGoods.stalls = it.shouliTime.getDay() + "货架";
+                daiFaGoods.num = it.return_num;
+                daiFaGoods.status = "7"
+                daiFaOrder.addToDaiFaGoods(daiFaGoods)
+
+            }
+        }
+
+        daiFaOrder.serviceFee = 0;
+        daiFaOrder.goodsFee = 0
+        daiFaOrder.shipFee = StringUtil.checkShip(daiFaOrder.wuliu, daiFaOrder.area_id, num)
+        daiFaOrder.regardsFee = 0
+        daiFaOrder.totalFee = daiFaOrder.shipFee
+        daiFaOrder.save(flush: true);
+
+        daiFaOrder.payTime = new Date();
+
+
+        def msg = memberDaiFaService.payDaiFa(daiFaOrder.id)
+        if (msg) {
+            flash.message = msg
+        } else {
+            flash.message = "支付成功！我们尽快按您的要求,将货物寄回！"
+        }
+        flash.messageClass = "success"
+        render(view: this.commonSuccess)
+        return false
+
     }
 
     def doAdd() {

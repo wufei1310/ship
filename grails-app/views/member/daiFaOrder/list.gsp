@@ -239,6 +239,11 @@
                         %{--<a class="btn" href="#beizhuModal" data-toggle="modal"--}%
                            %{--onclick="updateBeiZhu('${daiFaOrder.id}', '${daiFaOrder.senddesc}')">修改订单备注</a>--}%
                     %{--</g:if>--}%
+
+
+
+                    <g:if test="${!daiFaOrder.orderSN.startsWith('T')}">
+
                     <g:if test="${daiFaOrder.status == 'shipped'}">
 
                         <g:if test="${daiFaOrder.type == '0'}">
@@ -253,7 +258,7 @@
 
                         <button onclick="beforeKill('${daiFaOrder.id}')" class="btn btn-small" type="button">紧急中止发货</button>
                     </g:if>
-
+                    </g:if>
                 </td>
             </tr>
         </g:each>

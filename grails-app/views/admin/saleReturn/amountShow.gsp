@@ -233,12 +233,17 @@
                     K数据生成时间：<strong >${returnOrder.dateCreated} </strong>
                     <br/>
                     包裹关联单号：<strong ><shipSN:packOrderSN wuliu_sn="${returnOrder.wuliu_sn}"></shipSN:packOrderSN> </strong>
-                  <g:if test="${returnOrder.check_time}">
+                    <br/>
+                    M数据物流单号：
+                    <strong >${memberReturnOrder?.wuliu_sn}</strong>
+                    <g:if test="${returnOrder.check_time}">
                     退款人：<strong >${returnOrder.check_user.email}</strong>
                     <br/>
                     退款审核时间：
                     <strong >${returnOrder.check_time.toString()[0..18]}</strong>
-                   <br/>                  
+                   <br/>
+                      M数据物流单号：
+                      <strong >${memberReturnOrder.wuliu_no}</strong>
                   </g:if>
                 </td>
               </tr>

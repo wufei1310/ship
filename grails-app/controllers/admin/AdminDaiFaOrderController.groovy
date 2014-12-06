@@ -248,6 +248,7 @@ class AdminDaiFaOrderController extends BaseController {
                     [max: params.max, offset: params.offset])
             def total = DaiFaOrder.executeQuery("select d.id from DaiFaOrder d " +
                     "where d.status = ?  group by substring(" + date_time + ",1,10)", [params.status]).size()
+            println daiFaOrder
             daiFaOrder.each { it ->
 
 
