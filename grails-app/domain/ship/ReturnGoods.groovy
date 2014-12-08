@@ -38,6 +38,7 @@ class ReturnGoods{
 
         returnReason(blank:true,nullable:true)
         orderfrom (blank:true,nullable:true)
+        shelf(blank:true,nullable:true)
     }
 
     static belongsTo = [returnOrder:ReturnOrder]
@@ -82,7 +83,7 @@ class ReturnGoods{
     String shouliUser
     Date shouliTime
 
-
+    String shelf//货架
 
     String orderfrom="kings" //member
 

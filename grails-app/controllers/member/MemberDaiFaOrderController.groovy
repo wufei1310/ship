@@ -472,7 +472,12 @@ class MemberDaiFaOrderController extends BaseController {
                 it.status = "9"
                 num = (it.num as Long) + num
                 def daiFaGoods = it.daiFaGoods;
-                daiFaGoods.stalls = it.shouliTime.getDay() + "货架";
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(it.actual_returnTime);
+                int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
+
+                daiFaGoods.stalls = day + "货架";
                 daiFaGoods.num = it.return_num;
                 daiFaGoods.status = "7"
                 daiFaOrder.addToDaiFaGoods(daiFaGoods)
@@ -1076,6 +1081,8 @@ class MemberDaiFaOrderController extends BaseController {
 
         if(kreturnOrder){
             kreturnOrder.ishuiyuanxiadan = "1"
+            returnOrder.isScan = "1" //如果有k表记录，表明会员的这个退货已经在处理了
+
         }
 
         def shipSN = ShipSN.findByWuliu_sn(params.wuliu_sn)

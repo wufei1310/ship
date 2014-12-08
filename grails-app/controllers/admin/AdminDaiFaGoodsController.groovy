@@ -357,6 +357,7 @@ class AdminDaiFaGoodsController extends BaseController {
     def myList() {
 
 
+
         def searchMarket = {
 
             user {
@@ -599,6 +600,11 @@ class AdminDaiFaGoodsController extends BaseController {
 
             def shouli_amount = DaiFaGoods.executeQuery("select sum(d.price*d.num) as amount from DaiFaGoods d " +
                     "where d.status = '1' and d.daifa_user = ?", [User.get(session.loginPOJO.user.id)])[0]
+
+
+            if(!shouli_amount){
+                shouli_amount = "0"
+            }
 
             paramsMap.put("orderSN", goods.daiFaOrder.orderSN)
             paramsMap.put("id", goods.id)

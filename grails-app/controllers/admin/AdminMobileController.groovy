@@ -109,6 +109,9 @@ class AdminMobileController {
 
         }
 
+
+
+
         if (params.status == "6") {
             returnGoods.status = params.status
             returnGoods.reason = params.reason
@@ -117,9 +120,16 @@ class AdminMobileController {
             returnGoods.actual_return_fee = 0
             returnGoods.reason = params.reason
 
+
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+
+            int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
+
+            returnGoods.shelf = day;
             mm.message = params.reason + "，退货不成功"
         }
-
         if (params.status == "8") {
             returnGoods.status = params.status
             returnGoods.actual_returnTime = new Date()
@@ -254,11 +264,15 @@ class AdminMobileController {
         def searchClosure = {
 
             if (params.returnFail == "1") {
-                inList("status", ['6', '8'])
+                eq("status", '6')
             } else {
                 eq("status", params.status)
             }
 
+            if(params.shelf){
+                eq("shelf", params.shelf)
+            }
+            eq("orderfrom","kings")
 
         }
 
@@ -302,6 +316,7 @@ class AdminMobileController {
 
             returnGoodsPOJO.returnReason = it.returnReason
             returnGoodsPOJO.reason = it.reason;
+
 
 
             m_list.add(returnGoodsPOJO)
@@ -431,6 +446,44 @@ class AdminMobileController {
         }
     }
 
+
+
+    def initCountTuiFail(){
+        def list = ReturnGoods.findAllByStatus("6");
+        list.each{
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(it.actual_returnTime);
+
+            int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
+            it.shelf = day
+            it.save();
+        }
+
+    }
+
+
+    def countTuiFail(){
+        def list=[]
+        for(int i=1;i<32;i++){
+            def map = [:]
+            def c = ReturnGoods.countByShelfAndStatusAndOrderfrom(i,"6","kings")
+            map.put("shelf",i)
+            map.put("count",c)
+            list.add(map)
+        }
+        def mm = new MobileMessage()
+
+        mm.message = "物流获取退货商品列表成功"
+
+
+        mm.result = "success"
+        mm.model = [list:list]
+        render mm as JSON
+    }
+
+
+
+
     //管理员查询退货中的商品
     def returnGoodsListOfAdmin() {
 
@@ -462,9 +515,12 @@ class AdminMobileController {
                 eq("status", '5')
             }
             if (params.thFail == "1") { //退不成功
-                inList("status", ['6', '8'])
+                eq("status", '6')
             }
-
+            if(params.shelf){
+                eq("shelf",params.shelf)
+            }
+            eq("orderfrom","kings")
 
         }
 
@@ -746,31 +802,6 @@ class AdminMobileController {
     //根据市场查询下面的退货商品
     def returnGoodsList() {
 
-//        def shipSN = ShipSN.findAllByStatus("1")
-//
-//        def searchClosure = {
-//            or{
-//                and{
-//                    eq("status","1")
-//                    or{
-//                        eq("type", "3")//查询中止订单自动生成的退货
-//                        eq("type", "4")  //查询由于包裹先到生成的退货申请
-//                        eq("type", "5")  //查询由于管理员为包裹录入商品数据生成的退货申请
-//                    }
-//                }
-//
-//
-//                inList('wuliu_sn',shipSN.wuliu_sn)
-//            }
-//
-//
-//        }
-//
-//        def o = ReturnOrder.createCriteria();
-//        def returnOrder = o.list(searchClosure)
-//
-
-//        def returnOrder = ReturnOrder.findAllByTypeOrWuliu_snInList ("3",shipSN.wuliu_sn)
 
 
         def returnGoodsList = ReturnGoods.findAllByStatusInListAndOrderfrom(["1", "2"], 'kings')
@@ -1131,6 +1162,7 @@ class AdminMobileController {
         def mreturnOrder = ReturnOrder.findByOrderSN(returnOrder.orderSN.replace("K", "M"))
         if(mreturnOrder){
             returnOrder.ishuiyuanxiadan = "1"
+            mreturnOrder.isScan = "1"
         }
 
     }
@@ -1334,7 +1366,7 @@ class AdminMobileController {
         //等待退货商品数量
         def thIng = ReturnGoods.executeQuery("select count(a.id) from ReturnGoods a  where a.orderfrom='kings' and a.status='5'")[0]
         //退货处理中,代发已领货
-        def thFail = ReturnGoods.countByStatusInListAndOrderfrom(['6', '8'], 'kings')
+        def thFail = ReturnGoods.countByStatusAndOrderfrom('6', 'kings')
         def noowner = ShipSN.countByStatus("1")
         def xrkcount = ReturnGoods.executeQuery("select count(a.id) from ReturnGoods a  where a.orderfrom='kings' and a.status='1'")[0]
         //新入库商品数量

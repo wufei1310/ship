@@ -109,7 +109,7 @@ class AdminFinaceReportService {
         //已发货订单报表统计
         def shippedOrderList = DaiFaOrder.findAllByStatusInListAndShip_timeBetween(['shipped','kill'],startDate,endDate)
 
-        def shippedTranList = TranLog.findAllByTypeInListAndOrderSNInList(['1','2','5','6','11','7','8','9','3','4','22','23','24','25'],shippedOrderList.orderSN)
+        def shippedTranList = TranLog.findAllByTypeInListAndOrderSNInList(['1','2','5','6','11','7','8','9','3','4','22','23','24','25','28'],shippedOrderList.orderSN)
 
 
 
@@ -335,7 +335,8 @@ class AdminFinaceReportService {
 
         def changeStallchu = new BigDecimal(0)//会员更换档口退货款
         
-        def killchu = new BigDecimal(0)// 会员紧急中止订单，退回货款物流费
+        def killchu = new BigDecimal(0)// 会员紧急中止订单，退回货款
+        def killchuship = new BigDecimal(0)// 会员紧急中止订单，退回运费
 
         tranList.each{
             
@@ -357,6 +358,9 @@ class AdminFinaceReportService {
 
             }else if(it.type == '25'){//发货运费
                 killchu = killchu + it.amount
+
+            }else if(it.type == '28'){//发货运费
+                killchuship = killchuship + it.amount
 
             }else if(it.type == '5'){//会员取消商品退款
                 cancle_goods = cancle_goods + it.amount
@@ -548,7 +552,7 @@ class AdminFinaceReportService {
 
         mapParam.killru = killru
         mapParam.killchu = killchu
-        
+        mapParam.killchuship = killchuship
         
         mapParam.t_ali_goods = t_ali_goods
         mapParam.t_ali_ship = t_ali_ship

@@ -65,7 +65,7 @@ and open the template in the editor.
           <td>验收商品</td>
           <td>${yan_goods}</td>
           <td>${yanshougoodsnum}</td>
-          <td rowspan="12">${killchu+changeStallchu+cancle_order_giftfee + alichu+yan_goods + huan_ship+kong+tui_goods+cancle_allgoods+cancle_goods+fa_ship+cha_goods}</td>
+          <td rowspan="13">${killchuship+killchu+changeStallchu+cancle_order_giftfee + alichu+yan_goods + huan_ship+kong+tui_goods+cancle_allgoods+cancle_goods+fa_ship+cha_goods}</td>
         </tr>
 
         <tr>
@@ -130,12 +130,17 @@ and open the template in the editor.
       </tr>
 
       <tr>
-          <td>会员紧急中止发货，退货款运费</td>
+          <td>会员紧急中止发货，退货款</td>
 
           <td style="color: red">${killchu}</td>
           <td>&nbsp;</td>
       </tr>
+      <tr>
+          <td>会员紧急中止发货，退运费</td>
 
+          <td style="color: red">${killchuship}</td>
+          <td>&nbsp;</td>
+      </tr>
       </tbody>
 
     </table>
