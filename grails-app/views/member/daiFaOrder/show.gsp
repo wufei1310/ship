@@ -102,7 +102,7 @@
       <div class="page-header">
         <h3>
 <g:if test="${order.orderSN.startsWith('T')}">
-    寄回退货不成功商品
+    寄走退货不成功商品
 </g:if> <g:else>订单详细</g:else>(<small>订单号：</small>${order.orderSN})</h3>
       </div>
         <h4>1.商品信息</h4>

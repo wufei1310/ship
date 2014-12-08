@@ -461,7 +461,7 @@ class MemberDaiFaOrderController extends BaseController {
 
 
         def daiFaOrder = new DaiFaOrder(params)
-        daiFaOrder.senddesc = "帮我寄回退货不成功商品"
+        daiFaOrder.senddesc = "帮我寄走退货不成功商品"
         daiFaOrder.orderSN = "T"+kingsReturnOrder.daiFaOrder.orderSN;
         daiFaOrder.add_user = session.loginPOJO.user.id
         daiFaOrder.status = "allaccept"

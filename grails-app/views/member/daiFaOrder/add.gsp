@@ -67,6 +67,11 @@
                 <tr class="daiFaGoods">
                     <td>
                         <g:select class="input-small marketselect" value="${daiFaGoods.market}" name="market" from="${market}"/>
+
+
+
+
+
                         <select name="floor" class="input-small floorselect">
                             <option value="1楼" <g:if test="${daiFaGoods.floor == '1楼'}">selected</g:if>>1楼</option>
                             <option value="2楼" <g:if test="${daiFaGoods.floor == '2楼'}">selected</g:if>>2楼</option>
@@ -120,7 +125,27 @@
         </g:if><g:else>
             <tr class="daiFaGoods">
                 <td>
-                    <g:select class="input-small marketselect" name="market" from="${market}"/>
+
+
+                    <select name="market" class="input-small marketselect">
+                    <option value="大时代" >大时代</option>
+                    <option value="宝华" >宝华</option>
+                    <option value="女人街" >女人街</option>
+                    <option value="大西豪" >大西豪</option>
+                    <option value="西街" >西街</option>
+                    <option value="富丽" >富丽</option>
+                    <option value="金马" >金马</option>
+                    <option value="机筑巷" >机筑巷</option>
+                    <option value="国大" >国大</option>
+                    <option value="新潮都" >新潮都</option>
+                    <option value="柏美" >柏美</option>
+                    <option value="非凡" >非凡</option>
+                    <option value="佰润" >佰润</option>
+                    <option value="凡衣" >凡衣</option>
+
+                </select>
+
+
                     <select name="floor" class="input-small floorselect">
                         <option value="1楼">1楼</option>
                         <option value="2楼">2楼</option>
