@@ -243,7 +243,7 @@
                     <strong >${returnOrder.check_time.toString()[0..18]}</strong>
                    <br/>
                       M数据物流单号：
-                      <strong >${memberReturnOrder.wuliu_no}</strong>
+                      <strong >${memberReturnOrder.wuliu_sn}</strong>
                   </g:if>
                 </td>
               </tr>

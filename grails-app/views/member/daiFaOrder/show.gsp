@@ -139,7 +139,7 @@
                   <td rowspan="2">${daiFaGoods.stalls}</td>
                   <td rowspan="2">${daiFaGoods.goods_sn}</td>
                   <td>${daiFaGoods.spec}</td>
-                  <td>${daiFaGoods.num} ${daiFaGoods.status}</td>
+                  <td>${daiFaGoods.num}</td>
                   <td>${daiFaGoods.price}</td>
                   <td class="diff" style="color:red;"><g:if test="${daiFaGoods.status == '4'}">${daiFaGoods.diffFee}<g:set var="bukuanFlat" value="1"/><g:set var="totalDiff" value="${Double.valueOf(totalDiff) + daiFaGoods.diffFee*daiFaGoods.num}"/></g:if></td>
                   
