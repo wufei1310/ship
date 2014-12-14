@@ -214,7 +214,6 @@ class AdminDaiFaGoodsController extends BaseController {
             }
         }
         def marketList = []
-        println params
         if (session.loginPOJO.user.user_type == "admin") {
             if(params.market){
                 marketList.add(params.market)
@@ -308,6 +307,12 @@ class AdminDaiFaGoodsController extends BaseController {
                 def paramsMap = new HashMap()
                 it.properties.each { k, v ->
                     if (v) {
+                        if(k=="market"){
+                            paramsMap.put("market_en", PrintDic.market2en(v))
+                        }
+                        if(k=="floor"){
+                            paramsMap.put("floor_en", PrintDic.floor2en(v))
+                        }
                         paramsMap.put(k, v.toString())
                     } else {
                         paramsMap.put(k, null)
@@ -324,6 +329,9 @@ class AdminDaiFaGoodsController extends BaseController {
                 paramsMap.put('payTime', it.daiFaOrder.payTime)
                 paramsMap.put('id', it.id)
                 paramsMap.put('orderSN', it.daiFaOrder.orderSN)
+                def sn = it.daiFaOrder.orderSN
+                def order_sn_print =  sn[0..6]+ " "+sn[6..8] + " " +sn.substring(9)
+                paramsMap.put("order_sn_print", order_sn_print)
                 if (it.daifa_user) {
                     paramsMap.put('daifa_user_name', it.daifa_user.email)
                 } else {
@@ -367,7 +375,7 @@ class AdminDaiFaGoodsController extends BaseController {
         def marketList = Market.createCriteria().list(searchMarket).market_name
 
         if (!params.max) {
-            params.max = 10
+            params.max = 1000
         } else {
             params.max = new Long(params.max)
         }

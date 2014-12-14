@@ -141,8 +141,10 @@
                     <option value="柏美" >柏美</option>
                     <option value="非凡" >非凡</option>
                     <option value="佰润" >佰润</option>
-                    <option value="凡衣" >凡衣</option>
 
+                    <option value="益民" >益民</option>
+                    <option value="广州站" >广州站</option>
+                    <option value="凡衣" >凡衣</option>
                 </select>
 
 
