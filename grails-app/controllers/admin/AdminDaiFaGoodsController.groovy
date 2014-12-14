@@ -329,6 +329,8 @@ class AdminDaiFaGoodsController extends BaseController {
                 paramsMap.put('payTime', it.daiFaOrder.payTime)
                 paramsMap.put('id', it.id)
                 paramsMap.put('orderSN', it.daiFaOrder.orderSN)
+                paramsMap.put('senddesc',it.daiFaOrder.senddesc)
+                paramsMap.put('zzfw',it.daiFaOrder.regards)
                 def sn = it.daiFaOrder.orderSN
                 def order_sn_print =  sn[0..6]+ " "+sn[6..8] + " " +sn.substring(9)
                 paramsMap.put("order_sn_print", order_sn_print)
