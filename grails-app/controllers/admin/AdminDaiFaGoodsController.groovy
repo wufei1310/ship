@@ -377,10 +377,12 @@ class AdminDaiFaGoodsController extends BaseController {
         def marketList = Market.createCriteria().list(searchMarket).market_name
 
         if (!params.max) {
-            params.max = 1000
+            params.max = 10
         } else {
             params.max = new Long(params.max)
         }
+
+
         if (!params.offset) params.offset = 0
         if (!params.sort) params.sort = "dateCreated"
         if (!params.order) params.order = "desc"
@@ -1177,8 +1179,18 @@ class AdminDaiFaGoodsController extends BaseController {
         }
         def o = DaiFaGoods.createCriteria();
         def results = o.list(params, searchClosure)
-
         map.shouli = results[0]
+
+
+        def shouliresults = DaiFaGoods.findAllByDaifa_userAndStatus(session.loginPOJO.user,"2")
+
+        BigDecimal nahuoamount = 0;
+        shouliresults.each{
+                nahuoamount = nahuoamount + it.actual_price * it.num
+        }
+
+        map.nahuoamount = nahuoamount
+
 
         searchClosure = {
             rowCount()

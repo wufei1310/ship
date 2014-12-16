@@ -629,6 +629,7 @@ class MemberDaiFaOrderController extends BaseController {
 
 
 
+
         def line = "-"
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String nowDate = df.format(new Date())
@@ -642,7 +643,16 @@ class MemberDaiFaOrderController extends BaseController {
         if (!hasorder) {
             line = "="
         }
+        if(!line){
+            line = "-"
+        }
         daiFaOrder.orderSN = daiFaOrder.orderSN + line + goodsNum
+
+
+        if(daiFaOrder.goodsFee==0.01){
+            daiFaOrder.status = "allaccept"
+        }
+
 
         daiFaOrder.save(flush: true);
 
@@ -874,6 +884,17 @@ class MemberDaiFaOrderController extends BaseController {
             }
         }
 
+//        aOrder/listMobile - parameters:
+//        status: allaccept
+//        mobile: mobile
+//        String index out of range: 10. Stacktrace follows:
+//                java.lang.StringIndexOutOfBoundsException: String index out of range: 10
+//        at java.lang.String.substring(String.java:1934)
+//        at admin.AdminDaiFaOrderController$_listMobile_closure6.doCall(AdminDaiFaOrderController.groovy:261)
+//        at admin.AdminDaiFaOrderController.listMobile(AdminDaiFaOrderController.groovy:252)
+//        at grails.plugin.cache.web.filter.PageFragmentCachingFilter.doFilter(PageFragmentCachingFilter.java:195)
+//        at grails.plugin.cache.web.filter.AbstractFilter.doFilter(AbstractFilter.java:63)
+//        at java.lang.Thread.run(Thread.java:662)
 
 
         checkOrderFee(daiFaOrder)
@@ -886,7 +907,7 @@ class MemberDaiFaOrderController extends BaseController {
 
         def orderSN = daiFaOrder.orderSN;
 
-        orderSN = orderSN.substring(0, 13) + goodsNum
+        orderSN = orderSN.substring(0, 14) + goodsNum
 
         daiFaOrder.orderSN = orderSN;
         daiFaOrder.save();
