@@ -663,11 +663,11 @@ class AdminDaiFaGoodsController extends BaseController {
 //            flash.message = "提交补款成功"
 //            flash.messageClass = this.success
 
-            //暂时价格过高修改状态
-//            def order = goods.daiFaOrder
-//            def goodsStatusList = order.daiFaGoods.status
-//            def o_status = StringUtil.getOrderStatusByGoods(goodsStatusList)
-//            order.status = o_status
+            //暂时价格过高修改状态,进入手机的问题订单，提醒管理员操作
+            def order = goods.daiFaOrder
+            def goodsStatusList = order.daiFaGoods.status
+            def o_status = StringUtil.getOrderStatusByGoods(goodsStatusList)
+            order.status = o_status
 
             def goodsLog = new GoodsLog();
             goodsLog.daiFaGoods = goods
@@ -800,11 +800,11 @@ class AdminDaiFaGoodsController extends BaseController {
             params.id = goods.id
             //adminDaiFaGoodsService.doQuehuo(params, User.get(session.loginPOJO.user.id))
 
-            //暂时缺货修改状态
-//            def order = goods.daiFaOrder
-//            def goodsStatusList = order.daiFaGoods.status
-//            def o_status = StringUtil.getOrderStatusByGoods(goodsStatusList)
-//            order.status = o_status
+            //暂时缺货修改状态,进入手机的问题订单，提醒管理员操作
+            def order = goods.daiFaOrder
+            def goodsStatusList = order.daiFaGoods.status
+            def o_status = StringUtil.getOrderStatusByGoods(goodsStatusList)
+            order.status = o_status
 
             def goodsLog = new GoodsLog();
             goodsLog.daiFaGoods = goods
