@@ -75,37 +75,37 @@ class PrintDic {
 
     public static String floor2en(String floor){
         if(floor=="1楼"){
-            return "1L"
+            return "1F"
         }
         if(floor=="2楼"){
-            return "2L"
+            return "2F"
         }
         if(floor=="3楼"){
-            return "3L"
+            return "3F"
         }
         if(floor=="4楼"){
-            return "4L"
+            return "4F"
         }
         if(floor=="5楼"){
-            return "5L"
+            return "5F"
         }
         if(floor=="6楼"){
-            return "6L"
+            return "6F"
         }
         if(floor=="7楼"){
-            return "7L"
+            return "7F"
         }
         if(floor=="8楼"){
-            return "8L"
+            return "8F"
         }
         if(floor=="9楼"){
-            return "9L"
+            return "9F"
         }
         if(floor=="10楼"){
-            return "10L"
+            return "10F"
         }
         if(floor=="11楼"){
-            return "11L"
+            return "11F"
         }
     }
 
