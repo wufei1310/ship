@@ -654,9 +654,9 @@ class AdminDaiFaGoodsController extends BaseController {
 
 
             params.id = goods.id
-            goods = adminDaiFaGoodsService.doBukuan(params, User.get(session.loginPOJO.user.id))
-            flash.message = "提交补款成功"
-            flash.messageClass = this.success
+//            goods = adminDaiFaGoodsService.doBukuan(params, User.get(session.loginPOJO.user.id))
+//            flash.message = "提交补款成功"
+//            flash.messageClass = this.success
 
             //暂时价格过高修改状态
 //            def order = goods.daiFaOrder
@@ -776,13 +776,15 @@ class AdminDaiFaGoodsController extends BaseController {
         if (!goods || goods.daifa_user.id != session.loginPOJO.user.id) {
             flash.message = "操作出错";
             flash.messageClass = this.error
-        } else if(goods.daiFaOrder.payTime>time4) {
-            goods.tip = nowDate+"暂缺货，明天再去档口拿货"
-
-            goods.status = "0"
-            flash.message = "操作成功";
-            flash.messageClass = this.success
-        }else {
+        }
+//        else if(goods.daiFaOrder.payTime>time4) {
+//            goods.tip = nowDate+"暂缺货，明天再去档口拿货"
+//
+//            goods.status = "0"
+//            flash.message = "操作成功";
+//            flash.messageClass = this.success
+//        }
+        else {
             goods.status = "8"
             goods.shuoming = params.shuoming
             //goods.actual_price = new BigDecimal(params.actual_price)
@@ -791,7 +793,7 @@ class AdminDaiFaGoodsController extends BaseController {
             flash.messageClass = this.success
             goods.save();
             params.id = goods.id
-            adminDaiFaGoodsService.doQuehuo(params, User.get(session.loginPOJO.user.id))
+            //adminDaiFaGoodsService.doQuehuo(params, User.get(session.loginPOJO.user.id))
 
             //暂时缺货修改状态
 //            def order = goods.daiFaOrder
