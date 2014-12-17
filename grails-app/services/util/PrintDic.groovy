@@ -104,7 +104,7 @@ class PrintDic {
         if(floor=="10楼"){
             return "10F"
         }
-        if(floor=="11楼"){
+        if(floor=="11楼"){  
             return "11F"
         }
     }
