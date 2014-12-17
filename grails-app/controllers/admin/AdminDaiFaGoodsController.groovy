@@ -97,6 +97,7 @@ class AdminDaiFaGoodsController extends BaseController {
 
 
             goodsLog.each {
+                println it as JSON
                 if(it.addUser.user_type=="member"){
                     it.operuser = "会员";
                 }else{
