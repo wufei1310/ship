@@ -334,7 +334,7 @@ class MemberDaiFaService {
             diffGoods.each {
                 it.status = '1'
                 it.payTime = new Date()
-                it.daiFaGoods.status = '1' //已受理
+                it.daiFaGoods.status = '0' //已受理
 
                 if (it.reason == "changeStall") {
                     it.daiFaGoods.status = '0' //未受理；如果是自己更换档口自己补款的刚支付完成后重新受理

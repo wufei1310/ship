@@ -97,7 +97,12 @@ class AdminDaiFaGoodsController extends BaseController {
 
 
             goodsLog.each {
-                it.operuser = it.addUser.email;
+                if(it.addUser.user_type=="member"){
+                    it.operuser = "会员";
+                }else{
+                    it.operuser = it.addUser.email;
+                }
+
             }
 
 
