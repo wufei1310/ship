@@ -260,7 +260,6 @@ class AdminMobileController {
         if (!params.sort) params.sort = "actual_returnTime"
         if (!params.order) params.order = "desc"
 
-        println params
         def searchClosure = {
 
             if (params.returnFail == "1") {
@@ -862,6 +861,9 @@ class AdminMobileController {
         if (!params.order) params.order = "desc"
 
 
+
+
+
         def searchClosure = {
 
 
@@ -869,6 +871,9 @@ class AdminMobileController {
                 eq("status", "1")
             }
 
+            if(params.status=="new"){
+                eq("status", "new") //新登记的包裹　
+            }
 
             if (params.status == "noowner") {
 
@@ -886,8 +891,13 @@ class AdminMobileController {
 
         def o = ShipSN.createCriteria();
         def results = o.list(params, searchClosure)
-        def daifaList = adminUserService.selUser("daifa")
-        def map = [list: results, total: results.totalCount, daifaList: daifaList]
+        //def daifaList = adminUserService.selUser("daifa")
+
+
+
+
+
+        def map = [list: results, total: results.totalCount]
 
 
         if (params.mobile == "mobile") {
@@ -907,7 +917,6 @@ class AdminMobileController {
 
             mm.result = "success"
             mm.model = map
-
             render mm as JSON
         }
 
@@ -990,8 +999,8 @@ class AdminMobileController {
         def imgStr = '';
         params.imgStr.split("\\|").each {
             if (it != "") {
-                //def pic = util.RemoteFileUtil.remoteFileCopy(request, it)
-               // imgStr = imgStr + "|" + pic
+//                def pic = util.RemoteFileUtil.remoteFileCopy(request, it)
+//                imgStr = imgStr + "|" + pic
             }
         }
 
@@ -1027,14 +1036,18 @@ class AdminMobileController {
         shipSN.addEmail = session.loginPOJO.user.email
         //shipSN.num = params.num as int
         shipSN.wuliu_sn = params.wuliu_sn
-        shipSN.status = "1"
-        shipSN.needTui = "1" //无主包裹关联退货申请
+        shipSN.status = "new"   //新登记包裹　
+        shipSN.needTui = "1" //包裹关联退货申请
         shipSN.scanTime = new Date();
 
 
         def retunOrderList = ReturnOrder.findAllByWuliu_sn(params.wuliu_sn)
         retunOrderList.each {
-            shipSN.orderSN = shipSN.orderSN + "|" + it.orderSN
+            println it
+            if(!shipSN.orderSN?.contains(it.orderSN)){
+                shipSN.orderSN = shipSN.orderSN + "|" + it.orderSN
+            }
+
 
             it.isScan = '1'
         }
@@ -1042,7 +1055,7 @@ class AdminMobileController {
 
 
 
-        mm.message = "物流单号扫描成功，录入包裹入库"
+        mm.message = "物流单号扫描成功，新登记包裹入库。"
 
         //查询入库商品数量
 //        shipSN = ShipSN.findAllByStatus("1")
@@ -1281,7 +1294,7 @@ class AdminMobileController {
         //统计新提交未扫描的退货申请数据
         def canExport = DaiFaOrder.executeQuery("select count(a.id) from DaiFaOrder a  where a.status <> 'kill' and a.isCanExport in ('1')")[0]
         def noowner = ShipSN.countByStatus("1")
-
+        def newpackcount = ShipSN.countByStatus("new")
         def noownerandhasreturn = ShipSN.countByNeedTui("2")
 
         def ddthhcount = ReturnGoods.executeQuery("select count(a.id) from ReturnGoods a  where a.orderfrom='kings' and  a.status='2'")[0]
@@ -1294,7 +1307,7 @@ class AdminMobileController {
 
         def xrkcount = ReturnGoods.executeQuery("select count(a.id) from ReturnGoods a  where a.orderfrom='kings' and a.status='1'")[0]
 
-        def map = [xrkcount     : xrkcount, needShip: needShip, noownerandhasreturn: noownerandhasreturn, waitpay: waitpay, weishouli: weishouli, shouli: shouli, error: error, diffship: diffship,
+        def map = [newpackcount:newpackcount,xrkcount     : xrkcount, needShip: needShip, noownerandhasreturn: noownerandhasreturn, waitpay: waitpay, weishouli: weishouli, shouli: shouli, error: error, diffship: diffship,
                    partaccept   : partaccept, allaccept: allaccept, shipped: shipped, problem: problem, yanshou: yanshou,
                    goods_shipped: goods_shipped, tuihuancount: tuihuancount, canExport: canExport, noowner: noowner,
                    ddthhcount   : ddthhcount, thIng: thIng, thFail: thFail]
@@ -1368,12 +1381,13 @@ class AdminMobileController {
         //退货处理中,代发已领货
         def thFail = ReturnGoods.countByStatusAndOrderfrom('6', 'kings')
         def noowner = ShipSN.countByStatus("1")
+        def newpackcount = ShipSN.countByStatus("new")
         def xrkcount = ReturnGoods.executeQuery("select count(a.id) from ReturnGoods a  where a.orderfrom='kings' and a.status='1'")[0]
         //新入库商品数量
         def needShip = ReturnOrder.executeQuery("select count(a.id) from ReturnOrder a  where a.orderfrom='kings' and a.needShip='1'")[0]
         //等待发货的退货申请
 
-        def map = [goods_shipped: goods_shipped, shipped: shipped, allaccept: allaccept, yanshou: yanshou, canExport: canExport, weishouli: weishouli, shouli: shouli,
+        def map = [newpackcount:newpackcount,goods_shipped: goods_shipped, shipped: shipped, allaccept: allaccept, yanshou: yanshou, canExport: canExport, weishouli: weishouli, shouli: shouli,
                    partaccept   : partaccept, ddthhcount: ddthhcount, thIng: thIng, thFail: thFail, noowner: noowner, xrkcount: xrkcount, needShip: needShip]
 
         if (params.mobile == "mobile") {

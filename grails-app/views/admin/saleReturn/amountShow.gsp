@@ -261,6 +261,12 @@
 
               <tr>
                 <td >
+                    <span style="color:red;font-size: 1.2em;">
+                    <g:if test="${memberReturnOrder.wuliu_sn==returnOrder.wuliu_sn}">物流单号相同</g:if>
+                    <g:else>物流单号不相同</g:else>
+                    </span>
+                    <br/>
+
                   退货退款：<strong id="goodsFee">${returnFee}</strong><br/>
 
                     手&nbsp;&nbsp;续&nbsp;&nbsp;费：${returnOrder.serviceFee} （手续费每件2元）

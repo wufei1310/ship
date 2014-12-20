@@ -9,6 +9,7 @@ import ship.ReturnOrder
 import ship.ShipSN
 import ship.User
 import ship.DiffOrder
+import ship.DiffGoods
 import ship.DaiFaGoods
 import ship.GoodsLog
 import ship.Market
@@ -54,8 +55,9 @@ class AdminDaiFaGoodsController extends BaseController {
 
 
 
-        def diffGoods = g.diffGoods
-        def goodsLog = GoodsLog.findAllByDaiFaGoods(g)
+        def diffGoods = DiffGoods.findAllByDaiFaGoods(g, [sort: "id", order: "desc"])
+
+        def goodsLog = GoodsLog.findAllByDaiFaGoods(g, [sort: "id", order: "desc"])
 
 
 
