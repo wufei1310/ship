@@ -877,7 +877,7 @@ class AdminMobileController {
 
             if (params.status == "noowner") {
 
-                eq("status", "1")
+                eq("status", "noowner")
             }
 
             if (params.status == "noownerandhasreturn") {
@@ -989,7 +989,7 @@ class AdminMobileController {
         }
 
         shipSN.wuliu_sn = params.wuliu_sn
-        shipSN.status = "1"
+        shipSN.status = "noowner"
         shipSN.orderSN = ""
         shipSN.needTui = "0" //无主包裹没有关联退货申请
         shipSN.addUser = session.loginPOJO.user.id
@@ -1293,7 +1293,7 @@ class AdminMobileController {
         def tuihuancount = ReturnOrder.executeQuery("select count(a.id) from ReturnOrder a  where a.orderfrom='kings' ")[0]
         //统计新提交未扫描的退货申请数据
         def canExport = DaiFaOrder.executeQuery("select count(a.id) from DaiFaOrder a  where a.status <> 'kill' and a.isCanExport in ('1')")[0]
-        def noowner = ShipSN.countByStatus("1")
+        def noowner = ShipSN.countByStatus("noowner")
         def newpackcount = ShipSN.countByStatus("new")
         def noownerandhasreturn = ShipSN.countByNeedTui("2")
 
@@ -1380,7 +1380,7 @@ class AdminMobileController {
         def thIng = ReturnGoods.executeQuery("select count(a.id) from ReturnGoods a  where a.orderfrom='kings' and a.status='5'")[0]
         //退货处理中,代发已领货
         def thFail = ReturnGoods.countByStatusAndOrderfrom('6', 'kings')
-        def noowner = ShipSN.countByStatus("1")
+        def noowner = ShipSN.countByStatus("noowner")
         def newpackcount = ShipSN.countByStatus("new")
         def xrkcount = ReturnGoods.executeQuery("select count(a.id) from ReturnGoods a  where a.orderfrom='kings' and a.status='1'")[0]
         //新入库商品数量

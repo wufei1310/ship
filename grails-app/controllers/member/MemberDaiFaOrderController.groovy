@@ -1112,7 +1112,8 @@ class MemberDaiFaOrderController extends BaseController {
 
 
 
-            if (shipSN.status == "1") { //如果有物流单号在无主包裹中，我们认为这相退货申请等同于扫描入库了，从无主包裹中消失
+            if (shipSN.status == "noowner" || shipSN.status == "new" ) { //如果有物流单号在无主包裹中，我们认为这相退货申请等同于扫描入库了，从无主包裹中消失
+                shipSN.status = "new"
                 shipSN.needTui = "1"
                 if(!shipSN.orderSN?.contains(daiFaOrder.orderSN)){
                     shipSN.orderSN = shipSN.orderSN + "|" + daiFaOrder.orderSN
