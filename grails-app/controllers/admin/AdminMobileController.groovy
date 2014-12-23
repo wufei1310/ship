@@ -1226,6 +1226,8 @@ class AdminMobileController {
                 return;
             }
 
+            println "========================params.wuliu_sn:"
+            println params.wuliu_sn
             proReturn(k, v, params.wuliu_sn)
         }
 
@@ -1463,7 +1465,7 @@ class AdminMobileController {
 
         def arr = []
         println "params.contphone:"
-        println params.contphone
+        println params
         
         if(params.contphone instanceof String){
            arr.add(params.contphone) 
@@ -1491,16 +1493,20 @@ class AdminMobileController {
 
             }
             def contphone=""
-            def name=""
+            def reperson=""
             def address=""
             contectPhone.each{k,v->
-                contphone = contphone + "!" + v.contphone;
-                name = name + "!" + v.reperson;
-                address = address + "!" + v.address;
+                contphone = v.contphone + "!" + contphone;
+                reperson = v.reperson  + "!" + reperson;
+                address = v.address + "!" + address;
             }
 
-
-            def map = [contphone:contphone,name:name,address:address]
+            def dfoder = new DaiFaOrder();
+            dfoder.contphone=contphone
+            dfoder.reperson =reperson
+            dfoder.address = address
+            dfoder.wuliu_no = params.wuliu_sn
+            def map = [daifaOrder:dfoder]
             mm.result = "success"
             mm.message = "获取订单收货人信息成功"
             mm.model = map
@@ -1555,12 +1561,14 @@ class AdminMobileController {
             searchClosure = {
 
                 daiFaOrder {
-
+                    println "-----"
+                    println params.contphone
+                    println params.reperson
                     if (params.contphone) {
-                        eq('contphone', params.contphone)
+                        inList('contphone', params.contphone)
                     }
                     if (params.reperson) {
-                        eq('reperson', params.reperson)
+                        inList('reperson', params.reperson)
                     }
 
 
