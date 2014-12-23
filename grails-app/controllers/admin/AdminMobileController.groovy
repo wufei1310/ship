@@ -1463,11 +1463,31 @@ class AdminMobileController {
 
         def mm = new MobileMessage()
 
-        def daifaOrder = DaiFaOrder.findAllByContphoneAndStatus(params.contphone, "shipped")
+        def daifaOrder = DaiFaOrder.findAllByContphoneInListAndStatus(params.contphone, "shipped")
 
 
         if (daifaOrder && daifaOrder.size() > 0) {
-            def map = [daifaOrder: daifaOrder[0]]
+
+
+
+            def contectPhone = [:]
+            daifaOrder.each{
+                if(!contectPhone.containsKey((it.contphone))){
+                    contectPhone.put(it.contphone,it)
+                }
+
+            }
+            def contphone=""
+            def name=""
+            def address=""
+            contectPhone.each{k,v->
+                contphone = contphone + "!" + v.contphone;
+                name = name + "!" + v.reperson;
+                address = address + "!" + v.address;
+            }
+
+
+            def map = []
             mm.result = "success"
             mm.message = "获取订单收货人信息成功"
             mm.model = map
@@ -1502,13 +1522,18 @@ class AdminMobileController {
 
         def startDate = Date.parse("yyyy-MM-dd HH:mm:ss", findDate + " 00:00:00")
 
+
+        println "=============="
+        println params.orderSN
+
         def searchClosure;
         if (params.orderSN) {
             searchClosure = {
 
                 daiFaOrder {
 
-                    eq('orderSN', params.orderSN)
+                    //eq('orderSN', params.orderSN)
+                    inList('orderSN',params.orderSN)
 
                 }
 
