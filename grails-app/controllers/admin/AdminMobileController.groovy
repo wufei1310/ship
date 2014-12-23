@@ -1461,9 +1461,22 @@ class AdminMobileController {
 
     def checkPhone() {
 
+        def arr = []
+        println "params.contphone:"
+        println params.contphone
+        
+        if(params.contphone instanceof String){
+           arr.add(params.contphone) 
+        }else{
+           arr = params.contphone 
+        }
+        
+        
+        
+        println arr
         def mm = new MobileMessage()
 
-        def daifaOrder = DaiFaOrder.findAllByContphoneInListAndStatus(params.contphone, "shipped")
+        def daifaOrder = DaiFaOrder.findAllByContphoneInListAndStatus(arr, "shipped")
 
 
         if (daifaOrder && daifaOrder.size() > 0) {
@@ -1487,7 +1500,7 @@ class AdminMobileController {
             }
 
 
-            def map = []
+            def map = [contphone:contphone,name:name,address:address]
             mm.result = "success"
             mm.message = "获取订单收货人信息成功"
             mm.model = map
