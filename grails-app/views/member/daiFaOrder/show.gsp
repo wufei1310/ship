@@ -284,7 +284,7 @@
                 
                 <tr class="${c}">
                   <td colspan="6">
-                    
+              ${daiFaGoods.status}
                     <g:if test="${daiFaGoods.status == '4'}"><font color="red">等待补款</font> 该商品现在市场单价高于您当时支付价，请点击列表下方蓝色补款按钮补足相应差额，我们继续为您拿货发货。或者点击右方按钮取消该商品。</g:if>
                       <g:elseif test="${daiFaGoods.status == '5'}"><font color="red">缺货</font> ${daiFaGoods.shuoming} </g:elseif>
                       <g:elseif test="${daiFaGoods.status == '6'}"><font color="red">已取消</font> 商品已取消</g:elseif>
@@ -308,7 +308,7 @@
           </table>
           <g:if test="${bukuanFlat == '1'}">
            选择支付方式： <input type="radio" id="yuePay" name="pay_type" value="0" onclick="$('#safepassSpan').show();$('#zfbSpan').hide()" checked/>余额支付 &nbsp;&nbsp;
-                                <input type="radio" id="zfbPay" name="pay_type" value="1" onclick="$('#safepassSpan').hide();$('#zfbSpan').show()" />支付宝支付 
+                                %{--<input type="radio" id="zfbPay" name="pay_type" value="1" onclick="$('#safepassSpan').hide();$('#zfbSpan').show()" />支付宝支付 --}%
                                 <br/>
                                 <br/>
                                <div id="safepassSpan" >支&nbsp;&nbsp;付&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;码：<input  name="safepass" id="safepass_text" type="password" >
@@ -330,7 +330,7 @@
               <br/>
 
            选择支付方式： <input type="radio" id="yuePay" name="pay_type" value="0" onclick="$('#safepassSpan').show();$('#zfbSpan').hide()" checked/>余额支付 &nbsp;&nbsp;
-                                <input type="radio" id="zfbPay" name="pay_type" value="1" onclick="$('#safepassSpan').hide();$('#zfbSpan').show()" />支付宝支付 
+                                <input type="radio" id="zfbPay" name="pay_type" value="1" onclick="$('#safepassSpan').hide();$('#zfbSpan').show()" />支付宝支付
                                 <br/>
                                 <br/>
                                <div id="safepassSpan" >支&nbsp;&nbsp;付&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;码：<input  name="safepass" id="safepass_text" type="password" >

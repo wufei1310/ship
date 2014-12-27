@@ -372,7 +372,7 @@
 <script>
 
     function beforeKill(orderId){
-        if(confirm("确认强制停止订单吗？我们将退回您的货款及物流费，但物流公司会收取3.5元单据费，且您已缴纳的1元/件代发费将不会退回!")){
+        if(confirm("确认紧急取消订单吗？紧急取消订单，系统将扣除此订单3.5元服务费！")){
 
             $.ajax({
                 url: '${baseUrl}/memberDaiFaOrder/killOrder',

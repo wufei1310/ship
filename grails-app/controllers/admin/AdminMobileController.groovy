@@ -461,24 +461,7 @@ class AdminMobileController {
     }
 
 
-    def countTuiFail(){
-        def list=[]
-        for(int i=1;i<32;i++){
-            def map = [:]
-            def c = ReturnGoods.countByShelfAndStatusAndOrderfrom(i,"6","kings")
-            map.put("shelf",i)
-            map.put("count",c)
-            list.add(map)
-        }
-        def mm = new MobileMessage()
 
-        mm.message = "物流获取退货商品列表成功"
-
-
-        mm.result = "success"
-        mm.model = [list:list]
-        render mm as JSON
-    }
 
 
 
@@ -847,6 +830,49 @@ class AdminMobileController {
 
     }
 
+
+
+    def countTuiFail(){
+        def list=[]
+        for(int i=1;i<32;i++){
+            def map = [:]
+            def c = ReturnGoods.countByShelfAndStatusAndOrderfrom(i,"6","kings")
+            map.put("shelf",i)
+            map.put("count",c)
+            list.add(map)
+        }
+        def mm = new MobileMessage()
+
+        mm.message = "物流获取退货商品列表成功"
+
+
+        mm.result = "success"
+        mm.model = [list:list]
+        render mm as JSON
+    }
+
+
+
+    def countNoOwner(){
+        def list=[]
+        for(int i=1;i<32;i++){
+            def map = [:]
+            def c = ShipSN.countByShelfAndStatus(i,"noowner")
+            map.put("shelf",i)
+            map.put("count",c)
+            list.add(map)
+        }
+        def mm = new MobileMessage()
+
+        mm.message = "物流获取退货商品列表成功"
+
+
+        mm.result = "success"
+        mm.model = [list:list]
+        render mm as JSON
+    }
+
+
     //物流单号列表查询
     def shipList() {
 
@@ -879,7 +905,9 @@ class AdminMobileController {
 
                 eq("status", "noowner")
             }
-
+            if(params.shelf){
+                eq("shelf", params.shelf)
+            }
             if (params.status == "noownerandhasreturn") {
                 eq("needTui", "2")
             }
@@ -1010,6 +1038,14 @@ class AdminMobileController {
         retunOrderList.each {
             shipSN.orderSN = shipSN.orderSN + "|" + it.orderSN
         }
+
+
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        int day = cal.get(java.util.Calendar.DAY_OF_MONTH) ;
+        shipSN.shelf = day;
+
         shipSN.save();
 
         def mm = new MobileMessage()
@@ -1051,6 +1087,17 @@ class AdminMobileController {
 
             it.isScan = '1'
         }
+
+
+
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+
+        int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
+
+        shipSN.shelf = day;
+
         shipSN.save();
 
 

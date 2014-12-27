@@ -998,12 +998,15 @@ class AdminDaiFaGoodsController extends BaseController {
     def noQuehuo() {
         def o = DaiFaGoods.createCriteria();
         def goods = o.get { eq("status", "8") eq("id", new Long(params.id)) }
-
-
-        if (!goods || session.loginPOJO.user.role != 'admin') {
+        println "============"
+        println goods
+         println  session.loginPOJO.user.role
+        if (!goods ) {
+            println "============2"
             flash.message = "操作出错";
             flash.messageClass = this.error
         } else {
+            println "============3"
             goods.status = "0"
             goods.daifa_user = null
             goods.processtime = null

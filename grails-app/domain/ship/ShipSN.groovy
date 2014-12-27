@@ -23,6 +23,7 @@ class ShipSN {
         goods_sn (blank:true,nullable:true)
         scanTime(blank:true,nullable:true)
         imgStr(blank:true,nullable:true)
+        shelf(blank:true,nullable:true)
     }
 
     String wuliu_sn;
@@ -60,7 +61,7 @@ class ShipSN {
     String goods_sn
 
     String imgStr;
-
+    String shelf//货架
 
     Date dateCreated
     Date lastUpdated
