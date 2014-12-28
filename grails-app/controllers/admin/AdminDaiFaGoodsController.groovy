@@ -998,15 +998,10 @@ class AdminDaiFaGoodsController extends BaseController {
     def noQuehuo() {
         def o = DaiFaGoods.createCriteria();
         def goods = o.get { eq("status", "8") eq("id", new Long(params.id)) }
-        println "============"
-        println goods
-         println  session.loginPOJO.user.role
         if (!goods ) {
-            println "============2"
             flash.message = "操作出错";
             flash.messageClass = this.error
         } else {
-            println "============3"
             goods.status = "0"
             goods.daifa_user = null
             goods.processtime = null
@@ -1179,42 +1174,37 @@ class AdminDaiFaGoodsController extends BaseController {
         }
         map.marketList = m_result
 
-        def searchClosure = {
-            rowCount()
-            or {
-                eq("status", "2")
-                eq("status", "3")
-                eq("status", "8")
-            }
-
-            daifa_user {
-                eq('id', session.loginPOJO.user.id)
-            }
-        }
-        def o = DaiFaGoods.createCriteria();
-        def results = o.list(params, searchClosure)
-        map.shouli = results[0]
 
 
-        def shouliresults = DaiFaGoods.findAllByDaifa_userAndStatus(session.loginPOJO.user,"2")
+        def shouliresults = DaiFaGoods.findAllByDaifa_userAndStatusInList(session.loginPOJO.user,["2","7"])
 
         BigDecimal nahuoamount = 0;
+        BigDecimal allnahuoamount = 0;
+        def shouli = 0;
+        def allshouli = 0;
         shouliresults.each{
+            if(it.status=="2"){
                 nahuoamount = nahuoamount + it.actual_price * it.num
+                shouli = shouli + it.num
+            }
+            allnahuoamount = allnahuoamount + it.actual_price * it.num
+            allshouli = allshouli + it.num
         }
-
+        map.shouli = shouli
         map.nahuoamount = nahuoamount
 
+        map.allshouli = allshouli
+        map.allnahuoamount = allnahuoamount
 
-        searchClosure = {
+        def searchClosure = {
             rowCount()
             isNotNull('checktime')//已验收的商品
             daifa_user {
                 eq('id', session.loginPOJO.user.id)
             }
         }
-        o = DaiFaGoods.createCriteria();
-        results = o.list(params, searchClosure)
+        def o = DaiFaGoods.createCriteria();
+        def results = o.list(params, searchClosure)
         map.yanshou = results[0]
 
 
@@ -1648,6 +1638,62 @@ class AdminDaiFaGoodsController extends BaseController {
         mm.message = "确认提现成功"
         mm.result = "success"
         render mm as JSON
+    }
+
+
+    def clearReturnGoods(){
+        if (!params.max) {
+            params.max = 10
+        } else {
+            params.max = new Long(params.max)
+        }
+        if (!params.offset) params.offset = 0
+        if (!params.sort) params.sort = "shouliTime"
+        if (!params.order) params.order = "desc"
+
+        def searchClosure = {
+            eq("status", '10')
+
+        }
+
+        def o = ReturnGoods.createCriteria();
+        def results = o.list(params, searchClosure)
+
+        def map = [list: results,total:results.totalCount]
+        render(view: "/admin/daiFaGoods/returngoodslist", model: map)
+    }
+
+    def clearReturnGoodsAndNoOwnerPack(){
+//        SimpleDateFormat daydf=new SimpleDateFormat("dd");
+//        Long day = sdf.format(lastDate.getTime()) as Long
+//
+//        println
+
+
+
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        Calendar lastDate = Calendar.getInstance();
+//        lastDate.set(Calendar.DATE,29);//设为当前月的1 号
+//        lastDate.set(Calendar.MONTH,2)
+        lastDate.add(Calendar.MONTH,-1);//减一个月，变为下月的1 号
+        def str=sdf.format(lastDate.getTime());
+
+        Date lastMonthDay = Date.parse("yyyy-MM-dd HH:mm:ss",str+" 23:59:59")
+
+        def returnGoodsList = ReturnGoods.findAllByStatusAndActual_returnTimeLessThan("6",lastMonthDay)
+        returnGoodsList.each {
+            it.status = "10"
+            it.save();
+        }
+//
+        def shipSNList = ShipSN.findAllByStatusAndScanTimeLessThan("noowner",lastMonthDay)
+        shipSNList.each {
+            it.status = "giveup"
+            it.save();
+        }
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        render "清理 " + df.format(lastMonthDay) + "之前的无主包裹和退货不成的数据成功 "
     }
 
 }

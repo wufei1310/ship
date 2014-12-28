@@ -1027,8 +1027,8 @@ class AdminMobileController {
         def imgStr = '';
         params.imgStr.split("\\|").each {
             if (it != "") {
-//                def pic = util.RemoteFileUtil.remoteFileCopy(request, it)
-//                imgStr = imgStr + "|" + pic
+                def pic = util.RemoteFileUtil.remoteFileCopy(request, it)
+                imgStr = imgStr + "|" + pic
             }
         }
 

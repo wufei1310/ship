@@ -262,7 +262,7 @@
               <tr>
                 <td >
                     <span style="color:red;font-size: 1.2em;">
-                    <g:if test="${memberReturnOrder.wuliu_sn==returnOrder.wuliu_sn}">物流单号相同</g:if>
+                    <g:if test="${memberReturnOrder?.wuliu_sn==returnOrder?.wuliu_sn}">物流单号相同</g:if>
                     <g:else>物流单号不相同</g:else>
                     </span>
                     <br/>

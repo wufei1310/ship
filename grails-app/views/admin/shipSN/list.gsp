@@ -21,8 +21,8 @@
 
           <g:form class="form-inline" action="list" >
 
-              %{--状态：--}%
-              %{--<g:select class="input-medium" value="${params.status}" name="status" optionKey="status" optionValue="queryShow" from="${[[status:"",queryShow:"全部"],[status:"0",queryShow:"物流单不存在"],[status:"1",queryShow:"单号，数据无误，已入库"],[status:"2",queryShow:"单号匹配，商品数量不符"],[status:"4",queryShow:"已分配代发人员"],[status:"5",queryShow:"已由代发人员退货完成"],[status:"6",queryShow:"与代发人员已结账"]]}" />--}%
+              状态：
+              <g:select class="input-medium" value="${params.status}" name="status" optionKey="status" optionValue="queryShow" from="${[[status:"",queryShow:"全部"],[status:"new",queryShow:"新登记包裹"],[status:"noowner",queryShow:"无主包裹"],[status:"giveup",queryShow:"放弃不要了"]]}" />
               %{--是否关联：--}%
               %{--<g:select class="input-medium" value="${params.needTui}" name="needTui" optionKey="status" optionValue="queryShow" from="${[[status:"",queryShow:"全部"],[status:"0",queryShow:"未关联退货申请"],[status:"1",queryShow:"已关联退货申请，退货未结束"],[status:"2",queryShow:"退货结束，未关联退货申请"],[status:"3",queryShow:"退货结束，已关联退货申请，等待审核退款"],[status:"4",queryShow:"已退款给会员"]]}" />--}%
 
@@ -42,10 +42,10 @@
               <thead>
               <tr>
                   <th>物流单号</th>
-                  %{--<th>包裹状态</th>--}%
+                  <th>包裹状态</th>
                   %{--<th>关联申请情况</th>--}%
                   %{--<th>退款金额</th>--}%
-                  <th>订单号</th>
+                  %{--<th>订单号</th>--}%
                   <th>生成时间</th>
                   <th>录入人</th>
               </tr>
@@ -54,14 +54,14 @@
 
                     <tr>
                         <td>${shipSN.wuliu_sn}</td>
-                        %{--<td>--}%
-                            %{--<shipSN:shipSNStatus status="${shipSN.status}" />--}%
-%{--</td>                  --}%
+                        <td>     ${shipSN.status}
+                            <shipSN:shipSNStatus status="${shipSN.status}" />
+</td>
                         %{--<td>--}%
                         %{--<shipSN:needTui status="${shipSN.needTui}" />--}%
                     %{--</td>--}%
                         %{--<td>${shipSN.actual_return_fee}</td>--}%
-                        <td>${shipSN.orderSN}</td>
+                        %{--<td>${shipSN.orderSN}</td>--}%
                         <td>${shipSN.dateCreated.toString()[0..18]}</td>
                         <td>
                             ${shipSN.addUser}
