@@ -1572,6 +1572,7 @@ class AdminMobileController {
 
     def findGoodsFromPhone() {
 
+        def shelf ;
 
         if (!params.max) {
             params.max = 10
@@ -1589,8 +1590,6 @@ class AdminMobileController {
         def startDate = Date.parse("yyyy-MM-dd HH:mm:ss", findDate + " 00:00:00")
 
 
-        println "=============="
-        println params.orderSN
 
         def searchClosure;
         if (params.orderSN) {
@@ -1627,6 +1626,8 @@ class AdminMobileController {
             }
         } else {
             def shipsn = ShipSN.findByWuliu_sn(params.wuliu_sn);
+            shelf = shipsn.shelf ? shipsn.shelf:"";
+
             def ordersn = shipsn.orderSN?.split("\\|")
 
 
@@ -1651,7 +1652,7 @@ class AdminMobileController {
 
         def o = DaiFaGoods.createCriteria();
         def results = o.list(params, searchClosure)
-        def map = [list: results, total: results.totalCount]
+        def map = [list: results, total: results.totalCount,shelf:shelf]
 
         //封装分页传给手机端
         def pager = new Pager(max: params.max, "offset": params.offset, "totalPage": ((results.totalCount - 1) / params.max + 1) as int, total: results.totalCount)
