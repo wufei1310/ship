@@ -33,7 +33,7 @@ class ClearJob {
         def goodsSN = ""
         returnGoodsList.each {
             it.status = "10"
-            goodsSN = goodsSN+ "<br/>" + it.goods_sn + " # " + it.market + " # " + it.floor + " # " +it.stalls;
+            goodsSN = goodsSN+ "<br/>" + it.goods_sn + " # " + it.return_num + " # " + it.market + " # " + it.floor + " # " +it.stalls;
             it.save();
         }
         goodsSN = "退货不成商品：" +  goodsSN
