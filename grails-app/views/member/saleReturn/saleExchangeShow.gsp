@@ -33,7 +33,7 @@
 </g:if>
 
 <div class="page-header">
-    <h5 class=" alert alert-danger">退货不成的商品我们将为您免费保管十天，十天后将会收取10元每天的保管费，三十天后将默您已放弃该商品的所有权并清理出我们的仓库。</h5>
+    <h5 class=" alert alert-danger">退货不成的商品我们将为您免费保管十天，十天后将会收取10元每天的保管费，二十八天后将默您已放弃该商品的所有权并清理出我们的仓库。</h5>
 
     <h3>退货申请(<small>订单号：</small>${returnOrder.daiFaOrder.orderSN})
     <g:if test="${kingsReturnOrder && kingsReturnOrder.status == '2'}">

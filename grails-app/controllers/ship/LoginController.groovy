@@ -2,6 +2,8 @@ package ship
 
 import grails.converters.JSON
 
+import javax.servlet.ServletOutputStream
+
 class LoginController {
     def jcaptchaService
 
@@ -68,7 +70,38 @@ class LoginController {
 
 
 
+    def testData(){
 
+        def ujson =   User.last() as JSON
+
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        //下面那句是核心
+        response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1/*");
+        response.setHeader("Access-Control-Allow-Origin", "chrome-extension://dkdpelmhmoaandppkgjfllcdllkmojac");
+
+        response.setDateHeader("Expires", 0);
+        ServletOutputStream sos = response.getOutputStream();
+        try {
+            sos.write(ujson.toString().getBytes("GBK"));
+        } catch (Exception e) {
+            System.out.println(e)
+        } finally {
+            try {
+                sos.close();
+            } catch (Exception e) {
+            }
+        }
+
+//
+//        def ujson =   User.last() as JSON
+//        def jsonp = params.jsonpcallback
+//
+//        def str =  jsonp +"("+ ujson.toString()+ ")"
+//        println "返回jsonp========="
+//        println str
+//        render str
+    }
 
 
 }

@@ -67,7 +67,11 @@
 
             <g:each in="${list}" status="i" var="returnOrder">
                 <tr>
-                    <td>${returnOrder.orderSN}<g:if test="${returnOrder.flat == '1'}">(非平台订单)</g:if>
+                    <td>
+
+                    <g:checkMKWuliusn ordersn="${returnOrder.orderSN}"></g:checkMKWuliusn>
+
+                    <g:if test="${returnOrder.flat == '1'}">(非平台订单)</g:if>
                     </td>
                     <!--              <td>${returnOrder.wuliu_sn}</td>
               <td>${returnOrder.wuliu}</td>-->

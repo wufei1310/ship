@@ -15,7 +15,6 @@
       <div class="page-header">
         <h3>放弃的退货不成商品
 
-        <g:link controller="adminDaiFaGoods" action="clearReturnGoodsAndNoOwnerPack" target="_blank" class="btn btn-primary btn-large pull-right">清理30天前数据</g:link>
 
         </h3>
       </div>

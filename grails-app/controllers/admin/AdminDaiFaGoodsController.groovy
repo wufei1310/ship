@@ -85,7 +85,7 @@ class AdminDaiFaGoodsController extends BaseController {
             paramsMap.put("orderSN", g.daiFaOrder.orderSN)
 
             def sn = g.daiFaOrder.orderSN
-            def order_sn_print =  sn.substring(6)
+            def order_sn_print =  sn.substring(2)
             paramsMap.put("order_sn_print", order_sn_print)
 
             paramsMap.put("order_status", g.daiFaOrder.status)
@@ -341,7 +341,7 @@ class AdminDaiFaGoodsController extends BaseController {
                 paramsMap.put('zzfw',it.daiFaOrder.regards)
                 def sn = it.daiFaOrder.orderSN
 //                def order_sn_print =  sn[0..6]+ " "+sn[6..8] + " " +sn.substring(9)
-                def order_sn_print =  sn.substring(6)
+                def order_sn_print =  sn.substring(2)
                 paramsMap.put("order_sn_print", order_sn_print)
                 if (it.daifa_user) {
                     paramsMap.put('daifa_user_name', it.daifa_user.email)

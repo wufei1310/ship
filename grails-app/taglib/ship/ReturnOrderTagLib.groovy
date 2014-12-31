@@ -7,6 +7,17 @@ class ReturnOrderTagLib {
 //    String needShip;// 0：暂不需要 1：换货处理完成，等待发货 2 已发货给会员 3 处理完成，无发货商品
 
 
+    def checkMKWuliusn ={ attrs->
+        def memberReturnOrder  = ReturnOrder.findByOrderSNAndOrderfrom("M"+attrs.ordersn.substring(1),"member")
+           if(memberReturnOrder?.wuliu_sn == attrs.wuliu_sn){
+               out << attrs.ordersn
+           }else{
+               out << "<span style='color:red'>"+attrs.ordersn+"</span>"
+           }
+
+    }
+
+
     def memberReturnOrderTime = {attrs->
        def mordersn = attrs.orderSN.replace("K","M");
        def mReturnOrder = ReturnOrder.findByOrderSN(mordersn);
