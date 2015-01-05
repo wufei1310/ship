@@ -2,33 +2,41 @@ package ship
 
 class ReturnOrderTagLib {
 
-
 //    String needTui;//0：暂不需要 1：退货处理完成，等待退款 2 已退款给会员 3 处理完成，无退款商品
 //    String needShip;// 0：暂不需要 1：换货处理完成，等待发货 2 已发货给会员 3 处理完成，无发货商品
 
 
-    def checkMKWuliusn ={ attrs->
-        def memberReturnOrder  = ReturnOrder.findByOrderSNAndOrderfrom("M"+attrs.ordersn.substring(1),"member")
-           if(memberReturnOrder?.wuliu_sn == attrs.wuliu_sn){
-               out << attrs.ordersn
-           }else{
-               out << "<span style='color:red'>"+attrs.ordersn+"</span>"
-           }
+    def checkMKWuliusn = { attrs ->
+        def memberReturnOrder = ReturnOrder.findByOrderSNAndOrderfrom("M" + attrs.ordersn.substring(1), "member")
+
+        if(attrs.wuliu_sn&&memberReturnOrder){
+
+
+
+            if(memberReturnOrder.wuliu_sn != attrs.wuliu_sn){
+                out << "<span style='color:red'>" + attrs.ordersn + "</span>"
+            }else{
+                out << attrs.ordersn
+            }
+        }else{
+            out << attrs.ordersn
+        }
+
 
     }
 
 
-    def memberReturnOrderTime = {attrs->
-       def mordersn = attrs.orderSN.replace("K","M");
-       def mReturnOrder = ReturnOrder.findByOrderSN(mordersn);
-        if(mReturnOrder){
+    def memberReturnOrderTime = { attrs ->
+        def mordersn = attrs.orderSN.replace("K", "M");
+        def mReturnOrder = ReturnOrder.findByOrderSN(mordersn);
+        if (mReturnOrder) {
             out << mReturnOrder.dateCreated
         }
     }
 
 
-    def needTui = {attrs->
-        switch (attrs.status){
+    def needTui = { attrs ->
+        switch (attrs.status) {
             case "0": out << "退货处理中"
                 break;
             case "1": out << "退货处理完成，等待退款"
@@ -43,8 +51,8 @@ class ReturnOrderTagLib {
     }
 
 
-    def needShip = {attrs->
-        switch (attrs.status){
+    def needShip = { attrs ->
+        switch (attrs.status) {
             case "0": out << "换货处理中"
                 break;
             case "1": out << "换货处理完成，等待发货"
@@ -58,8 +66,8 @@ class ReturnOrderTagLib {
 
     }
 
-    def returnGoods = {attrs->
-        switch (attrs.status){
+    def returnGoods = { attrs ->
+        switch (attrs.status) {
             case "0": out << "收到退货申请"
                 break;
             case "1": out << "收到退回货物"
@@ -80,42 +88,42 @@ class ReturnOrderTagLib {
     }
 
     def returnOrder = { attrs ->
-        try{
-            if(session.loginPOJO.user.user_type == 'admin'){
-                switch (attrs.status){
+        try {
+            if (session.loginPOJO.user.user_type == 'admin') {
+                switch (attrs.status) {
                     case "0": out << "未支付"
                         break;
                     case "1": out << "已支付,等待处理"
                         break;
                     case "2": out << "退货处理结束"
                         break;
-                    }
+                }
             }
-            if(session.loginPOJO.user.user_type == 'member'){
-                switch (attrs.status){
+            if (session.loginPOJO.user.user_type == 'member') {
+                switch (attrs.status) {
                     case "0": out << "未支付"
                         break;
                     case "1": out << "正在处理中"
                         break;
                     case "2": out << "处理结束"
                         break;
-                    }
+                }
             }
-        }catch(Exception e){
-            switch (attrs.status){
-                    case "0": out << "未支付"
-                        break;
-                    case "1": out << "已支付,等待处理"
-                        break;
-                    case "2": out << "退货完成,已退款"
-                        break;
-                    case "4": out << "已退货,档口已回款"
-                        break;
-                    case "5": out << "换货完成,已发货"
-                        break;       
-                    }
+        } catch (Exception e) {
+            switch (attrs.status) {
+                case "0": out << "未支付"
+                    break;
+                case "1": out << "已支付,等待处理"
+                    break;
+                case "2": out << "退货完成,已退款"
+                    break;
+                case "4": out << "已退货,档口已回款"
+                    break;
+                case "5": out << "换货完成,已发货"
+                    break;
+            }
         }
-            
-		
+
+
     }
 }

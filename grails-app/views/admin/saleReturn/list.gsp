@@ -69,7 +69,7 @@
                 <tr>
                     <td>
 
-                    <g:checkMKWuliusn ordersn="${returnOrder.orderSN}"></g:checkMKWuliusn>
+                    <g:checkMKWuliusn ordersn="${returnOrder.orderSN}" wuliu_sn="${returnOrder.wuliu_sn}"></g:checkMKWuliusn>
 
                     <g:if test="${returnOrder.flat == '1'}">(非平台订单)</g:if>
                     </td>

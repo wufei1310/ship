@@ -1572,6 +1572,8 @@ class AdminMobileController {
 
     def findGoodsFromPhone() {
 
+        println params
+
         def shelf ;
 
         if (!params.max) {
@@ -1628,6 +1630,9 @@ class AdminMobileController {
             def shipsn = ShipSN.findByWuliu_sn(params.wuliu_sn);
             shelf = shipsn.shelf ? shipsn.shelf:"";
 
+            println "========="
+            println shipsn
+
             def ordersn = shipsn.orderSN?.split("\\|")
 
 
@@ -1638,7 +1643,7 @@ class AdminMobileController {
                     or {
                         ordersn.each {
                             if (it) {
-                                eq("orderSN", it.replace("M", ""))
+                                eq("orderSN", it.replace("K", ""))
                             }
                         }
                     }
