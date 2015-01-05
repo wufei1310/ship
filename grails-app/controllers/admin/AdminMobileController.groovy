@@ -1643,7 +1643,7 @@ class AdminMobileController {
                     or {
                         ordersn.each {
                             if (it) {
-                                eq("orderSN", it.replace("K", ""))
+                                eq("orderSN", it.replace("M", ""))
                             }
                         }
                     }
