@@ -1,9 +1,19 @@
 package member
+
+import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.support.PropertiesLoaderUtils
 import ship.User
 import ship.Remit
 import util.StringUtil
 import admin.BaseController
+
+import java.text.SimpleDateFormat
+
 class MemberRemitController extends BaseController {
+
+    def mailService
+    def properties = PropertiesLoaderUtils.loadProperties(new ClassPathResource("sysSetting.properties"))
+    def isPro = properties.getProperty("isPro");
 
     def index() { 
     
@@ -46,6 +56,24 @@ class MemberRemitController extends BaseController {
         remit.status = "0"
         remit.save()
         flash.message = "系统将启动对账流程，如果资料填写正确，您的代发帐户将会增加相应的金额"
+
+
+        Thread.start {
+            mailService.sendMail {
+                async true
+                from "service@findyi.com"
+                if(isPro=="true"){
+                    to "mail3298@gmail.com","wufei1310@126.com"
+                }else{
+                    to "wufei1310@126.com"
+                }
+
+                subject "金士代发有人充值了"
+                html remit.submit_user.email + "刚刚提交了线下充值" + remit.bank_amount
+
+            }
+        }
+
         redirect(action:"list")
     }
 }
