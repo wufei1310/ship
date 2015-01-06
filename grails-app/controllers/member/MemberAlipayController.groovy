@@ -2,6 +2,9 @@ package member
 
 import com.alipay.config.*
 import com.alipay.util.*
+import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.support.PropertiesLoaderUtils
+
 import java.util.HashMap
 import java.util.Map
 import ship.DaiFaOrder
@@ -22,6 +25,9 @@ import ship.User
 class MemberAlipayController {
 
     def memberAlipayService
+
+    def properties = PropertiesLoaderUtils.loadProperties(new ClassPathResource("sysSetting.properties"))
+    def shouxufee = properties.getProperty("AlipayConfig.shouxufee")
     
     def index() { }
     
@@ -103,6 +109,10 @@ class MemberAlipayController {
 //                println pushPOJO.content + "================================"
 //                pushPOJO.pushMsgList = results
 //                new Push().pushByStore(pushPOJO)
+
+
+
+                def shouxu = util.DecimalUtil.mul(new Double(params.total_fee), new Double(shouxufee))
                 
                 //插入资金流水表（商品）
                 def tranLog = new TranLog();
@@ -114,6 +124,17 @@ class MemberAlipayController {
                 tranLog.orderSN = daiFaOrder.orderSN
                 tranLog.order_user = daiFaOrder.add_user
                 tranLog.save()
+
+
+                def shouxuLog = new TranLog();
+                shouxuLog.shouru_type = "1"
+                shouxuLog.amount =  shouxu
+                shouxuLog.direction = "0"
+                shouxuLog.type = "29"
+                shouxuLog.orderSN = daiFaOrder.orderSN
+                shouxuLog.order_user = daiFaOrder.add_user
+                shouxuLog.flat = '2'
+                shouxuLog.save()
 
                 //插入资金流水表（运费）
                 def tranLogShip = new TranLog();
