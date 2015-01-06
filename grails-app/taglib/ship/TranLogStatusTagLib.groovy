@@ -62,6 +62,8 @@ class TranLogStatusTagLib {
                 break;
             case "27": out << "管理员直接对商品退货款"
                 break;
+            case "29": out << "支付宝手续费"
+                break;
         }
          //370612
     }

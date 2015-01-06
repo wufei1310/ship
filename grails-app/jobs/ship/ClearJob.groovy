@@ -58,7 +58,7 @@ class ClearJob {
                 async true
                 from "service@findyi.com"
                 if(isPro=="true"){
-                    to "findyi@icloud.com","mail3298@gmail.com","wufei1310@126.com"
+                    to "mail3298@gmail.com","wufei1310@126.com"
                 }else{
                     to "wufei1310@126.com"
                 }
