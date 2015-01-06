@@ -7,14 +7,12 @@ package member
 
 import admin.BaseController
 import ship.AlipayRemit
-import util.DecimalUtil
-
 /**
  *
  * @author DELL
  */
 class MemberAlipayRemitController extends BaseController {
-	def memberAlipayService;
+	
     
     def list() { 
         if (!params.max) params.max = 10  
@@ -48,27 +46,13 @@ class MemberAlipayRemitController extends BaseController {
     def doAdd(){
        def remitSN = "C"+(new Date().getTime()).toString();
        def total_fee = new BigDecimal(params.amount)
-       def shouxu_fee = new BigDecimal(params.shouxufee)
        if(total_fee>0){
-           redirect(controller:"memberAlipay",action: "reqPay", params: [total_fee:total_fee+shouxu_fee,payType:"4",orderSN:remitSN,body:session.loginPOJO.user.id])
+           redirect(controller:"memberAlipay",action: "reqPay", params: [total_fee:params.amount,payType:"4",orderSN:remitSN,body:session.loginPOJO.user.id])
        }else{
            render "充值出错"
        }
        
     }
-
-    def test(){
-        def shouxufee = memberAlipayService.shouxufee();
-
-        render shouxufee
-        render "<br/>"
-        def total_fee = new Double("101.2")
-        def ji = DecimalUtil.mul(total_fee,new Double(shouxufee))
-        render DecimalUtil.round(ji,1)
-    }
-
-
-
 
 }
 
