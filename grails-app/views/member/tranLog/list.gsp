@@ -14,7 +14,7 @@
 
     <div class="container body" id="page">
       <div class="page-header">
-        <h3>订单金额流水列表
+        <h3>订单金额流水列表<span style="font-size: 0.5em">(友情提醒：网站暂不支持提现服务，您的账户余额可用于支付货款等相关费用)</span>
         </h3>
       </div>
       <div class="well well-large">

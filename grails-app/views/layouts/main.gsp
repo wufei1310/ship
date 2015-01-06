@@ -391,8 +391,8 @@ margin-top: -120px; /* Vertically center images part 3: negative margin up the i
                   <ul class="dropdown-menu">
                     <li><a href="javascript:void(0);"> 余额：<span id="yueDivHtml"></span></a></li>
                       <li><g:link
-                              controller="memberRemit" action="toAdd">线下汇款充值</g:link></li>
-                    <li><a href="<%=request.getContextPath()%>/memberAlipayRemit/toAdd">支付宝充值</a></li>
+                              controller="memberRemit" action="toAdd">线下汇款充值<font style="font-size: 0.4em">（手续费:0%）</font></g:link></li>
+                    <li><a href="<%=request.getContextPath()%>/memberAlipayRemit/toAdd">支付宝充值<font style="font-size: 0.4em">（手续费:1.2%）</font></a></li>
 
 
 

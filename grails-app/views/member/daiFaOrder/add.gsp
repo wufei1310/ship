@@ -349,14 +349,16 @@
                 <br/>
                 订单总价：&nbsp;<strong id="totalFee">0</strong>
                 <input type="hidden" name="totalFee">
+                <br/>
+                手&nbsp; 续&nbsp; 费：&nbsp;<strong id="shouxufeeshow" style="color: red">0</strong>
                 <!--                <br/>
                                   账户余额：<strong style="color: red;">0</strong>(余额不足，去充值)-->
                 <br/>
                 <br/>
-                选择支付方式： <input type="radio" id="zfbPay" name="pay_type" value="1" onclick="$('#safepassSpan').hide()"
-                               checked/>支付宝支付
+                选择支付方式： <input type="radio" id="zfbPay" name="pay_type" value="1" onclick="$('#safepassSpan').hide();fee()"
+                               checked/>支付宝支付<font style="font-size: 0.5em;">(手续费1.2%)</font>
                 <input type="radio" id="yuePay" name="pay_type" value="0"
-                       onclick="$('#safepassSpan').show()"/>余额支付 &nbsp;&nbsp;
+                       onclick="$('#safepassSpan').show();fee();"/>余额支付  <font style="font-size: 0.5em;">(手续费0%)</font>
                 <input style="display: none;" type="radio" id="saveOrder" name="pay_type" value="2"/>
                 <br/>
                 <br/>
@@ -415,6 +417,15 @@
 
 
 <script>
+
+    function accMul(arg1,arg2)
+    {
+        var m=0,s1=arg1.toString(),s2=arg2.toString();
+        try{m+=s1.split(".")[1].length}catch(e){}
+        try{m+=s2.split(".")[1].length}catch(e){}
+        return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m);
+    }
+    var shouxufee = '<%=properties.getProperty("AlipayConfig.shouxufee")%>'
 
 
     var isPro = '<%=properties.getProperty("isPro")%>'
@@ -673,6 +684,18 @@
         totalFee = parseFloat(goodsFee) + parseFloat(serviceFee) + parseFloat(shipFee) + parseFloat(regardsFee);
         $("#totalFee").html(totalFee.toFixed(2));
         $("#totalFee").next().val(totalFee.toFixed(2))
+
+
+
+        if($("#zfbPay").attr("checked")=="checked"){
+            var v =  accMul(totalFee,shouxufee).toFixed(2)
+            $("#shouxufeeshow").html(v)
+        }else{
+            $("#shouxufeeshow").html("0")
+        }
+
+
+
     }
 
 
