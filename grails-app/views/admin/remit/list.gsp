@@ -70,6 +70,7 @@
               <th>汇入款单号</th>
               <th>汇入款金额</th>
               <th>汇入款时间</th>
+              <th>提交时间</th>
               <th>状态</th>
               <th>操作</th>
             </tr>
@@ -86,6 +87,7 @@
               <td>${remit.bank_order}</td>
               <td>${remit.bank_amount}</td>
               <td>${remit.remit_date.toString()[0..10]}</td>
+              <td>${remit.dateCreated.toString()[0..18]}</td>
               <td><g:if test="${remit.status == '0'}">
                       处理中
                   </g:if>
