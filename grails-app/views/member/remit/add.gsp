@@ -49,7 +49,9 @@
                     <select name="bank_name" id="bank_name" data-required-message="汇出款银行不能为空" data-required="true">
 
                         <option value="">请选择...</option>
+<option value="支付宝">支付宝</option>
 
+                        <option value="财富通">财富通</option>
                         <option value="浦发银行">浦发银行</option>
 
                         <option value="中国工商银行">中国工商银行</option>
