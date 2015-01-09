@@ -5,6 +5,7 @@ import com.alipay.util.*
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.support.PropertiesLoaderUtils
 
+import java.text.DecimalFormat
 import java.util.HashMap
 import java.util.Map
 import ship.DaiFaOrder
@@ -113,7 +114,7 @@ class MemberAlipayController {
 
 
                 def shouxu = util.DecimalUtil.mul(new Double(params.total_fee), new Double(shouxufee))
-                
+                if(shouxu<0.5)shouxu=0.5
                 //插入资金流水表（商品）
                 def tranLog = new TranLog();
                 tranLog.shouru_type = "1"
@@ -399,6 +400,11 @@ class MemberAlipayController {
             //订单名称
             //付款金额
             total_fee = daiFaOrder.totalFee;
+            def shouxu = util.DecimalUtil.mul(new Double(total_fee), new Double(shouxufee))
+            if(shouxu<0.5)shouxu=0.5
+            total_fee = util.DecimalUtil.add(new Double(total_fee), new Double(shouxu))
+            DecimalFormat df = new DecimalFormat("#.00");
+            total_fee = df.format(total_fee as double)
         }else if(payType == '1'){//支付差额订单
             def daiFaOrder = DaiFaOrder.findByOrderSN(orderSN)
             def diffGoodsList = DaiFaGoods.findAllByDaiFaOrderAndStatus(daiFaOrder, '4')

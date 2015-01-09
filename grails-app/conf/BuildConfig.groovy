@@ -69,6 +69,6 @@ grails.project.dependency.resolution = {
         compile ":excel-import:1.0.0"
         compile ":joda-time:1.4"
         compile ":random:0.2"
-        compile ":rest:0.8"
+        build ":rest:0.8"
     }
 }

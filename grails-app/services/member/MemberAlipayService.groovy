@@ -38,6 +38,9 @@ class MemberAlipayService {
 
 
         def shouxu = DecimalUtil.mul(new Double(params.total_fee), new Double(shouxufee))
+        if(shouxu<0.5){
+            shouxu = 0.5
+        }
         def chongzhi = DecimalUtil.sub(new Double(params.total_fee),new Double(shouxu))
         //插入资金流水表（会员充值（收入））
         def tranLog = new TranLog();

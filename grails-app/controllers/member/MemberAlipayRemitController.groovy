@@ -51,7 +51,11 @@ class MemberAlipayRemitController extends BaseController {
        def remitSN = "C"+(new Date().getTime()).toString();
        def total_fee = new Double(params.amount)
        def shouxu_fee = DecimalUtil.mul(total_fee,new Double(shouxufeepoint))
-       
+
+        if(shouxu_fee<0.5){
+            shouxu_fee = 0.5
+        }
+
        def payamount = new BigDecimal(total_fee) + new BigDecimal(shouxu_fee)
         DecimalFormat df = new DecimalFormat("#.00");
         println df.format(payamount)

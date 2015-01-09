@@ -80,9 +80,9 @@
 
 <div class="page-header">
     <h3>${session.loginPOJO.user.email}的代发订单（点击查看<g:link controller="memberTranLog" target="_blank"
-                                                         action="list">订单金额流水</g:link>）
+                                                         action="list">账户收支明细</g:link>）
     <!--          <a href="#taobaoModal" data-toggle="modal" class="btn btn-primary btn-large pull-right">同步淘宝订单</a>-->
-    <g:link controller="memberDaiFaOrder" action="add" class="btn btn-primary btn-large pull-right">创建新订单</g:link>
+    <g:link controller="memberDaiFaOrder" action="add" class="btn btn-primary btn-large pull-right">新建代发订单</g:link>
 
     </h3>
 </div>

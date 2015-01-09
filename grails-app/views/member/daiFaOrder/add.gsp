@@ -350,7 +350,7 @@
                 订单总价：&nbsp;<strong id="totalFee">0</strong>
                 <input type="hidden" name="totalFee">
                 <br/>
-                手&nbsp; 续&nbsp; 费：&nbsp;<strong id="shouxufeeshow" style="">0</strong>
+                手&nbsp; 续&nbsp; 费：&nbsp;<strong id="shouxufeeshow" style="">0</strong>元(手续费最低为0.5元)
                 <!--                <br/>
                                   账户余额：<strong style="color: red;">0</strong>(余额不足，去充值)-->
                 <br/>
@@ -689,6 +689,9 @@
 
         if($("#zfbPay").attr("checked")=="checked"){
             var v =  accMul(totalFee,shouxufee).toFixed(2)
+            if(v<0.5){
+                v=0.5
+            }
             $("#shouxufeeshow").html(v)
         }else{
             $("#shouxufeeshow").html("0")

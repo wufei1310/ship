@@ -31,9 +31,9 @@
           <label>充值金额:&nbsp;
               <input onchange="checkshouxufee(this)" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')"   name="amount" class="input-medium" type="text" placeholder="" data-error-message="充值金额不能为空" data-required="true">
               &nbsp;
-              手续费:<span id="shouxufeeshow" style="color: red">0</span>
+              手续费:<span id="shouxufeeshow" style="color: red">0</span>元(手续费最低为0.5元)
           </label>
-        <span>友情提醒：网站暂不支持提现服务，您的账户余额可用于支付货款等相关费用</span>
+        <span>友情提醒：网站暂不支持提现服务，您的账户余额可用于支付货款等相关费用。</span>
 
     </div>
       
@@ -73,6 +73,9 @@
     function checkshouxufee(o){
 
         var v =  accMul($(o).val(),shouxufee).toFixed(2)
+        if(v<0.5){
+            v=0.5
+        }
         $("#shouxufee").val(v)
         $("#shouxufeeshow").html(v)
     }
