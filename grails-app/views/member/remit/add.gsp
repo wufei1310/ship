@@ -45,7 +45,7 @@
                         <h4>2.在此填写如下汇款信息</h4>
 
                         <div class="span4">
-                            <label>汇出银行名称</label>
+                            <label>汇出银行名称</label> 
                             <select name="bank_name" id="bank_name" data-required-message="汇出款银行不能为空" data-required="true">
 
                                 <option value="">请选择...</option>
