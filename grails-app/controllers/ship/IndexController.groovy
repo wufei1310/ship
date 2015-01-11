@@ -47,6 +47,11 @@ def jcaptchaService
         render(view:"/gonggao")
     }
     
+    
+    def alipaydoc(){
+        render(view:"/alipaydoc")
+    }
+    
     def contractus(){
         render(view:"/contractus")
     }

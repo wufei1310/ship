@@ -60,7 +60,7 @@ class MemberAlipayRemitController extends BaseController {
         DecimalFormat df = new DecimalFormat("#.00");
         println df.format(payamount)
        if(payamount>0){
-           redirect(controller:"memberAlipay",action: "reqPay", params: [total_fee:df.format(payamount),payType:"4",orderSN:remitSN,body:session.loginPOJO.user.id])
+           redirect(controller:"memberAlipay",action: "reqPay", params: [shouxu_fee:shouxu_fee, total_fee:df.format(payamount),payType:"4",orderSN:remitSN,body:session.loginPOJO.user.id])
        }else{
            render "充值出错"
        }

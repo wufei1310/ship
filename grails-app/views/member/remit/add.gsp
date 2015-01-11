@@ -15,7 +15,7 @@
             </g:if>
 
             <div class="page-header">
-                <h3>汇款充值</h3>
+                <h3>汇款充值<g:link controller="index" action="alipaydoc" target="_blank"><font style="font-size: 0.4em;color: red">点击这里查看如何使用支付宝充值</font></g:link></h3>
             </div>
 
             <g:form name="updateUserInfoForm" data-validate="parsley" url="[controller: 'memberRemit', action: 'doAdd']"

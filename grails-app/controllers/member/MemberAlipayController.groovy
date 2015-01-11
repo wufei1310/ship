@@ -112,9 +112,13 @@ class MemberAlipayController {
 //                new Push().pushByStore(pushPOJO)
 
 
+                def shouxu ;
+                if(params.extra_common_param){
+                    shouxu = new BigDecimal(params.extra_common_param)
+                }else{
+                    shouxu = 0;
+                }
 
-                def shouxu = util.DecimalUtil.mul(new Double(params.total_fee), new Double(shouxufee))
-                if(shouxu<0.5)shouxu=0.5
                 //插入资金流水表（商品）
                 def tranLog = new TranLog();
                 tranLog.shouru_type = "1"
@@ -338,7 +342,7 @@ class MemberAlipayController {
             }
                 
             }else if(payType == '4'){
-                print '============================================4==================================='
+                print '===============================================================================充值成功：'+orderSN
                 memberAlipayService.chongzhi(params,orderSN)
             }
             
@@ -387,6 +391,8 @@ class MemberAlipayController {
         String total_fee = ""
         def orderSN = params.orderSN;
         def payType = params.payType;
+
+        def extra_common_param = params.shouxu_fee
         
         //订单描述
 
@@ -402,6 +408,9 @@ class MemberAlipayController {
             total_fee = daiFaOrder.totalFee;
             def shouxu = util.DecimalUtil.mul(new Double(total_fee), new Double(shouxufee))
             if(shouxu<0.5)shouxu=0.5
+
+            extra_common_param = shouxu as String
+
             total_fee = util.DecimalUtil.add(new Double(total_fee), new Double(shouxu))
             DecimalFormat df = new DecimalFormat("#.00");
             total_fee = df.format(total_fee as double)
@@ -495,6 +504,8 @@ class MemberAlipayController {
         sParaTemp.put("show_url", show_url);
         sParaTemp.put("anti_phishing_key", anti_phishing_key);
         sParaTemp.put("exter_invoke_ip", exter_invoke_ip);
+        sParaTemp.put("extra_common_param", extra_common_param);
+
 		
         //建立请求
         String sHtmlText = AlipaySubmit.buildRequest(sParaTemp,"get","确认");
