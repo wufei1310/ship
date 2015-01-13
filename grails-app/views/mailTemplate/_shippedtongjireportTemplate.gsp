@@ -56,7 +56,7 @@ and open the template in the editor.
 
 
 
-    凡衣拨款：${shippedmap.t_shipped_actualhuanhuo_shipfee+shippedmap.t_shipped_actual_price+shippedmap.t_shipped_actual_shipfee-shippedmap.t_return_goodsFee}<br/>
+    凡衣拨款：${shippedmap.t_shipped_actualhuanhuo_shipfee+shippedmap.t_shipped_actual_price+shippedmap.t_shipped_actual_shipfee-shippedmap.t_return_goodsFee-shippedmap.zhijiegoodsfee-shippedmap.zhijieshipfee}<br/>
 
     <hr/>
 
@@ -79,7 +79,7 @@ and open the template in the editor.
           <td>验收商品</td>
           <td>${shippedmap.yan_goods}</td>
           <td>${shippedmap.yanshougoodsnum}</td>
-          <td rowspan="11">${huanmap.changeStallchu+shippedmap.cancle_order_giftfee + huanmap.cha_goods+huanmap.huan_ship+shippedmap.kong+tuimap.tui_goods+shippedmap.cancle_allgoods+shippedmap.cancle_goods+shippedmap.fa_ship+shippedmap.yan_goods}</td>
+          <td rowspan="12">${huanmap.changeStallchu+shippedmap.cancle_order_giftfee + huanmap.cha_goods+huanmap.huan_ship+shippedmap.kong+tuimap.tui_goods+shippedmap.cancle_allgoods+shippedmap.cancle_goods+shippedmap.fa_ship+shippedmap.yan_goods+shippedmap.zhijiegoodsfee+shippedmap.zhijieshipfee}</td>
         </tr>
 
         <tr>
@@ -129,6 +129,19 @@ and open the template in the editor.
       <tr>
           <td>换档口退货款</td>
           <td>${shippedmap.changeStallchu}</td>
+          <td></td>
+      </tr>
+
+
+      <tr>
+          <td>管理员直接退运费</td>
+          <td>${shippedmap.zhijieshipfee}</td>
+          <td></td>
+      </tr>
+
+      <tr>
+          <td>管理员直接退货款</td>
+          <td>${shippedmap.zhijiegoodsfee}</td>
           <td></td>
       </tr>
 

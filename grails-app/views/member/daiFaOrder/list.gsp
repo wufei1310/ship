@@ -223,6 +223,7 @@
 
                     <g:if test="${daiFaOrder.payTime}">
                         ${daiFaOrder.payTime.toString()[0..18]}
+                        
                     </g:if>
 
                 </td>
@@ -247,8 +248,15 @@
                     <g:if test="${daiFaOrder.status == 'shipped'}">
 
                         <g:if test="${daiFaOrder.type == '0'}">
-                        <g:link controller="memberDaiFaOrder" action="toSaleExchange" id="${daiFaOrder.id}"
+                            
+                            <g:if test="${new Date() - daiFaOrder.payTime<15}">
+                                <g:link controller="memberDaiFaOrder" action="toSaleExchange" id="${daiFaOrder.id}"
                                 params="${params}" class="btn btn-small">申请退货</g:link>
+                            
+                            </g:if>
+                            
+                            
+                        
                             </g:if>
 
                     </g:if>

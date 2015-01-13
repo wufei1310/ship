@@ -287,7 +287,7 @@
                                type="text"/>
                         <select name="" class="span1" onchange="selReturnType(this);
                         validGoods();">
-                            <option value="">选择</option>
+                            <!--<option value="">选择</option>-->
                             <option value="0">退货</option>
                             %{--<option value="1">换货</option>--}%
                         </select>

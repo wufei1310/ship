@@ -337,7 +337,8 @@ class AdminFinaceReportService {
         
         def killchu = new BigDecimal(0)// 会员紧急中止订单，退回货款
         def killchuship = new BigDecimal(0)// 会员紧急中止订单，退回运费
-
+        def zhijieshipfee = new BigDecimal(0)//
+        def zhijiegoodsfee = new BigDecimal(0)
         tranList.each{
             
             
@@ -361,6 +362,12 @@ class AdminFinaceReportService {
 
             }else if(it.type == '28'){//发货运费
                 killchuship = killchuship + it.amount
+
+            }else if(it.type == '26'){//发货运费
+                zhijieshipfee = zhijieshipfee + it.amount
+
+            }else if(it.type == '27'){//发货运费
+                zhijiegoodsfee = zhijiegoodsfee + it.amount
 
             }else if(it.type == '5'){//会员取消商品退款
                 cancle_goods = cancle_goods + it.amount
@@ -553,6 +560,9 @@ class AdminFinaceReportService {
         mapParam.killru = killru
         mapParam.killchu = killchu
         mapParam.killchuship = killchuship
+
+        mapParam.zhijieshipfee = zhijieshipfee
+        mapParam.zhijiegoodsfee = zhijiegoodsfee
         
         mapParam.t_ali_goods = t_ali_goods
         mapParam.t_ali_ship = t_ali_ship
