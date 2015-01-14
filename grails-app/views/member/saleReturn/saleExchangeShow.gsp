@@ -22,7 +22,23 @@
     }
 
 
+    function returnGoOn(){
+        if($("#safepass_text1").val()==""){
+            alert("支付密码不能为空")
+            return false;
+        }else{
+            $(".returnGoOn #safepass").val($("#safepass_text1").val())
+           $(".returnGoOn").submit()
+        }
+    }
+
 </script>
+
+<g:form controller="memberDaiFaOrder" action="returnGoOn" method="post" class="returnGoOn">
+    <input name="id" type="hidden" value="${kingsReturnOrder?.id}">
+    <input id="safepass" name="safepass" type="hidden">
+    <input name="mid" type="hidden" value="${returnOrder.id}">
+</g:form>
 
 
 <div class="container body">
@@ -41,6 +57,7 @@
                 action="giveup" class="btn btn-danger btn-large pull-right jihui">不要了</g:link>
 
 
+
     <g:if test="${new Date() - returnOrder.dateCreated<30}">
 
         <g:link style="display: none;" params="[mid:returnOrder.id]" id="${kingsReturnOrder.id}" controller="memberDaiFaOrder" action="addBack"
@@ -55,7 +72,6 @@
     </h3>
     </div>
 <g:form>
-
 <g:if test="${kingsReturnOrder && kingsReturnOrder.status == '2'}">
     <h4>收到包裹情况</h4>
 
@@ -133,6 +149,14 @@
             </g:each>
             </tbody>
         </table>
+        <br/>
+<g:if test="${kingsReturnOrder && kingsReturnOrder.status == '2'}">
+        <h4>退货不成商品降低5元继续退货,支付2元手续费</h4>
+        <div id="safepassSpan" >支付密码：<input  name="safepass" id="safepass_text1" type="password" >
+            <g:if test="${!session.loginPOJO.user.safepass}"><a target="_blank" style="color: red" href="<%=request.getContextPath()%>/memberUser/toSetSafepass">您还没有设置支付密码，点此设置</a></g:if>
+                <a  href="javascript:void(0)" onclick="returnGoOn()"  class=" btn btn-large btn-primary">提交继续退货</a>
+        </div>
+    </g:if>
 
     </div>
 

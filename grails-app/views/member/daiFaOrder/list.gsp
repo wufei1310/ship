@@ -249,11 +249,11 @@
 
                         <g:if test="${daiFaOrder.type == '0'}">
                             
-                            <g:if test="${new Date() - daiFaOrder.payTime<15}">
+                            %{--<g:if test="${new Date() - daiFaOrder.payTime<15}">--}%
                                 <g:link controller="memberDaiFaOrder" action="toSaleExchange" id="${daiFaOrder.id}"
                                 params="${params}" class="btn btn-small">申请退货</g:link>
                             
-                            </g:if>
+                            %{--</g:if>--}%
                             
                             
                         

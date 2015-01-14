@@ -297,6 +297,55 @@ class MemberDaiFaOrderController extends BaseController {
         redirect(controller: "memberDaiFaOrder",action: "saleReturnShow",id:params.mid  )
     }
 
+    //退货不成的商品继续退货
+    def returnGoOn(){
+
+
+        if (!session.loginPOJO.user.safepass) {
+            flash.message = "请先设置支付密码"
+            flash.messageClass = "error"
+            redirect(controller: "memberDaiFaOrder",action: "saleReturnShow",id:params.mid  )
+            return false
+        }
+        if (!params.safepass || params.safepass.encodeAsPassword() != session.loginPOJO.user.safepass) {
+            flash.message = "支付密码不正确"
+            flash.messageClass = "error"
+            redirect(controller: "memberDaiFaOrder",action: "saleReturnShow",id:params.mid  )
+            return false
+        }
+
+
+        def kingsReturnOrder = ReturnOrder.get(params.id)
+        kingsReturnOrder.returnGoods.each{
+            if(it.status=="6"){
+                it.status="1"
+            }
+            it.save()
+        }
+
+
+        kingsReturnOrder.status = "1"
+        kingsReturnOrder.save()
+
+        def memberReturnOrder = ReturnOrder.findByOrderSN(kingsReturnOrder.orderSN.replace("K","M"))
+
+
+
+        memberReturnOrder.returnGoods.each{
+            if(it.return_fee-5>0){
+                it.return_fee = it.return_fee -5
+            }else{
+                it.return_fee = 1
+            }
+            it.save()
+        }
+        memberReturnOrder.status = "1"
+        memberReturnOrder.save();
+
+
+        redirect(controller: "memberDaiFaOrder",action: "saleReturnShow",id:params.mid  )
+    }
+
 
 
 
@@ -1344,7 +1393,6 @@ class MemberDaiFaOrderController extends BaseController {
 
         def retrunOrder = ReturnOrder.findAllByWuliu_sn(params.wuliu_sn)
 
-        println retrunOrder.orderSN
         def searchClosure = {
 
             ne("status", "delete")

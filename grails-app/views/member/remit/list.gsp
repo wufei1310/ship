@@ -52,7 +52,7 @@
                       处理中
                   </g:if>
                   <g:if test="${remit.status == '1'}">
-                      审核通过
+                      已充值
                   </g:if>
                   <g:if test="${remit.status == '2'}">
                     审核不通过 <a title="${remit.reason}" href="javascript:void(0)">查看原因</a>

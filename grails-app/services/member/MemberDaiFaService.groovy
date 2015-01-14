@@ -583,6 +583,10 @@ class MemberDaiFaService {
             returnGoods.goods_sn = params.goods_sn
             returnGoods.spec = params.spec
             returnGoods.return_num = params.return_num as Long
+
+            println "====================="
+            println "params.price:"+params.price
+
             returnGoods.return_fee = new BigDecimal(params.price)
 
 

@@ -372,10 +372,10 @@
                                onafterpaste="if(value>${daiFaGoods.actual_price})this.value=${daiFaGoods.actual_price};if(isNaN(value) || value<=0)execCommand('undo')"
                                name="price_tip" class="input-small price" type="text"
                                value="${daiFaGoods.actual_price}"/>
-                        <span style="color: red;font-size: 0.5em;"><br/>(最低允许退货价格)</span>
+
                         <input style="display:none;" disabled="disabled" name="price" type="text"
                                value="${daiFaGoods.actual_price}">
-
+                        <span style="color: red;font-size: 0.5em;"><br/>(最低允许退货价格)</span>
                     </td>
                     %{--<td><input onkeyup="if(value>${daiFaGoods.num})this.value=${daiFaGoods.num};if(isNaN(value) || value<=0)execCommand('undo')" onafterpaste="if(value>${daiFaGoods.num})this.value=${daiFaGoods.num};if(isNaN(value) || value<=0)execCommand('undo')" data-error-message="换货件数不能为空" data-required="true"   name="return_num" class="input-small" type="text" placeholder="" value="${daiFaGoods.num}" disabled="disabled" onblur="if(value>${daiFaGoods.num})this.value=${daiFaGoods.num};if(isNaN(value) || value<=0)execCommand('undo');checkShip();">--}%
                     %{--</td>--}%
