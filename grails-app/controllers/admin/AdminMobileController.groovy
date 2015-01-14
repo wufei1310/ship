@@ -715,8 +715,12 @@ class AdminMobileController {
             returnGoodsPOJO.wuliu_sn = it.returnOrder.wuliu_sn
             returnGoodsPOJO.orderSN = it.returnOrder.orderSN
 
+            
+            def memberReturnGoods = ReturnGoods.findByDaiFaGoodsAndIdNotEqual(it.daiFaGoods,it.id) 
+            
             returnGoodsPOJO.actual_price = it.actual_price
-            returnGoodsPOJO.return_fee = it.return_fee
+            returnGoodsPOJO.return_fee = memberReturnGoods.return_fee
+            
             returnGoodsPOJO.num = it.return_num   //退回的商品数量
             returnGoodsPOJO.type = it.type   //退回的商品数量
 
