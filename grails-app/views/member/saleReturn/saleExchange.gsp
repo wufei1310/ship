@@ -287,7 +287,7 @@
                                type="text"/>
                         <select name="" class="span1" onchange="selReturnType(this);
                         validGoods();">
-                            <!--<option value="">选择</option>-->
+                            <option value="">选择</option>   
                             <option value="0">退货</option>
                             %{--<option value="1">换货</option>--}%
                         </select>
@@ -300,7 +300,7 @@
                     <td class="oldGoods_sn">${daiFaGoods.goods_sn}</td>
                     <td>${daiFaGoods.spec}</td>
                     <td>${daiFaGoods.num}</td>
-                    <td>${daiFaGoods.actual_price}</td>
+                    <td>${daiFaGoods.actual_price}<span style="color: red;font-size: 0.5em;"><br/>(原拿货价格)</span></td>
                     %{--<td>--}%
                     %{----}%
                     %{--</td>--}%
@@ -372,7 +372,7 @@
                                onafterpaste="if(value>${daiFaGoods.actual_price})this.value=${daiFaGoods.actual_price};if(isNaN(value) || value<=0)execCommand('undo')"
                                name="price_tip" class="input-small price" type="text"
                                value="${daiFaGoods.actual_price}"/>
-
+                        <span style="color: red;font-size: 0.5em;"><br/>(最低允许退货价格)</span>
                         <input style="display:none;" disabled="disabled" name="price" type="text"
                                value="${daiFaGoods.actual_price}">
 

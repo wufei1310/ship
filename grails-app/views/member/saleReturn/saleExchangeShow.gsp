@@ -39,8 +39,16 @@
     <g:if test="${kingsReturnOrder && kingsReturnOrder.status == '2'}">
         <g:link style="margin-left: 10px;display: none;" params="[mid:returnOrder.id]" id="${kingsReturnOrder.id}" controller="memberDaiFaOrder"
                 action="giveup" class="btn btn-danger btn-large pull-right jihui">不要了</g:link>
+
+
+    <g:if test="${new Date() - returnOrder.dateCreated<30}">
+
         <g:link style="display: none;" params="[mid:returnOrder.id]" id="${kingsReturnOrder.id}" controller="memberDaiFaOrder" action="addBack"
                 class="btn btn-primary btn-large pull-right jihui">帮我寄回退不了的商品</g:link>
+
+    </g:if>
+
+
 
     </g:if>
 
