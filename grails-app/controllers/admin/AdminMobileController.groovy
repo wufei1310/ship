@@ -719,7 +719,20 @@ class AdminMobileController {
             def memberReturnGoods = ReturnGoods.findByDaiFaGoodsAndIdNotEqual(it.daiFaGoods,it.id) 
             
             returnGoodsPOJO.actual_price = it.actual_price
-            returnGoodsPOJO.return_fee = memberReturnGoods.return_fee
+//            if(memberReturnGoods){
+//                returnGoodsPOJO.return_fee = memberReturnGoods.return_fee
+//            }else{
+//                returnGoodsPOJO.return_fee = it.return_fee
+//            }
+//
+//            if( returnGoodsPOJO.return_fee>10){
+//                returnGoodsPOJO.return_fee =  returnGoodsPOJO.return_fee -10
+//            }
+
+
+
+            returnGoodsPOJO.return_fee = 1
+
             
             returnGoodsPOJO.num = it.return_num   //退回的商品数量
             returnGoodsPOJO.type = it.type   //退回的商品数量

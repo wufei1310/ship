@@ -315,7 +315,42 @@ class MemberDaiFaOrderController extends BaseController {
         }
 
 
+
+
+
+
+
         def kingsReturnOrder = ReturnOrder.get(params.id)
+        def memberReturnOrder = ReturnOrder.findByOrderSN(kingsReturnOrder.orderSN.replace("K","M"))
+        def user = User.get(memberReturnOrder.add_user)
+        def account = user.account
+        account.lock()
+
+        if (account.amount < 2) {
+            flash.message = "余额不足，请先充值！"
+            flash.messageClass = "error"
+            redirect(controller: "memberDaiFaOrder",action: "saleReturnShow",id:params.mid  )
+            return false
+        }else{
+            account.amount = account.amount - 2
+            account.save()
+            //插入资金流水表（退货服务费）
+            def tranLog = new TranLog();
+            tranLog.shouru_type = "0"
+            tranLog.amount = 2
+            tranLog.memberamount = account.amount
+            tranLog.direction = "0"
+            tranLog.type = "12"
+            tranLog.orderSN = memberReturnOrder.orderSN
+            tranLog.order_user = memberReturnOrder.add_user
+
+            tranLog.save()
+
+
+
+        }
+
+
         kingsReturnOrder.returnGoods.each{
             if(it.status=="6"){
                 it.status="1"
@@ -327,7 +362,10 @@ class MemberDaiFaOrderController extends BaseController {
         kingsReturnOrder.status = "1"
         kingsReturnOrder.save()
 
-        def memberReturnOrder = ReturnOrder.findByOrderSN(kingsReturnOrder.orderSN.replace("K","M"))
+
+
+
+
 
 
 
@@ -341,6 +379,12 @@ class MemberDaiFaOrderController extends BaseController {
         }
         memberReturnOrder.status = "1"
         memberReturnOrder.save();
+
+
+
+
+
+
 
 
         redirect(controller: "memberDaiFaOrder",action: "saleReturnShow",id:params.mid  )
@@ -1476,3 +1520,5 @@ class MemberDaiFaOrderController extends BaseController {
     }
 
 }
+
+

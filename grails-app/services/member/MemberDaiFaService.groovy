@@ -984,14 +984,11 @@ class MemberDaiFaService {
             }
         }
 
-        println "isKillingAndKill_return:" + isKillingAndKill_return
-        println "killreturn:" + killreturn
 
 
         if (isKillingAndKill_return.count(false) == 0) {    //当　false数量为０时，说明  订单下的商品都已经是中止退货，和中止可直接退款的
 
             BigDecimal return_fee = 0.0
-            println "killingkillingkilling"+killing
             killing.each { goodskilling ->
                 return_fee = return_fee + (goodskilling.price * goodskilling.num)     //计算需要直接退款的金额
                 goodskilling.status = "killed"

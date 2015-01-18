@@ -1,9 +1,26 @@
 package ship
 
+import grails.converters.JSON
+
 class ReturnOrderTagLib {
 
 //    String needTui;//0：暂不需要 1：退货处理完成，等待退款 2 已退款给会员 3 处理完成，无退款商品
 //    String needShip;// 0：暂不需要 1：换货处理完成，等待发货 2 已发货给会员 3 处理完成，无发货商品
+
+
+    def getMemberReturnFee = {attrs->
+        println "==================:"+attrs.id
+        def returnGoods = ReturnGoods.get(attrs.id)
+        println returnGoods as JSON
+        def memberReturnGoods = ReturnGoods.findByDaiFaGoodsAndOrderfrom(returnGoods.daiFaGoods,"member")
+        out << memberReturnGoods.return_fee
+    }
+
+    def getKingsReturnFee = {attrs->
+        def returnGoods = ReturnGoods.get(attrs.id)
+        def kingsReturnGoods = ReturnGoods.findByDaiFaGoodsAndOrderfrom(returnGoods.daiFaGoods,"kings")
+        out << kingsReturnGoods.actual_return_fee
+    }
 
 
     def checkMKWuliusn = { attrs ->

@@ -26,6 +26,21 @@ class EmailJob {
         adminFinaceReportService.sendEmail(null)
 
 
+        //本已经退货完成的商品，由于退回价格高于会员期往价
+        //在会员降低期望价后，重新提交退货申请，此时k表退货商品已经是退货完成状态，但k表状态变为1了
+        //该查询集合用于变更k表申请状态为2
+        def autoReturnOrderList = ReturnOrder.findAllByOrderfromAndStatusAndNeedTui("kings", "1", "1")
+        autoReturnOrderList.each{autoReturnOrder->
+            autoReturnOrder.status = "2" ;//如果这里把状态变为2会员后台将会再次看见收到包裹 情况
+            autoReturnOrder.returnGoods.each{autoReturnOrderGoods->
+                if(autoReturnOrderGoods.status == "1"){
+                    autoReturnOrder.status = "1"//当有商品还是等待分拣状态时，该退货申请还是待处理状态
+                }
+            }
+        }
+
+
+
 
         def returnOrderList = ReturnOrder.findAllByOrderfromAndStatusAndNeedTui("kings","2","1")
         // render    returnOrderList as JSON

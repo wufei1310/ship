@@ -50,7 +50,7 @@
 
 <div class="page-header">
     <h5 class=" alert alert-danger">退货不成的商品我们将为您免费保管十天，十天后将会收取10元每天的保管费，二十八天后将默您已放弃该商品的所有权并清理出我们的仓库。</h5>
-
+    <input id="isfail" value="0" type="hidden">
     <h3>退货申请(<small>订单号：</small>${returnOrder.daiFaOrder.orderSN})
     <g:if test="${kingsReturnOrder && kingsReturnOrder.status == '2'}">
         <g:link style="margin-left: 10px;display: none;" params="[mid:returnOrder.id]" id="${kingsReturnOrder.id}" controller="memberDaiFaOrder"
@@ -58,16 +58,17 @@
 
 
 
-    <g:if test="${new Date() - returnOrder.dateCreated<30}">
+                <g:if test="${new Date() - returnOrder.dateCreated<30}">
 
-        <g:link style="display: none;" params="[mid:returnOrder.id]" id="${kingsReturnOrder.id}" controller="memberDaiFaOrder" action="addBack"
-                class="btn btn-primary btn-large pull-right jihui">帮我寄回退不了的商品</g:link>
+                    <g:link style="display: none;" params="[mid:returnOrder.id]" id="${kingsReturnOrder.id}" controller="memberDaiFaOrder" action="addBack"
+                            class="btn btn-primary btn-large pull-right jihui">帮我寄回退不了的商品</g:link>
+
+                </g:if>
+
+
 
     </g:if>
 
-
-
-    </g:if>
 
     </h3>
     </div>
@@ -122,11 +123,25 @@
                     <td>${returnGoods.goods_sn}</td>
                     <td>${returnGoods.spec}</td>
                     <td>${returnGoods.return_num}</td>
-                    <td>会员期望退回：${returnGoods.actual_price}
+                    <td>
+                        会员期望退回：<g:getMemberReturnFee id="${returnGoods.id}"/>
                         <br/>
-                        <g:if test="${returnOrder.status == '2'}">
-                            档口实际退回：<span style="color: red">${returnGoods.actual_return_fee}</span>
-                        </g:if><br/>
+                        %{--根据M表申请的状态来决定是否显示实际退回的价格给会员看到--}%
+                        %{--<g:if test="${returnOrder.status == '2'}">--}%
+                            %{--档口实际退回：<span style="color: red">${returnGoods.actual_return_fee}</span>--}%
+                        %{--</g:if>--}%
+
+
+
+                        <g:if test="${(g.getMemberReturnFee([id:returnGoods.id]) as BigDecimal)>returnGoods.actual_return_fee}">
+                            <font style="color: red;">无法按您指定价格退货</font>
+                            <script>
+                                $("#isfail").val("1")
+                            </script>
+                        </g:if>
+
+
+                        <br/>
                         <g:if test="${returnGoods.status == '10'}">
                             <span style="color: red">不要了</span>
 
@@ -137,25 +152,45 @@
                         </g:if>
                     </td>
                     <input type="hidden" name="returnGoods_id" value="${returnGoods.id}"/>
-                    <td>${returnGoods.reason}</td>
+                    <td>
+            <g:if test="${returnGoods.status != '4'}">
+
+                ${returnGoods.reason}
+            </g:if>
+
+
+                    </td>
                     <g:if test="${returnGoods.status == '6'}">
                         <script>
-
+                            $("#isfail").val("1")
                             $('.jihui').show();
                         </script>
-
                     </g:if>
                 </tr>
             </g:each>
             </tbody>
         </table>
         <br/>
-<g:if test="${kingsReturnOrder && kingsReturnOrder.status == '2'}">
+<g:if test="${kingsReturnOrder  }">
+    <div id="returnGoOnDiv">
         <h4>退货不成商品降低5元继续退货,支付2元手续费</h4>
         <div id="safepassSpan" >支付密码：<input  name="safepass" id="safepass_text1" type="password" >
             <g:if test="${!session.loginPOJO.user.safepass}"><a target="_blank" style="color: red" href="<%=request.getContextPath()%>/memberUser/toSetSafepass">您还没有设置支付密码，点此设置</a></g:if>
                 <a  href="javascript:void(0)" onclick="returnGoOn()"  class=" btn btn-large btn-primary">提交继续退货</a>
         </div>
+
+    </div>
+
+
+    <script>
+        if($("#isfail").val()=="1"){
+            $("#returnGoOnDiv").show()
+        }else{
+            $("#returnGoOnDiv").hide()
+        }
+
+    </script>
+
     </g:if>
 
     </div>
@@ -210,7 +245,9 @@
                 <td>${returnGoods.goods_sn}</td>
                 <td>${returnGoods.spec}</td>
                 <td>${returnGoods.return_num}</td>
-                <td>${returnGoods.return_fee}
+                <td>
+
+                    会员期望退回：${returnGoods.return_fee}
                 <td></td>
             </tr>
         </g:each>
@@ -376,8 +413,9 @@
 <g:if test="${returnOrder.status == '0'}">
     选择支付方式： <input type="radio" id="yuePay" name="pay_type" value="0" onclick="$('#safepassSpan').show();
 $('#zfbSpan').hide()" checked/>余额支付 &nbsp;&nbsp;
-    <input type="radio" id="zfbPay" name="pay_type" value="1" onclick="$('#safepassSpan').hide();
-    $('#zfbSpan').show()"/>支付宝支付
+    %{--<input type="radio" id="zfbPay" name="pay_type" value="1" onclick="$('#safepassSpan').hide();--}%
+    %{--$('#zfbSpan').show()"/>--}%
+    %{--支付宝支付--}%
     <br/>
     <br/>
 

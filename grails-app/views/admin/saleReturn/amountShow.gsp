@@ -78,7 +78,7 @@
                               <td>${returnGoods.goods_sn}</td>
                               <td>${returnGoods.spec}</td>
                               <td>${returnGoods.return_num}  </td>
-                              <td>会员期望退回：${returnGoods.actual_price}
+                              <td>会员期望退回：${returnGoods.return_fee}
                               </td>
                               <input type="hidden" name="returnGoods_id" value="${returnGoods.id}"/>
                               <td>${returnGoods.reason}</td>
@@ -143,11 +143,17 @@
                           <td>${returnGoods.goods_sn}</td>
                           <td>${returnGoods.spec}</td>
                           <td>${returnGoods.return_num}  </td>
-                          <td>会员期望退回：${returnGoods.actual_price}
+                          <td>会员期望退回：<g:getMemberReturnFee id="${returnGoods.id}"/>
                               <br/>
-                          档口实际退回：<span style="color: red">${returnGoods.actual_return_fee}</span>
+                                档口实际退回：<span style="color: red">${returnGoods.actual_return_fee}</span>
                               <br/>
                               档口退货时间：${returnGoods.actual_returnTime}
+                              <g:if test="${(g.getMemberReturnFee([id:returnGoods.id]) as BigDecimal)>returnGoods.actual_return_fee}">
+                                  <br/>
+                                  <font style="color: red;">会员期望退回价格高于实际退回价</font>
+                                 <g:set var="isHigh" value="1"/>
+                              </g:if>
+
                           </td>
                           <input type="hidden" name="returnGoods_id" value="${returnGoods.id}"/>
                           <td>${returnGoods.reason}</td>
@@ -287,11 +293,21 @@
 
           <input type='hidden' name='returnOrderOperType' id='returnOrderOperType' value='tui'>
           <g:if test="${returnOrder.ishuiyuanxiadan=='1'}">会员已经认领</g:if>
- <g:if test="${returnOrder.ishuiyuanxiadan=='1'&&returnOrder.needTui=='1'}">
 
-     <a  href="javascript:void(0)" onclick="beforeTuikuan()"  class=" btn btn-large btn-primary">确认退款</a>
 
- </g:if>
+
+         <g:if test="${returnOrder.ishuiyuanxiadan=='1'&&returnOrder.needTui=='1'}">
+
+
+             <g:if test="${isHigh=='1'}">
+                 有商品退回价格低于会员期望价格，暂不能退款。等待会员降价退货处理
+             </g:if>
+             <g:else>
+                 <a  href="javascript:void(0)" onclick="beforeTuikuan()"  class=" btn btn-large btn-primary">确认退款</a>
+             </g:else>
+
+
+         </g:if>
  <g:link controller="adminDaiFaOrder" action="saleReturnList"  params="${params}" class=" btn btn-large ">返回</g:link>
       
     </g:form>
