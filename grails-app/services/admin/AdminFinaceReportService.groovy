@@ -109,7 +109,7 @@ class AdminFinaceReportService {
         //已发货订单报表统计
         def shippedOrderList = DaiFaOrder.findAllByStatusInListAndShip_timeBetween(['shipped','kill'],startDate,endDate)
 
-        def shippedTranList = TranLog.findAllByTypeInListAndOrderSNInList(['1','2','5','6','11','7','8','9','3','4','22','23','24','25','28'],shippedOrderList.orderSN)
+        def shippedTranList = TranLog.findAllByTypeInListAndOrderSNInList(['1','2','5','6','11','7','8','9','3','4','22','23','24','25','28','26','27'],shippedOrderList.orderSN)
 
 
 

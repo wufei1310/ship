@@ -31,8 +31,6 @@ class MemberDaiFaService {
         account.lock()
         if (account.amount < totalFee) {
             return "余额不足，请先充值！"
-        } else if (daiFaOrder.status != 'waitpay') {
-            return "页面过期，请刷新！"
         } else {
 
             BigDecimal memberamount = account.amount;
@@ -52,23 +50,12 @@ class MemberDaiFaService {
                     shichang = shichang + it.market + ","
                 goodsNum = goodsNum + it.num
             }
-//            def searchClosure = {
-//                eq("user_type", "admin")
-//            }
-
-//            def o = PushMsg.createCriteria();
-//            def results = o.list(searchClosure)
-
-//            PushPOJO pushPOJO = new PushPOJO();
-//            pushPOJO.title = shichang+"有人下单啦，快去代发挣钱呀";
-//            pushPOJO.content = "订单号："+daiFaOrder.orderSN+"#拿货数量："+goodsNum+
-//                                        "#拿货市场："+shichang
-//
-//            pushPOJO.pushMsgList = results
-//            new Push().pushByStore(pushPOJO)
 
 
             if(!daiFaOrder.orderSN.startsWith("T")){
+
+
+
                 //插入资金流水表（商品）
                 def tranLog = new TranLog();
                 tranLog.shouru_type = "0"
@@ -96,7 +83,10 @@ class MemberDaiFaService {
                 tranLogDaiFa.order_user = daiFaOrder.add_user
                 tranLogDaiFa.num = goodsNum
                 tranLogDaiFa.save()
+            }else{
+                daiFaOrder.status = "allaccept"
             }
+
 
 
             //插入资金流水表（运费）
@@ -614,6 +604,8 @@ class MemberDaiFaService {
                 returnGoods.num = goods.num
                 returnGoods.price = goods.price
                 returnGoods.actual_price = goods.actual_price
+
+                returnGoods.orderfrom = "member"
 
 
 

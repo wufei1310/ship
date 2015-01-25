@@ -134,10 +134,18 @@
 
 
                         <g:if test="${(g.getMemberReturnFee([id:returnGoods.id]) as BigDecimal)>returnGoods.actual_return_fee}">
-                            <font style="color: red;">无法按您指定价格退货</font>
-                            <script>
-                                $("#isfail").val("1")
-                            </script>
+
+                            <g:if test="${returnGoods.actual_return_fee!=0}">
+                                <font style="color: red;">无法按您指定价格退货,档口允许退货价为${returnGoods.actual_return_fee}</font>
+                                <script>
+                                    $("#isfail").val("1")
+                                </script>
+                            </g:if>
+                            <g:if test="${returnGoods.actual_return_fee!=0}">
+                                <font style="color: red;">无法按您指定价格退货</font>
+                            </g:if>
+
+
                         </g:if>
 
 
@@ -147,7 +155,7 @@
 
                         </g:if>
                         <g:if test="${returnGoods.status == '9'}">
-                            <span style="color: red">寄回</span>
+                            <span style="color: red">已寄回</span>
 
                         </g:if>
                     </td>
@@ -172,7 +180,7 @@
         </table>
         <br/>
 <g:if test="${kingsReturnOrder  }">
-    <div id="returnGoOnDiv">
+    <div id="returnGoOnDiv" style="display:none;">
         <h4>退货不成商品降低5元继续退货,支付2元手续费</h4>
         <div id="safepassSpan" >支付密码：<input  name="safepass" id="safepass_text1" type="password" >
             <g:if test="${!session.loginPOJO.user.safepass}"><a target="_blank" style="color: red" href="<%=request.getContextPath()%>/memberUser/toSetSafepass">您还没有设置支付密码，点此设置</a></g:if>

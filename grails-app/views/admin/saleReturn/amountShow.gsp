@@ -78,7 +78,10 @@
                               <td>${returnGoods.goods_sn}</td>
                               <td>${returnGoods.spec}</td>
                               <td>${returnGoods.return_num}  </td>
-                              <td>会员期望退回：${returnGoods.return_fee}
+                              <td>
+                                  商品拿货价格：${returnGoods.daiFaGoods.actual_price}
+                                  <br/>
+                                  会员期望退回：${returnGoods.return_fee}
                               </td>
                               <input type="hidden" name="returnGoods_id" value="${returnGoods.id}"/>
                               <td>${returnGoods.reason}</td>
@@ -143,15 +146,21 @@
                           <td>${returnGoods.goods_sn}</td>
                           <td>${returnGoods.spec}</td>
                           <td>${returnGoods.return_num}  </td>
-                          <td>会员期望退回：<g:getMemberReturnFee id="${returnGoods.id}"/>
+                          <td>
+                              商品拿货价格：${returnGoods.daiFaGoods.actual_price}
+                              <br/>
+                              会员期望退回：<g:getMemberReturnFee id="${returnGoods.id}"/>
                               <br/>
                                 档口实际退回：<span style="color: red">${returnGoods.actual_return_fee}</span>
                               <br/>
                               档口退货时间：${returnGoods.actual_returnTime}
-                              <g:if test="${(g.getMemberReturnFee([id:returnGoods.id]) as BigDecimal)>returnGoods.actual_return_fee}">
-                                  <br/>
-                                  <font style="color: red;">会员期望退回价格高于实际退回价</font>
-                                 <g:set var="isHigh" value="1"/>
+                              <g:if test="${g.getMemberReturnFee([id:returnGoods.id])}">
+
+                                      <g:if test="${(g.getMemberReturnFee([id:returnGoods.id]) as BigDecimal)>returnGoods.actual_return_fee}">
+                                          <br/>
+                                          <font style="color: red;">会员期望退回价格高于实际退回价</font>
+                                         <g:set var="isHigh" value="1"/>
+                                      </g:if>
                               </g:if>
 
                           </td>

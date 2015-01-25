@@ -164,6 +164,9 @@ class AdminDaiFaOrderController extends BaseController {
 
         if (!params.order) params.order = "desc"
         def map = [:]
+
+        println params
+
         if (params.dateCreated) {
 
             def searchClosure = {
@@ -572,6 +575,7 @@ class AdminDaiFaOrderController extends BaseController {
 
     def show() {
 
+        println params
         def order = DaiFaOrder.get(params.id)
 
 

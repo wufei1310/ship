@@ -904,9 +904,6 @@ class AdminMobileController {
         if (!params.order) params.order = "desc"
 
 
-
-
-
         def searchClosure = {
 
 
@@ -1660,7 +1657,7 @@ class AdminMobileController {
                     or {
                         ordersn.each {
                             if (it) {
-                                eq("orderSN", it.replace("M", ""))
+                                eq("orderSN", it.replace("M", "").replace("K", ""))
                             }
                         }
                     }

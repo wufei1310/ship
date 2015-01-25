@@ -13,13 +13,13 @@ class ReturnOrderTagLib {
         def returnGoods = ReturnGoods.get(attrs.id)
         println returnGoods as JSON
         def memberReturnGoods = ReturnGoods.findByDaiFaGoodsAndOrderfrom(returnGoods.daiFaGoods,"member")
-        out << memberReturnGoods.return_fee
+        out << memberReturnGoods?.return_fee
     }
 
     def getKingsReturnFee = {attrs->
         def returnGoods = ReturnGoods.get(attrs.id)
         def kingsReturnGoods = ReturnGoods.findByDaiFaGoodsAndOrderfrom(returnGoods.daiFaGoods,"kings")
-        out << kingsReturnGoods.actual_return_fee
+        out << kingsReturnGoods?.actual_return_fee
     }
 
 

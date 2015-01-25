@@ -55,7 +55,7 @@
               <td><g:if test="${tranLog.shouru_type == '0'}">会员账户余额支付</g:if>
                   <g:if test="${tranLog.shouru_type == '1'}">支付宝支付</g:if>
               </td>
-              <td><tranLog:tranLogStatusDic status="${tranLog.type}"/></td>
+              <td><tranLog:tranLogStatusDic4Member status="${tranLog.type}"/></td>
               <td>${tranLog.dateCreated.toString()[0..18]}</td>
                 <td>${tranLog.memberamount}</td>
             </tr>

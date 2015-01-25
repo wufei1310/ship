@@ -55,6 +55,7 @@ and open the template in the editor.
     档口退货回款：${shippedmap.t_return_goodsFee}<br/>
 
 
+    管理员退款：${shippedmap.zhijieshipfee + shippedmap.zhijiegoodsfee}<br/>
 
     凡衣拨款：${shippedmap.t_shipped_actualhuanhuo_shipfee+shippedmap.t_shipped_actual_price+shippedmap.t_shipped_actual_shipfee-shippedmap.t_return_goodsFee-shippedmap.zhijiegoodsfee-shippedmap.zhijieshipfee}<br/>
 
